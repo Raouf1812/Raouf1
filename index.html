@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تجربه</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* --- نفس التصميم الأصلي الخاص بك بدون أي تغيير --- */
+        :root { --bg: #030303; --gold: #d4af37; --gold-glow: rgba(212, 175, 55, 0.4); --clr-shrah: rgb(255, 79, 79); --clr-mozakrat: rgb(97, 255, 76); --clr-books: #fcff32; --clr-exams: #b5ffdf; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        body { font-family: 'Cairo', sans-serif; background: var(--bg); color: #fff; margin: 0; overflow-x: hidden; min-height: 100vh; }
+        .background-objects { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
+        .obj { position: absolute; background: linear-gradient(var(--gold), transparent); border-radius: 50%; filter: blur(50px); opacity: 0.16; animation: float 10s infinite linear; }
+        @keyframes float { 0% { transform: translateY(100vh) scale(1); } 100% { transform: translateY(-100px) scale(1.5); } }
+        header { padding: 50px 20px; text-align: center; }
+        header h1 { font-size: 2.8rem; margin: 0; font-weight: 900; background: linear-gradient(to right, #fff, var(--gold), #fff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; cursor: pointer; }
+        .container { padding: 15px; max-width: 450px; margin: auto; }
+        .subject-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 35px; padding: 25px; margin-bottom: 25px; backdrop-filter: blur(20px); transition: 0.4s; cursor: pointer; }
+        .subject-card:hover { transform: translateY(-10px); border-color: var(--gold); }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .stat-item { padding: 15px; border-radius: 20px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; }
+        .stat-num { font-size: 2rem; font-weight: 900; }
+        .stat-label { font-size: 0.8rem; opacity: 0.6; }
+        .shrah { color: var(--clr-shrah); } .mozakrat { color: var(--clr-mozakrat); } .books { color: var(--clr-books); } .exams { color: var(--clr-exams); }
+        .modal, .admin-panel { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.9); backdrop-filter: blur(30px); overflow-y: auto; }
+        .modal-content, .admin-content { padding: 30px; max-width: 500px; margin: auto; }
+        .btn-luxury { width: 100%; padding: 20px; margin-bottom: 15px; border-radius: 22px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+        .item-card { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 25px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        .action-btns { display: flex; gap: 10px; margin-top: 10px; }
+        .view-btn, .download-btn { flex: 1; padding: 12px; border-radius: 12px; text-decoration: none; font-weight: 900; text-align: center; font-size: 0.8rem; color: #000; }
+        .view-btn { background: #fff; } .download-btn { background: var(--gold); }
+        .admin-input, .admin-select { width: 100%; padding: 15px; border-radius: 15px; background: #111; border: 1px solid var(--gold); color: #fff; margin-bottom: 10px; font-family: 'Cairo'; }
+        .admin-add-btn { background: var(--gold); color: #000; font-weight: 900; border: none; padding: 15px; border-radius: 15px; width: 100%; cursor: pointer; }
+        .close-btn { font-size: 30px; color: var(--gold); cursor: pointer; float: left; }
+    </style>
+</head>
+<body>
+
+    <div class="background-objects" id="bgObj"></div>
+
+    <header>
+        <h1 onclick="handleAdminTap()">مكتبة اجهزة</h1>
+        <p style="color: rgba(255,255,255,0.4); letter-spacing: 5px;">الصف الثاني الترم الثاني</p>
+    </header>
+
+    <div class="container" id="subjectsGrid">
+        <p style="text-align: center;">استنا يسطا بيحمل...</p>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">✕</span>
+            <h2 id="modalTitle" style="color: var(--gold); margin: 30px 0;"></h2>
+            <div id="mainOptions">
+                <button class="btn-luxury" onclick="showSubSection('shrah')">🎬 فيديوهات الشرح <span class="shrah">❯</span></button>
+                <button class="btn-luxury" onclick="showSubSection('mozakrat')">📜 المذكرات <span class="mozakrat">❯</span></button>
+                <button class="btn-luxury" onclick="showSubSection('books')">📚 الكتب <span class="books">❯</span></button>
+                <button class="btn-luxury" onclick="showSubSection('exams')">✍️ امتحانات <span class="exams">❯</span></button>
+            </div>
+            <div id="subSection" style="display: none;">
+                <button class="btn-luxury" onclick="backToMain()" style="background: var(--gold); color: #000;">🔙 العودة</button>
+                <div id="itemsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="adminPanel" class="admin-panel">
+        <div class="admin-content">
+            <span class="close-btn" onclick="document.getElementById('adminPanel').style.display='none'">✕</span>
+            <h2 style="color: var(--gold); margin-top: 40px;">لوحة الإدارة لايف</h2>
+            <select id="selSub" class="admin-select"></select>
+            <select id="selType" class="admin-select">
+                <option value="shrah">فيديو شرح</option>
+                <option value="mozakrat">مذكرة</option>
+                <option value="books">كتاب</option>
+                <option value="exams">امتحان</option>
+            </select>
+            <input type="text" id="inTitle" class="admin-input" placeholder="عنوان الملف">
+            <input type="text" id="inLink" class="admin-input" placeholder="الرابط">
+            <button class="admin-add-btn" onclick="addNewItem()">إضافة ونشر للكل ✅</button>
+        </div>
+    </div>
+
+    <script>
+        // 1. ضع إعدادات Firebase الخاصة بك هنا (سأشرح لك كيف تجلبها في الأسفل)
+       const firebaseConfig = {
+        apiKey: "AIzaSyADtj_iYU1wn3kBaaPfXTqMqEAClVJRVNE",
+        authDomain: "raouf-68d9e.firebaseapp.com",
+        databaseURL: "https://raouf-68d9e-default-rtdb.firebaseio.com",
+        projectId: "raouf-68d9e",
+        storageBucket: "raouf-68d9e.firebasestorage.app",
+        messagingSenderId: "390151395077",
+        appId: "1:390151395077:web:993860d19c10650cc1496c",
+        measurementId: "G-VSZ31FMZGD"
+        };
+
+
+        // بدء تشغيل Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        let libraryData = {};
+        let currentSub = "";
+
+        // 2. جلب البيانات "لايف" - بمجرد تغييرها في السيرفر تتغير عند كل الطلاب فوراً
+        db.ref('library').on('value', (snapshot) => {
+            libraryData = snapshot.val() || {
+                "KAB (مشروع وثقافة العمل الحر )": { shrah: [], mozakrat: [], books: [], exams: [] },
+                "PLC (متحكمات مبرمجة)": { shrah: [], mozakrat: [], books: [], exams: [] },
+                "صيانة وإصلاح أجهزة إلكترونية": { shrah: [], mozakrat: [], books: [], exams: [] },
+                "إتصالات": { shrah: [], mozakrat: [], books: [], exams: [] },
+                "معامل تطبيقية": { shrah: [], mozakrat: [], books: [], exams: [] },
+                "تقارير فنية": { shrah: [], mozakrat: [], books: [], exams: [] },
+                "دوائر الكترونية متقدمة": { shrah: [], mozakrat: [], books: [], exams: [] }
+
+            };
+            renderCards();
+        });
+
+        function renderCards() {
+            const grid = document.getElementById('subjectsGrid');
+            grid.innerHTML = "";
+            for (let sub in libraryData) {
+                const d = libraryData[sub];
+                // تأكد من وجود المصفوفات حتى لو فارغة لمنع الأخطاء
+                const getLen = (arr) => (arr ? Object.keys(arr).length : 0);
+                
+                const card = document.createElement('div');
+                card.className = 'subject-card';
+                card.innerHTML = `
+                    <h3>${sub}</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item shrah"><span class="stat-num">${getLen(d.shrah)}</span><span class="stat-label">شرح</span></div>
+                        <div class="stat-item mozakrat"><span class="stat-num">${getLen(d.mozakrat)}</span><span class="stat-label">مذكرات</span></div>
+                        <div class="stat-item books"><span class="stat-num">${getLen(d.books)}</span><span class="stat-label">كتب</span></div>
+                        <div class="stat-item exams"><span class="stat-num">${getLen(d.exams)}</span><span class="stat-label">امتحان</span></div>
+                    </div>`;
+                card.onclick = () => openModal(sub);
+                grid.appendChild(card);
+            }
+            updateAdminOptions();
+        }
+
+        function showSubSection(t) {
+            document.getElementById('mainOptions').style.display = 'none';
+            document.getElementById('subSection').style.display = 'block';
+            const list = document.getElementById('itemsList');
+            const items = libraryData[currentSub][t] || {};
+            list.innerHTML = Object.keys(items).length === 0 ? "<p>قريباً...</p>" : "";
+            for(let key in items) {
+                let i = items[key];
+                list.innerHTML += `
+                    <div class="item-card">
+                        <b>${i.title}</b>
+                        <div class="action-btns">
+                            <a href="${i.link}" target="_blank" class="view-btn"> عرض</a>
+                            <a href="${i.link}" target="_blank" class="download-btn">📥 تحميل</a>
+                        </div>
+                    </div>`;
+            }
+        }
+
+        // إرسال البيانات للسيرفر لتظهر للكل
+        function addNewItem() {
+            const sub = document.getElementById('selSub').value;
+            const type = document.getElementById('selType').value;
+            const title = document.getElementById('inTitle').value;
+            const link = document.getElementById('inLink').value;
+
+            if (title && link) {
+                db.ref('library/' + sub + '/' + type).push({
+                    title: title,
+                    link: link
+                }).then(() => {
+                    alert("تم النشر لجميع الطلاب!");
+                    document.getElementById('inTitle').value = "";
+                    document.getElementById('inLink').value = "";
+                });
+            }
+        }
+
+        // باقي الوظائف (فتح المودال، الأدمن، إلخ) كما هي...
+        let tapCount = 0;
+        function handleAdminTap() {
+            tapCount++;
+            if (tapCount === 5) {
+                let pass = prompt("كلمة السر:");
+                if (pass === "0000") document.getElementById('adminPanel').style.display = 'block';
+                tapCount = 0;
+            }
+            setTimeout(() => tapCount = 0, 3000);
+        }
+        function openModal(n) { currentSub = n; document.getElementById('modalTitle').innerText = n; document.getElementById('modal').style.display = 'block'; backToMain(); }
+        function closeModal() { document.getElementById('modal').style.display = 'none'; }
+        function backToMain() { document.getElementById('mainOptions').style.display = 'block'; document.getElementById('subSection').style.display = 'none'; }
+        function updateAdminOptions() {
+            const sel = document.getElementById('selSub');
+            sel.innerHTML = "";
+            for (let sub in libraryData) sel.innerHTML += `<option value="${sub}">${sub}</option>`;
+        }
+    </script>
+</body>
+</html>
