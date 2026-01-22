@@ -153,18 +153,6 @@
         .mozakrat { color: var(--clr-mozakrat); }
         .books { color: var(--clr-books); }
         .exams { color: var(--clr-exams); }
-        .play-button {
-    width: 50px;
-    height: 50px;
-    background: rgba(255, 0, 0, 0.8);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 20px;
-    box-shadow: 0 0 15px rgba(255,0,0,0.5);
-}
     </style>
 </head>
 <body>
@@ -361,26 +349,23 @@
         list.innerHTML = "<p style='text-align:center; color:var(--gold);'>جاري ترتيب المكتبة...</p>";
         let content = "";
         
-        for (const [index, item] of items.entries()) {
-            const size = (t !== 'shrah') ? await getFileSize(item.link) : "";
-            const uniqueId = `preview-${t}-${index}`;
+        for (const item of items) {
+            const fileSize = await getFileSize(item.link); // جلب الحجم تلقائياً
 
             if (t === 'shrah') {
-                const thumb = getYouTubeThumb(item.link);
                 content += `
                     <div class="memo-card">
-                        <div class="memo-preview" style="background-image: url('${thumb}'); background-size: cover; background-position: center;">
-                            <div class="play-button">▶</div>
-                        </div>
-                        <div class="memo-details"><span class="memo-name">${item.title}</span></div>
+                        <div class="memo-preview"><span style="font-size:40px;">🎬</span><span class="preview-label">VIDEO PLAYER</span></div>
+                        <div class="memo-details"><span class="memo-name">${item.title}</span><span class="memo-info">دقة عالية | MP4</span></div>
                         <div class="memo-actions"><a href="${item.link}" target="_blank" class="btn btn-watch">👁️ مشاهدة الآن</a></div>
                     </div>`;
             } else {
+                // جلب الحجم تلقائياً لكل ملف قبل عرضه
+                const size = await getFileSize(item.link);
+                
                 content += `
                     <div class="memo-card">
-                        <div class="memo-preview">
-                            <canvas id="${uniqueId}" style="width: 100%; height: 100%; object-fit: cover;"></canvas>
-                        </div>
+                        <div class="memo-preview"><span style="font-size:40px;">📂</span><span class="preview-label">DOCUMENT</span></div>
                         <div class="memo-details">
                             <span class="memo-name">${item.title}</span>
                             <span class="memo-info">📂 الحجم: ${size} | PDF</span>
@@ -390,8 +375,6 @@
                             <button onclick="triggerDownload('${item.link}', '${item.title}')" class="btn btn-dl">📥 تحميل الملف</button>
                         </div>
                     </div>`;
-                // استدعاء دالة الرسم بعد إضافة الكود للـ HTML
-                setTimeout(() => renderPDFPreview(item.link, uniqueId), 100);
             }
         }
         list.innerHTML = content;
@@ -426,29 +409,6 @@ async function getFileSize(url) {
     }
     return "1.5 MB";
 }
-        // دالة لجلب صورة يوتيوب من الرابط
-        function getYouTubeThumb(url) {
-            const videoId = url.split('v=')[1]?.split('&')[0] || url.split('/').pop();
-            return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-        }
-
-        // دالة رسم أول صفحة PDF على Canvas
-        async function renderPDFPreview(url, canvasId) {
-            try {
-                const loadingTask = pdfjsLib.getDocument(url);
-                const pdf = await loadingTask.promise;
-                const page = await pdf.getPage(1); // الصفحة الأولى
-                const viewport = page.getViewport({ scale: 0.5 });
-                const canvas = document.getElementById(canvasId);
-                const context = canvas.getContext('2d');
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
-
-                await page.render({ canvasContext: context, viewport: viewport }).promise;
-            } catch (e) {
-                console.error("خطأ في تحميل المعاينة:", e);
-            }
-        }
 </script>
 <footer>
     <div class="footer-content">
