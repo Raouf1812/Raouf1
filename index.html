@@ -9,13 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* تطبيق قاعدة 60-30-10 */
+            /* توزيع الألوان 60-30-10 */
             --bg: #000000;           /* 60% الأساسي: أسود */
-            --secondary: #2e3b23;    /* 30% الثانوي: زيتي وقور */
-            --accent: #ffffff;       /* 10% البارز: أبيض ناصع */
+            --secondary: #3e4f30;    /* 30% الثانوي: زيتي */
+            --accent: #ffffff;       /* 10% البارز: أبيض */
             
-            --gold: var(--accent); 
-            --gold-glow: rgba(255, 255, 255, 0.3);
+            /* اللون الزيتي المتوهج للنصوص */
+            --ziti-glow: #6b8e23; 
+            --gold-glow: rgba(107, 142, 35, 0.6);
+            
             --clr-shrah: #ff4b2b;
             --clr-mozakrat: #00f260;
             --clr-books: #fcff32;
@@ -27,7 +29,7 @@
         body {
             font-family: 'Cairo', sans-serif;
             background: var(--bg);
-            color: #ccc; /* رمادي خفيف للنصوص العادية */
+            color: var(--accent);
             margin: 0; overflow-x: hidden;
             min-height: 100vh;
         }
@@ -47,25 +49,37 @@
             background: var(--accent); color: #000; padding: 15px 25px;
             border-radius: 50px; font-weight: 900; z-index: 10001;
             transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 30px rgba(255,255,255,0.2); white-space: nowrap;
+            box-shadow: 0 10px 30px var(--gold-glow); white-space: nowrap;
         }
 
         #bgCanvas { position: fixed; top: 0; left: 0; z-index: -1; background: var(--bg); }
 
         header { padding: 40px 20px; text-align: center; position: relative; z-index: 10; }
         .main-logo { width: 100px; filter: drop-shadow(0 0 15px var(--gold-glow)); margin-bottom: 10px; }
-        header h1 { font-size: 2.2rem; margin: 0; color: var(--accent); font-weight: 900; }
+        
+        /* النص الزيتي المتوهج */
+        header h1 { 
+            font-size: 2.2rem; margin: 0; 
+            color: var(--ziti-glow); 
+            text-shadow: 0 0 10px var(--gold-glow), 0 0 20px rgba(107, 142, 35, 0.3);
+            font-weight: 900;
+        }
 
         .container { padding: 15px; max-width: 450px; margin: auto; position: relative; z-index: 10; }
 
-        /* الكروت باللون الزيتي */
         .subject-card {
-            background: rgba(46, 59, 35, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(62, 79, 48, 0.2);
+            border: 1px solid rgba(107, 142, 35, 0.3);
             border-radius: 25px; padding: 20px; margin-bottom: 20px;
             backdrop-filter: blur(10px); transition: 0.3s;
         }
         .subject-card:active { transform: scale(0.96); }
+
+        /* العناوين داخل الكروت متوهجة */
+        .subject-card h3 {
+            color: var(--ziti-glow);
+            text-shadow: 0 0 8px var(--gold-glow);
+        }
 
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
         .stat-item { padding: 10px; border-radius: 15px; background: rgba(0,0,0,0.5); text-align: center; border: 1px solid rgba(255,255,255,0.05); }
@@ -73,8 +87,8 @@
         .stat-label { font-size: 0.7rem; opacity: 0.6; }
 
         .memo-card {
-            background: rgba(46, 59, 35, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(62, 79, 48, 0.15);
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 20px; margin-bottom: 15px; overflow: hidden;
         }
 
@@ -82,24 +96,23 @@
             height: 90px; background: linear-gradient(45deg, #1a2214, var(--secondary));
             display: flex; align-items: center; justify-content: center; position: relative;
         }
-        .preview-label { position: absolute; top: 10px; right: 15px; font-size: 10px; color: var(--accent); font-weight: bold; opacity: 0.5; }
 
         .memo-details { padding: 15px; }
         .memo-name { display: block; font-weight: 700; font-size: 1rem; color: var(--accent); }
-        .memo-info { font-size: 0.75rem; color: #ccc; opacity: 0.8; }
+        .memo-info { font-size: 0.75rem; color: var(--ziti-glow); font-weight: bold; }
 
         .memo-actions { display: flex; gap: 8px; padding: 12px; background: rgba(0,0,0,0.4); }
         
         .btn { flex: 1; padding: 12px; border-radius: 12px; text-align: center; text-decoration: none; font-weight: 800; font-size: 0.85rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; transition: 0.3s; }
         
         .btn-watch { background: var(--clr-shrah); color: #fff; }
-        .btn-open { background: #fff; color: #000; }
-        .btn-dl { background: var(--secondary); color: #fff; border: 1px solid var(--accent); }
+        .btn-open { background: var(--accent); color: #000; }
+        .btn-dl { background: var(--secondary); color: #fff; border: 1px solid var(--ziti-glow); }
 
         .modal { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0, 0, 0, 0.98); backdrop-filter: blur(25px); overflow-y: auto; }
         .modal-content { padding: 25px; max-width: 500px; margin: auto; }
         .close-modal { font-size: 30px; color: var(--accent); cursor: pointer; display: block; margin-bottom: 10px; }
-        .btn-luxury { width: 100%; padding: 25px; margin-bottom: 10px; border-radius: 18px; background: rgba(46, 59, 35, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--accent); font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+        .btn-luxury { width: 100%; padding: 25px; margin-bottom: 10px; border-radius: 18px; background: rgba(62, 79, 48, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--accent); font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
 
         .shrah { color: var(--clr-shrah); }
         .mozakrat { color: var(--clr-mozakrat); }
@@ -110,7 +123,7 @@
             margin-top: 50px; padding: 40px 20px; text-align: center; 
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-        footer span { color: var(--accent); font-weight: 900; }
+        footer span { color: var(--ziti-glow); font-weight: 900; text-shadow: 0 0 5px var(--gold-glow); }
     </style>
 </head>
 <body>
@@ -118,7 +131,7 @@
 <div id="welcome-screen">
     <div class="welcome-content">
         <img src="IMG/RR.png" alt="Logo" style="width: 120px; margin-bottom: 20px;">
-        <h2 style="color: var(--accent); font-weight: 900;">مكتبة أجهزة</h2>
+        <h2 style="color: var(--ziti-glow); font-weight: 900; text-shadow: 0 0 10px var(--gold-glow);">مرحباً بك</h2>
     </div>
 </div>
 
@@ -136,7 +149,7 @@
 <div id="modal" class="modal">
     <div class="modal-content">
         <span class="close-modal" onclick="closeModal()">✕</span>
-        <h2 id="modalTitle" style="color: var(--accent); margin: 10px 0 25px; text-align: center;"></h2>
+        <h2 id="modalTitle" style="color: var(--ziti-glow); margin: 10px 0 25px; text-align: center; text-shadow: 0 0 10px var(--gold-glow);"></h2>
         
         <div id="mainOptions">
             <button class="btn-luxury" onclick="showSubSection('shrah')">🎬 فيديوهات الشرح <span class="shrah">❯</span></button>
@@ -146,17 +159,18 @@
         </div>
 
         <div id="subSection" style="display: none;">
-            <button class="btn-luxury" onclick="backToMain()" style="background: var(--accent); color: #000; padding: 15px; margin-bottom: 25px;">🔙 العودة للقائمة</button>
+            <button class="btn-luxury" onclick="backToMain()" style="background: var(--secondary); color: #fff; padding: 15px; margin-bottom: 25px; border: 1px solid var(--accent);">🔙 العودة للقائمة</button>
             <div id="itemsList"></div>
         </div>
     </div>
 </div>
 
 <footer>
-    <p>تم التطوير بواسطة <span>اسمك</span> & <span>معرفش</span></p>
+    <p>تم التطوير بواسطة <span>معرفش</span> & <span>معرفش برضو</span></p>
 </footer>
 
 <script>
+    // الحفاظ على كل الوظائف الأصلية (الترحيب، التنبيه، الخلفية، البيانات، التحميل)
     window.addEventListener('load', () => {
         setTimeout(() => {
             const screen = document.getElementById('welcome-screen');
@@ -193,7 +207,7 @@
 
     function draw() {
         ctx.clearRect(0, 0, width, height);
-        ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+        ctx.fillStyle = "rgba(107, 142, 35, 0.4)";
         particles.forEach((p, i) => {
             p.x += p.vx; p.y += p.vy;
             if(p.x < 0 || p.x > width) p.vx *= -1;
@@ -204,7 +218,7 @@
                 let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
                 if(dist < 150) {
                     ctx.beginPath();
-                    ctx.strokeStyle = `rgba(255, 255, 255, ${0.3 - dist/150})`;
+                    ctx.strokeStyle = `rgba(107, 142, 35, ${0.3 - dist/150})`;
                     ctx.lineWidth = 0.8; ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
                 }
             }
@@ -236,7 +250,7 @@
             const d = libraryData[sub];
             grid.innerHTML += `
                 <div class="subject-card" onclick="openModal('${sub}')">
-                    <h3 style="margin:0; font-size:1.3rem; color:var(--accent);">${sub}</h3>
+                    <h3 style="margin:0; font-size:1.3rem;">${sub}</h3>
                     <div class="stats-grid">
                         <div class="stat-item shrah"><span class="stat-num">${d.shrah.length}</span><span class="stat-label">شرح</span></div>
                         <div class="stat-item mozakrat"><span class="stat-num">${d.mozakrat.length}</span><span class="stat-label">مذكرات</span></div>
@@ -262,11 +276,11 @@
         const items = libraryData[currentSub][t];
 
         if(items.length === 0) {
-            list.innerHTML = "<div style='text-align:center; padding:40px; opacity:0.3;'>قريباً...</div>";
+            list.innerHTML = "<div style='text-align:center; padding:40px; opacity:0.3;'>لا يوجد محتوى حالياً</div>";
             return;
         }
 
-        list.innerHTML = "<p style='text-align:center; color:var(--accent);'>جاري التحميل...</p>";
+        list.innerHTML = "<p style='text-align:center;'>جاري التحميل...</p>";
         let content = "";
         
         for (const item of items) {
@@ -275,17 +289,17 @@
             if (t === 'shrah') {
                 content += `
                     <div class="memo-card">
-                        <div class="memo-preview"><span style="font-size:40px;">🎬</span><span class="preview-label">VIDEO</span></div>
+                        <div class="memo-preview"><span style="font-size:40px;">🎬</span></div>
                         <div class="memo-details"><span class="memo-name">${item.title}</span><span class="memo-info">دقة عالية | MP4</span></div>
-                        <div class="memo-actions"><a href="${item.link}" target="_blank" class="btn btn-watch">👁️ مشاهدة الآن</a></div>
+                        <div class="memo-actions"><a href="${item.link}" target="_blank" class="btn btn-watch">👁️ مشاهدة</a></div>
                     </div>`;
             } else {
                 content += `
                     <div class="memo-card">
-                        <div class="memo-preview"><span style="font-size:40px;">📂</span><span class="preview-label">DOCUMENT</span></div>
-                        <div class="memo-details"><span class="memo-name">${item.title}</span><span class="memo-info">📂 الحجم: ${fileSize} | PDF</span></div>
+                        <div class="memo-preview"><span style="font-size:40px;">📂</span></div>
+                        <div class="memo-details"><span class="memo-name">${item.title}</span><span class="memo-info">حجم: ${fileSize} | PDF</span></div>
                         <div class="memo-actions">
-                            <a href="${item.link}" target="_blank" class="btn btn-open">👁️ فتح سريع</a>
+                            <a href="${item.link}" target="_blank" class="btn btn-open">👁️ فتح</a>
                             <button onclick="triggerDownload('${item.link}', '${item.title}')" class="btn btn-dl">📥 تحميل</button>
                         </div>
                     </div>`;
@@ -313,15 +327,10 @@
         try {
             const response = await fetch(url, { method: 'HEAD' });
             const size = response.headers.get('content-length');
-            if (size) {
-                return (size / (1024 * 1024)).toFixed(1) + " MB";
-            }
-        } catch (e) {
-            return "1.5 MB";
-        }
+            if (size) return (size / (1024 * 1024)).toFixed(1) + " MB";
+        } catch (e) {}
         return "1.5 MB";
     }
 </script>
 </body>
 </html>
-
