@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مكتبة أجهزة</title>
+    <title>مكتبة أجهزة - النسخة الملكية</title>
     <link rel="icon" href="IMG/RR.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #030303;
+            --bg: #050505;
             --gold: #d4af37;
             --gold-glow: rgba(212, 175, 55, 0.4);
             --clr-shrah: rgb(255, 79, 79);
@@ -17,7 +17,7 @@
             --clr-exams: #b5ffdf;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             font-family: 'Cairo', sans-serif;
@@ -26,316 +26,203 @@
             min-height: 100vh;
         }
 
-        /* حاوية الخلفية */
         #bgCanvas {
-            position: fixed;
-            top: 0; left: 0;
+            position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
             z-index: -1;
-            background: #000;
         }
 
-        header { padding: 40px 20px; position: relative; z-index: 10; }
-
-        .header-container {
-            display: flex; align-items: center; justify-content: center;
-            gap: 25px; padding: 10px;
-        }
-
+        header { padding: 50px 20px; text-align: center; }
         .main-logo {
-            width: 130px; height: auto;
-            filter: drop-shadow(0 0 15px var(--gold-glow));
-            border-radius: 50%;
+            width: 120px; height: auto;
+            filter: drop-shadow(0 0 20px var(--gold-glow));
+            margin-bottom: 15px;
         }
-
-        .header-text { text-align: right; }
         header h1 { 
-            font-size: 2.8rem; margin: 0; font-weight: 900;
-            background: linear-gradient(to right, #fff, var(--gold), #fff);
+            font-size: 2.5rem; margin: 0; font-weight: 900;
+            background: linear-gradient(to bottom, #fff, var(--gold));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 10px var(--gold-glow));
         }
-        header p { margin: 5px 0 0; opacity: 0.8; font-size: 1.1rem; }
 
-        .container { padding: 15px; max-width: 450px; margin: auto; position: relative; z-index: 10; }
+        .container { padding: 15px; max-width: 450px; margin: auto; }
 
         .subject-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 35px; padding: 25px; margin-bottom: 25px;
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 30px; padding: 25px; margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
         }
-        .subject-card:hover { transform: translateY(-10px); border-color: var(--gold); }
+        .subject-card:active { transform: scale(0.98); border-color: var(--gold); }
 
-        .card-header h3 { font-size: 1.7rem; margin: 0 0 20px; color: #fff; }
+        .card-header h3 { font-size: 1.5rem; margin: 0 0 15px; }
 
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .stat-item { 
-            padding: 15px; border-radius: 20px; background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center;
+            padding: 12px; border-radius: 18px; background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05); text-align: center;
         }
-        .stat-num { font-size: 2rem; font-weight: 900; }
-        .stat-label { font-size: 0.8rem; opacity: 0.6; }
+        .stat-num { font-size: 1.8rem; font-weight: 900; display: block; }
+        .stat-label { font-size: 0.7rem; opacity: 0.5; }
 
-        .modal { 
-            display: none; position: fixed; inset: 0; z-index: 9999; 
-            background: rgba(0,0,0,0.9); backdrop-filter: blur(30px);
-            overflow-y: auto;
-        }
-        .modal-content { padding: 30px; max-width: 500px; margin: auto; animation: modalSlide 0.5s ease; }
-
-        .btn-luxury {
-            width: 100%; padding: 40px; margin-bottom: 10px; border-radius: 22px;
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); 
-            color: #fff; font-weight: 700; display: flex; justify-content: space-between; 
-            align-items: center; cursor: pointer; font-family: 'Cairo';
-        }
-
-        .item-card {
-            background: rgba(255,255,255,0.03); padding: 15px; border-radius: 25px;
-            margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05);
-        }
-        .action-btns { display: flex; gap: 10px; margin-top: 10px; }
-        .view-btn, .download-btn { flex: 1; padding: 12px; border-radius: 12px; text-decoration: none; font-weight: 900; text-align: center; font-size: 0.8rem; color: #000; }
-        .view-btn { background: #fff; }
-        .download-btn { background: var(--gold); }
-
+        /* الألوان المميزة */
         .shrah { color: var(--clr-shrah); }
         .mozakrat { color: var(--clr-mozakrat); }
         .books { color: var(--clr-books); }
         .exams { color: var(--clr-exams); }
 
-        @keyframes modalSlide { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .close-btn { font-size: 30px; color: var(--gold); cursor: pointer; float: left; }
-
-        @media (max-width: 480px) {
-            .header-container { gap: 15px; }
-            .main-logo { width: 95px; }
-            header h1 { font-size: 2rem !important; }
+        .modal { 
+            display: none; position: fixed; inset: 0; z-index: 9999; 
+            background: rgba(0,0,0,0.95); backdrop-filter: blur(20px);
         }
+        .modal-content { padding: 30px; }
+        .btn-luxury {
+            width: 100%; padding: 35px; margin-bottom: 12px; border-radius: 20px;
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(212, 175, 55, 0.2); 
+            color: #fff; font-weight: 700; display: flex; justify-content: space-between; align-items: center;
+        }
+        .item-card {
+            background: rgba(255,255,255,0.04); padding: 18px; border-radius: 20px;
+            margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .action-btns { display: flex; gap: 8px; margin-top: 12px; }
+        .view-btn, .download-btn { flex: 1; padding: 10px; border-radius: 10px; text-decoration: none; text-align: center; color: #000; font-weight: 900; font-size: 0.8rem; }
+        .view-btn { background: #fff; }
+        .download-btn { background: var(--gold); }
     </style>
 </head>
 <body>
 
-    <canvas id="bgCanvas"></canvas>
+<canvas id="bgCanvas"></canvas>
 
-    <header>
-        <div class="header-container">
-            <img src="IMG/RR.png" alt="Logo" class="main-logo">
-            <div class="header-text">
-                <h1>مكتبة أجهزة</h1>
-                <p>الصف الثاني - الترم الثاني</p>
-            </div>
+<header>
+    <img src="IMG/RR.png" alt="Logo" class="main-logo">
+    <h1>مكتبة أجهزة</h1>
+    <p style="color: var(--gold); opacity: 0.8;">الصف الثاني - الترم الثاني</p>
+</header>
+
+<div class="container" id="subjectsGrid"></div>
+
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span style="font-size: 30px; color: var(--gold); cursor: pointer;" onclick="closeModal()">✕</span>
+        <h2 id="modalTitle" style="color: var(--gold); margin: 20px 0; text-align: center;"></h2>
+        <div id="mainOptions">
+            <button class="btn-luxury" onclick="showSubSection('shrah')">🎬 فيديوهات الشرح <span class="shrah">❯</span></button>
+            <button class="btn-luxury" onclick="showSubSection('mozakrat')">📜 المذكرات <span class="mozakrat">❯</span></button>
+            <button class="btn-luxury" onclick="showSubSection('books')">📚 الكتب <span class="books">❯</span></button>
+            <button class="btn-luxury" onclick="showSubSection('exams')">✍️ امتحانات <span class="exams">❯</span></button>
         </div>
-    </header>
-
-    <div class="container" id="subjectsGrid"></div>
-
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">✕</span>
-            <h2 id="modalTitle" style="color: var(--gold); margin: 30px 0;"></h2>
-            <div id="mainOptions">
-                <button class="btn-luxury" onclick="showSubSection('shrah')">🎬 فيديوهات الشرح <span class="shrah">❯</span></button>
-                <button class="btn-luxury" onclick="showSubSection('mozakrat')">📜 المذكرات <span class="mozakrat">❯</span></button>
-                <button class="btn-luxury" onclick="showSubSection('books')">📚 الكتب <span class="books">❯</span></button>
-                <button class="btn-luxury" onclick="showSubSection('exams')">✍️ امتحانات <span class="exams">❯</span></button>
-            </div>
-            <div id="subSection" style="display: none;">
-                <button class="btn-luxury" onclick="backToMain()" style="background: var(--gold); color: #000;">🔙 رجوع</button>
-                <div id="itemsList"></div>
-            </div>
+        <div id="subSection" style="display: none;">
+            <button class="btn-luxury" onclick="backToMain()" style="background: var(--gold); color: #000;">🔙 رجوع</button>
+            <div id="itemsList"></div>
         </div>
     </div>
+</div>
 
-    <script>
-        // --- إعدادات فيزياء السائل المتطورة ---
-        const canvas = document.getElementById('bgCanvas');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        let angle = 0; 
-        let points = [];
-        const numPoints = 35; // عدد النقاط لزيادة نعومة الموجة
-        const springK = 0.015; // مرونة الماء
-        const damping = 0.95;  // لزوجة الماء
-        const spread = 0.12;   // سرعة انتشار الموجة
-        const particles = [];
+<script>
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let width, height;
 
-        function initCanvas() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-            points = [];
-            for (let i = 0; i <= numPoints; i++) {
-                points.push({
-                    x: (width / numPoints) * i,
-                    y: height * 0.78,
-                    vel: 0
-                });
-            }
-        }
-
-        // قراءة الجيروسكوب وتصحيح الميل (تأثير الكوب)
-        window.addEventListener('deviceorientation', (e) => {
-            if (e.gamma !== null) {
-                // عكسنا الإشارة ليكون الميل واقعياً مع الجاذبية
-                angle = Math.max(-35, Math.min(35, -e.gamma)) * (Math.PI / 180);
-            }
-        });
-
-        function createParticle() {
-            return {
+    function init() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+        particles = [];
+        for(let i=0; i<80; i++) {
+            particles.push({
                 x: Math.random() * width,
-                y: -20,
-                speed: Math.random() * 4 + 2,
-                size: Math.random() * 2 + 0.5
-            };
+                y: Math.random() * height,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                r: Math.random() * 2 + 1
+            });
         }
+    }
 
-        function draw() {
-            ctx.fillStyle = '#000';
-            ctx.fillRect(0, 0, width, height);
+    function draw() {
+        ctx.clearRect(0, 0, width, height);
+        ctx.fillStyle = "rgba(212, 175, 55, 0.5)";
+        
+        particles.forEach((p, i) => {
+            p.x += p.vx;
+            p.y += p.vy;
 
-            // 1. المطر الذهبي الشفاف
-            if (Math.random() > 0.88) particles.push(createParticle());
-            ctx.fillStyle = 'rgba(212, 175, 55, 0.3)';
-            particles.forEach((p, i) => {
-                p.y += p.speed;
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
-                if (p.y > height) particles.splice(i, 1);
-            });
+            if(p.x < 0 || p.x > width) p.vx *= -1;
+            if(p.y < 0 || p.y > height) p.vy *= -1;
 
-            // 2. تحديث فيزياء النقاط بشكل مستقل
-            const targetBaseY = height * 0.78;
-            const tilt = Math.tan(angle) * (width / 2);
-
-            points.forEach((p, i) => {
-                const relativePos = (i / numPoints) - 0.5;
-                const targetY = targetBaseY + (tilt * relativePos * 2);
-                const force = springK * (targetY - p.y);
-                p.vel = p.vel * damping + force;
-                p.y += p.vel;
-            });
-
-            // انتشار الموجة بين النقاط لجعلها سلسة (Fluid Physics)
-            for (let j = 0; j < 6; j++) {
-                for (let i = 0; i < points.length; i++) {
-                    if (i > 0) {
-                        const leftDiff = spread * (points[i].y - points[i-1].y);
-                        points[i-1].vel += leftDiff;
-                        points[i-1].y += leftDiff;
-                    }
-                    if (i < points.length - 1) {
-                        const rightDiff = spread * (points[i].y - points[i+1].y);
-                        points[i+1].vel += rightDiff;
-                        points[i+1].y += rightDiff;
-                    }
-                }
-            }
-
-            // 3. رسم السائل الملكي الشفاف
             ctx.beginPath();
-            ctx.moveTo(0, height);
-            ctx.lineTo(0, points[0].y);
-
-            // رسم المنحنيات بسلاسة بكسل بكسل
-            for (let i = 0; i < points.length - 1; i++) {
-                const xc = (points[i].x + points[i+1].x) / 2;
-                const yc = (points[i].y + points[i+1].y) / 2;
-                ctx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
-            }
-
-            ctx.lineTo(width, points[points.length-1].y);
-            ctx.lineTo(width, height);
-
-            // تدرج ذهبي احترافي "شفاف"
-            const grd = ctx.createLinearGradient(0, height * 0.65, 0, height);
-            grd.addColorStop(0, "rgba(212, 175, 55, 0.18)"); // سطح شفاف جداً
-            grd.addColorStop(0.5, "rgba(184, 134, 11, 0.08)"); // منتصف شفاف
-            grd.addColorStop(1, "rgba(212, 175, 55, 0.02)");  // قاع غير مرئي تقريباً
-
-            ctx.fillStyle = grd;
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
             ctx.fill();
 
-            // إضافة لمعة بيضاء رقيقة جداً على السطح
-            ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
-            ctx.lineWidth = 1.2;
-            ctx.stroke();
+            // رسم الخطوط عند الاقتراب
+            for(let j=i+1; j<particles.length; j++) {
+                let p2 = particles[j];
+                let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                if(dist < 100) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(212, 175, 55, ${1 - dist/100})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.stroke();
+                }
+            }
+        });
+        requestAnimationFrame(draw);
+    }
 
-            requestAnimationFrame(draw);
-        }
+    window.addEventListener('resize', init);
+    init();
+    draw();
 
-        window.addEventListener('resize', initCanvas);
-        initCanvas();
-        draw();
+    // نظام البيانات
+    const libraryData = {
+        "PLC (متحكمات مبرمجة)": { shrah: [], mozakrat: [], books: [], exams: [] },
+        "KAB (مشروع وثقافة العمل)": { shrah: [], mozakrat: [], books: [], exams: [] },
+        "صيانة أجهزة إلكترونية": { shrah: [], mozakrat: [], books: [], exams: [] },
+        "إتصالات": { shrah: [], mozakrat: [], books: [], exams: [] },
+        "معامل تطبيقية": { shrah: [], mozakrat: [], books: [], exams: [] },
+        "تقارير فنية": { shrah: [], mozakrat: [], books: [], exams: [] },
+        "دوائر متقدمة": { shrah: [], mozakrat: [], books: [], exams: [] },
+    };
 
-        // --- نظام البيانات الأصلي ---
-        const libraryData = {
-            "PLC (متحكمات مبرمجة)": { 
-                shrah: [{ title: "شرح الفيديو الأول", link: "videos/plc1.mp4" }], 
-                mozakrat: [{ title: "مذكرة الباب الأول", link: "notes/test.pdf" }],
-                books: [], exams: [] 
-            },
-            "KAB (مشروع وثقافة العمل الحر )": { shrah: [], mozakrat: [], books: [], exams: [] },
-            "صيانة وإصلاح أجهزة إلكترونية": { shrah: [], mozakrat: [], books: [], exams: [] },
-            "إتصالات ": { shrah: [], mozakrat: [], books: [], exams: [] },
-            "معامل تطبيقية": { shrah: [], mozakrat: [], books: [], exams: [] },
-            "تقارير فنية": { shrah: [], mozakrat: [], books: [], exams: [] },
-            "دوائر الكترونية متقدمة": { shrah: [], mozakrat: [], books: [], exams: [] },
-        };
-
+    function renderCards() {
         const grid = document.getElementById('subjectsGrid');
-        let currentSub = "";
-
-        function renderCards() {
-            grid.innerHTML = "";
-            for (let sub in libraryData) {
-                const d = libraryData[sub];
-                const card = document.createElement('div');
-                card.className = 'subject-card';
-                card.innerHTML = `
+        grid.innerHTML = "";
+        for (let sub in libraryData) {
+            const d = libraryData[sub];
+            grid.innerHTML += `
+                <div class="subject-card" onclick="openModal('${sub}')">
                     <div class="card-header"><h3>${sub}</h3></div>
                     <div class="stats-grid">
                         <div class="stat-item shrah"><span class="stat-num">${d.shrah.length}</span><span class="stat-label">شرح</span></div>
                         <div class="stat-item mozakrat"><span class="stat-num">${d.mozakrat.length}</span><span class="stat-label">مذكرات</span></div>
                         <div class="stat-item books"><span class="stat-num">${d.books.length}</span><span class="stat-label">كتب</span></div>
                         <div class="stat-item exams"><span class="stat-num">${d.exams.length}</span><span class="stat-label">امتحان</span></div>
-                    </div>`;
-                card.onclick = () => openModal(sub);
-                grid.appendChild(card);
-            }
+                    </div>
+                </div>`;
         }
+    }
 
-        function openModal(n) {
-            currentSub = n;
-            document.getElementById('modalTitle').innerText = n;
-            document.getElementById('modal').style.display = 'block';
-            backToMain();
-        }
+    let currentSub = "";
+    function openModal(n) {
+        currentSub = n;
+        document.getElementById('modalTitle').innerText = n;
+        document.getElementById('modal').style.display = 'block';
+        backToMain();
+    }
+    function closeModal() { document.getElementById('modal').style.display = 'none'; }
+    function backToMain() { document.getElementById('mainOptions').style.display = 'block'; document.getElementById('subSection').style.display = 'none'; }
+    function showSubSection(t) {
+        document.getElementById('mainOptions').style.display = 'none';
+        document.getElementById('subSection').style.display = 'block';
+        const list = document.getElementById('itemsList');
+        list.innerHTML = "<p style='text-align:center; opacity:0.5;'>قريباً...</p>";
+    }
 
-        function showSubSection(t) {
-            document.getElementById('mainOptions').style.display = 'none';
-            document.getElementById('subSection').style.display = 'block';
-            const list = document.getElementById('itemsList');
-            const items = libraryData[currentSub][t];
-            list.innerHTML = items.length === 0 ? "<p style='text-align:center; opacity:0.5;'>قريباً...</p>" : "";
-            items.forEach(i => {
-                list.innerHTML += `
-                    <div class="item-card">
-                        <b>${i.title}</b>
-                        <div class="action-btns">
-                            <a href="${i.link}" target="_blank" class="view-btn">👁️ عرض</a>
-                            <a href="${i.link}" target="_blank" class="download-btn">📥 تحميل</a>
-                        </div>
-                    </div>`;
-            });
-        }
-
-        function closeModal() { document.getElementById('modal').style.display = 'none'; }
-        function backToMain() { document.getElementById('mainOptions').style.display = 'block'; document.getElementById('subSection').style.display = 'none'; }
-
-        renderCards();
-    </script>
+    renderCards();
+</script>
 </body>
 </html>
