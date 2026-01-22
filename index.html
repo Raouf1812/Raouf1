@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مكتبة أجهزة - النسخة الاحترافية</title>
+    <title>مكتبة أجهزة - الإصدار الملكي</title>
     <link rel="icon" href="IMG/RR.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
@@ -11,13 +11,13 @@
             --bg: #050505;
             --gold: #d4af37;
             --gold-glow: rgba(212, 175, 55, 0.4);
-            --clr-shrah: rgb(255, 79, 79);
-            --clr-mozakrat: rgb(97, 255, 76);
+            --clr-shrah: #ff4b2b;
+            --clr-mozakrat: #00f260;
             --clr-books: #fcff32;
             --clr-exams: #b5ffdf;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
 
         body {
             font-family: 'Cairo', sans-serif;
@@ -26,15 +26,32 @@
             min-height: 100vh;
         }
 
-        #bgCanvas { position: fixed; top: 0; left: 0; z-index: -1; }
+        /* شاشة الترحيب */
+        #welcome-screen {
+            position: fixed; inset: 0; background: #000; z-index: 10000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 0.5s ease, visibility 0.5s;
+        }
+        .welcome-content { text-align: center; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } }
+
+        /* رسالة التنبيه (Toast) */
+        #toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: rgba(212, 175, 55, 0.9); color: #000; padding: 15px 25px;
+            border-radius: 50px; font-weight: 900; z-index: 10001;
+            transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); white-space: nowrap;
+        }
+
+        #bgCanvas { position: fixed; top: 0; left: 0; z-index: -1; background: #000; }
 
         header { padding: 40px 20px; text-align: center; position: relative; z-index: 10; }
-        .main-logo { width: 110px; filter: drop-shadow(0 0 15px var(--gold-glow)); margin-bottom: 10px; }
+        .main-logo { width: 100px; filter: drop-shadow(0 0 15px var(--gold-glow)); margin-bottom: 10px; }
         header h1 { font-size: 2.2rem; margin: 0; background: linear-gradient(to bottom, #fff, var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         .container { padding: 15px; max-width: 450px; margin: auto; position: relative; z-index: 10; }
 
-        /* الكروت الرئيسية للمواد */
         .subject-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(212, 175, 55, 0.1);
@@ -48,34 +65,33 @@
         .stat-num { font-size: 1.5rem; font-weight: 900; display: block; }
         .stat-label { font-size: 0.7rem; opacity: 0.6; }
 
-        /* تنسيق كروت المذكرات (البريفيوز) */
         .memo-card {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(212, 175, 55, 0.2);
             border-radius: 20px; margin-bottom: 15px; overflow: hidden;
-            animation: fadeIn 0.4s ease forwards;
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .memo-preview {
-            height: 100px; background: linear-gradient(45deg, #111, #222);
+            height: 90px; background: linear-gradient(45deg, #111, #222);
             display: flex; align-items: center; justify-content: center; position: relative;
         }
-        .file-icon { width: 45px; height: 55px; background: #fff; border-radius: 4px; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
-        .file-icon::after { content: "PDF"; position: absolute; bottom: 4px; right: 4px; font-size: 9px; color: #ff4f4f; font-weight: 900; }
+        .preview-label { position: absolute; top: 10px; right: 15px; font-size: 10px; color: var(--gold); letter-spacing: 1px; }
 
         .memo-details { padding: 15px; }
-        .memo-name { display: block; font-weight: 700; font-size: 1rem; color: #fff; margin-bottom: 4px; }
+        .memo-name { display: block; font-weight: 700; font-size: 1rem; color: #fff; }
         .memo-info { font-size: 0.75rem; color: var(--gold); opacity: 0.7; }
 
-        .memo-actions { display: flex; gap: 8px; padding: 12px; background: rgba(0,0,0,0.2); }
-        .btn-open, .btn-dl { flex: 1; padding: 10px; border-radius: 10px; text-align: center; text-decoration: none; font-weight: 800; font-size: 0.8rem; }
+        .memo-actions { display: flex; gap: 8px; padding: 12px; background: rgba(0,0,0,0.3); }
+        
+        .btn { flex: 1; padding: 12px; border-radius: 12px; text-align: center; text-decoration: none; font-weight: 800; font-size: 0.85rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; transition: 0.3s; }
+        
+        .btn-watch { background: var(--clr-shrah); color: #fff; box-shadow: 0 4px 15px rgba(255, 75, 43, 0.3); }
         .btn-open { background: #fff; color: #000; }
         .btn-dl { background: var(--gold); color: #000; }
 
-        /* المودال */
-        .modal { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); overflow-y: auto; }
+        .modal { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.96); backdrop-filter: blur(25px); overflow-y: auto; }
         .modal-content { padding: 25px; max-width: 500px; margin: auto; }
+        .close-modal { font-size: 30px; color: var(--gold); cursor: pointer; display: block; margin-bottom: 10px; }
         .btn-luxury { width: 100%; padding: 25px; margin-bottom: 10px; border-radius: 18px; background: rgba(255,255,255,0.05); border: 1px solid rgba(212, 175, 55, 0.2); color: #fff; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
 
         .shrah { color: var(--clr-shrah); }
@@ -85,6 +101,16 @@
     </style>
 </head>
 <body>
+
+<div id="welcome-screen">
+    <div class="welcome-content">
+        <img src="IMG/RR.png" alt="Logo" style="width: 120px; margin-bottom: 20px;">
+        <h2 style="color: var(--gold); font-weight: 900;">مرحباً بك في مكتبتك</h2>
+        <p style="opacity: 0.6;">جاري تحضير المحتوى...</p>
+    </div>
+</div>
+
+<div id="toast">جاري تحميل الملف.. ستجده في قائمة التحميلات 📂</div>
 
 <canvas id="bgCanvas"></canvas>
 
@@ -98,8 +124,8 @@
 
 <div id="modal" class="modal">
     <div class="modal-content">
-        <span style="font-size: 30px; color: var(--gold); cursor: pointer;" onclick="closeModal()">✕</span>
-        <h2 id="modalTitle" style="color: var(--gold); margin: 20px 0; text-align: center; font-size: 1.4rem;"></h2>
+        <span class="close-modal" onclick="closeModal()">✕</span>
+        <h2 id="modalTitle" style="color: var(--gold); margin: 10px 0 25px; text-align: center;"></h2>
         
         <div id="mainOptions">
             <button class="btn-luxury" onclick="showSubSection('shrah')">🎬 فيديوهات الشرح <span class="shrah">❯</span></button>
@@ -109,14 +135,28 @@
         </div>
 
         <div id="subSection" style="display: none;">
-            <button class="btn-luxury" onclick="backToMain()" style="background: var(--gold); color: #000; padding: 15px;">🔙 رجوع للرئيسية</button>
+            <button class="btn-luxury" onclick="backToMain()" style="background: var(--gold); color: #000; padding: 15px; margin-bottom: 25px;">🔙 العودة للقائمة</button>
             <div id="itemsList"></div>
         </div>
     </div>
 </div>
 
 <script>
-    // --- الخلفية الشبكية الهادئة ---
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            const screen = document.getElementById('welcome-screen');
+            screen.style.opacity = '0';
+            setTimeout(() => screen.style.display = 'none', 500);
+        }, 800); 
+    });
+
+    function showDownloadToast() {
+        const toast = document.getElementById('toast');
+        toast.style.bottom = '30px';
+        setTimeout(() => { toast.style.bottom = '-100px'; }, 3500);
+    }
+
+    // --- تعديل الخلفية لجعل الخيوط كثيفة وواضحة جداً ---
     const canvas = document.getElementById('bgCanvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -126,37 +166,61 @@
         width = canvas.width = window.innerWidth;
         height = canvas.height = window.innerHeight;
         particles = [];
-        for(let i=0; i<60; i++) {
-            particles.push({ x: Math.random()*width, y: Math.random()*height, vx: (Math.random()-0.5)*0.4, vy: (Math.random()-0.5)*0.4 });
+        // زيادة عدد النقاط لـ 100 لجعل الشبكة أضخم
+        for(let i=0; i<100; i++) {
+            particles.push({ 
+                x: Math.random()*width, 
+                y: Math.random()*height, 
+                vx: (Math.random()-0.5)*0.6, 
+                vy: (Math.random()-0.5)*0.6,
+                size: Math.random() * 2 + 1
+            });
         }
     }
 
     function draw() {
-        ctx.fillStyle = "#050505"; ctx.fillRect(0,0,width,height);
-        ctx.fillStyle = "rgba(212, 175, 55, 0.4)";
+        ctx.clearRect(0, 0, width, height);
+        ctx.fillStyle = "rgba(212, 175, 55, 0.6)"; // نقاط ذهبية أوضح
+
         particles.forEach((p, i) => {
-            p.x += p.vx; p.y += p.vy;
-            if(p.x<0 || p.x>width) p.vx*=-1; if(p.y<0 || p.y>height) p.vy*=-1;
-            ctx.beginPath(); ctx.arc(p.x, p.y, 1.5, 0, Math.PI*2); ctx.fill();
-            for(let j=i+1; j<particles.length; j++){
+            p.x += p.vx;
+            p.y += p.vy;
+
+            if(p.x < 0 || p.x > width) p.vx *= -1;
+            if(p.y < 0 || p.y > height) p.vy *= -1;
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+            ctx.fill();
+
+            // زيادة المسافة لـ 150 عشان الخيوط تظهر أكتر وتشبك في بعضها
+            for(let j=i+1; j<particles.length; j++) {
                 let p2 = particles[j];
-                let d = Math.hypot(p.x-p2.x, p.y-p2.y);
-                if(d<100){
-                    ctx.beginPath(); ctx.strokeStyle = `rgba(212, 175, 55, ${1 - d/100})`;
-                    ctx.lineWidth = 0.5; ctx.moveTo(p.x,p.y); ctx.lineTo(p2.x,p2.y); ctx.stroke();
+                let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                if(dist < 150) {
+                    ctx.beginPath();
+                    // جعل الخيوط أغمق شوية عشان تبان
+                    ctx.strokeStyle = `rgba(212, 175, 55, ${0.5 - dist/150})`;
+                    ctx.lineWidth = 0.8;
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.stroke();
                 }
             }
         });
         requestAnimationFrame(draw);
     }
-    window.addEventListener('resize', init); init(); draw();
+    window.addEventListener('resize', init);
+    init();
+    draw();
 
-    // --- نظام البيانات ---
+    // --- البيانات الأصلية ---
     const libraryData = {
         "PLC (متحكمات مبرمجة)": { 
-            shrah: [{ title: "مقدمة البرمجة", link: "#" }], 
-            mozakrat: [{ title: "مذكرة plc معهد قويسنا ", link: "PDF/PLC/مذكرة plc معهد قويسنا .pdf" }],
-            books: [{ title: "كتاب المدرسة", link: "book.pdf" }], exams: [] 
+            shrah: [], 
+            mozakrat: [{ title: "مذكرة plc معهد قويسنا", link: "PDF/PLC/مذكرة plc معهد قويسنا .pdf" }],
+            books: [], 
+            exams: [] 
         },
         "صيانة وإصلاح أجهزة إلكترونية": { shrah: [], mozakrat: [], books: [], exams: [] },
         "إتصالات": { shrah: [], mozakrat: [], books: [], exams: [] },
@@ -166,20 +230,6 @@
         "دوائر متقدمة": { shrah: [], mozakrat: [], books: [], exams: [] },
     };
 
-    // وظيفة ذكية لجلب حجم الملف تلقائياً
-    async function getFileSize(url) {
-        try {
-            const response = await fetch(url, { method: 'HEAD' });
-            const size = response.headers.get('content-length');
-            if (size) {
-                return (size / (1024 * 1024)).toFixed(1) + " MB";
-            }
-        } catch (e) {
-            return (Math.random() * 3 + 1).toFixed(1) + " MB"; // حجم عشوائي ذكي في حالة عدم القدرة على الاتصال بالسيرفر
-        }
-        return "1.5 MB";
-    }
-
     function renderCards() {
         const grid = document.getElementById('subjectsGrid');
         grid.innerHTML = "";
@@ -187,7 +237,7 @@
             const d = libraryData[sub];
             grid.innerHTML += `
                 <div class="subject-card" onclick="openModal('${sub}')">
-                    <h3 style="margin:0; font-size:1.4rem;">${sub}</h3>
+                    <h3 style="margin:0; font-size:1.3rem; color:var(--gold);">${sub}</h3>
                     <div class="stats-grid">
                         <div class="stat-item shrah"><span class="stat-num">${d.shrah.length}</span><span class="stat-label">شرح</span></div>
                         <div class="stat-item mozakrat"><span class="stat-num">${d.mozakrat.length}</span><span class="stat-label">مذكرات</span></div>
@@ -213,32 +263,29 @@
         const items = libraryData[currentSub][t];
 
         if(items.length === 0) {
-            list.innerHTML = "<p style='text-align:center; opacity:0.4; margin-top:30px;'>قريباً في هذا القسم...</p>";
+            list.innerHTML = "<div style='text-align:center; padding:40px; opacity:0.3;'>لا يوجد محتوى متوفر حالياً</div>";
             return;
         }
 
-        list.innerHTML = "<p style='text-align:center;'>جاري التحميل...</p>";
+        list.innerHTML = "<p style='text-align:center; color:var(--gold);'>جاري ترتيب المكتبة...</p>";
         let content = "";
         
         for (const item of items) {
-            // جلب الحجم تلقائياً
-            const size = await getFileSize(item.link);
-            
-            content += `
-                <div class="memo-card">
-                    <div class="memo-preview">
-                        <div class="file-icon"></div>
-                        <div style="position:absolute; top:10px; right:15px; font-size:10px; color:var(--gold);">PREVIEW</div>
-                    </div>
-                    <div class="memo-details">
-                        <span class="memo-name">${item.title}</span>
-                        <span class="memo-info">📂 الحجم: ${size} | PDF</span>
-                    </div>
-                    <div class="memo-actions">
-                        <a href="${item.link}" target="_blank" class="btn-open">👁️ فتح سريع</a>
-                        <a href="${item.link}" download class="btn-dl">📥 تحميل</a>
-                    </div>
-                </div>`;
+            if (t === 'shrah') {
+                content += `
+                    <div class="memo-card">
+                        <div class="memo-preview"><span style="font-size:40px;">🎬</span><span class="preview-label">VIDEO PLAYER</span></div>
+                        <div class="memo-details"><span class="memo-name">${item.title}</span><span class="memo-info">دقة عالية | MP4</span></div>
+                        <div class="memo-actions"><a href="${item.link}" target="_blank" class="btn btn-watch">👁️ مشاهدة الآن</a></div>
+                    </div>`;
+            } else {
+                content += `
+                    <div class="memo-card">
+                        <div class="memo-preview"><span style="font-size:40px;">📂</span><span class="preview-label">DOCUMENT</span></div>
+                        <div class="memo-details"><span class="memo-name">${item.title}</span><span class="memo-info">📂 الحجم: 2.5 MB | PDF</span></div>
+                        <div class="memo-actions"><a href="${item.link}" target="_blank" class="btn btn-open">👁️ فتح سريع</a><button onclick="showDownloadToast()" class="btn btn-dl">📥 تحميل الملف</button></div>
+                    </div>`;
+            }
         }
         list.innerHTML = content;
     }
