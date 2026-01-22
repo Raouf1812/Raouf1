@@ -9,9 +9,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #050505;
-            --gold: #d4af37;
-            --gold-glow: rgba(212, 175, 55, 0.4);
+            /* تطبيق قاعدة الألوان 60-30-10 */
+            --bg: #0b0b0b;           /* 60% الأساسي: أسود فخم */
+            --secondary: #800020;   /* 30% الثانوي: نبيتي (Burgundy) */
+            --accent: #98ff98;      /* 10% البارز: مينت جرين (Mint Green) */
+            
+            --gold: var(--accent); 
+            --gold-glow: rgba(152, 255, 152, 0.4);
             --clr-shrah: #ff4b2b;
             --clr-mozakrat: #00f260;
             --clr-books: #fcff32;
@@ -27,174 +31,124 @@
             min-height: 100vh;
         }
 
-
         /* شاشة الترحيب */
         #welcome-screen {
-            position: fixed; inset: 0; background: #000; z-index: 10000;
+            position: fixed; inset: 0; background: var(--bg); z-index: 10000;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             transition: opacity 0.5s ease, visibility 0.5s;
         }
         .welcome-content { text-align: center; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } }
 
-        /* رسالة التنبيه (Toast) */
+        /* رسالة التنبيه (Toast) باللون المينت */
         #toast {
             position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
-            background: rgba(212, 175, 55, 0.9); color: #000; padding: 15px 25px;
+            background: var(--accent); color: #000; padding: 15px 25px;
             border-radius: 50px; font-weight: 900; z-index: 10001;
             transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); white-space: nowrap;
+            box-shadow: 0 10px 30px rgba(152, 255, 152, 0.3); white-space: nowrap;
         }
 
-        #bgCanvas { position: fixed; top: 0; left: 0; z-index: -1; background: #000; }
+        #bgCanvas { position: fixed; top: 0; left: 0; z-index: -1; background: var(--bg); }
 
         header { padding: 40px 20px; text-align: center; position: relative; z-index: 10; }
         .main-logo { width: 100px; filter: drop-shadow(0 0 15px var(--gold-glow)); margin-bottom: 10px; }
-        header h1 { font-size: 2.2rem; margin: 0; background: linear-gradient(to bottom, #fff, var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        header h1 { font-size: 2.2rem; margin: 0; background: linear-gradient(to bottom, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         .container { padding: 15px; max-width: 450px; margin: auto; position: relative; z-index: 10; }
 
-        footer {
-                margin-top: 60px;
-                padding: 40px 20px;
-                text-align: center;
-                border-top: 1px solid rgba(212, 175, 55, 0.2);
-                background: linear-gradient(to bottom, transparent, rgba(212, 175, 55, 0.02));
-                position: relative;
-                z-index: 10;
-            }
-
-            .footer-content {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 10px;
-            }
-
-            .footer-text {
-                font-size: 0.95rem;
-                color: #ffffff;
-                margin: 0;
-            }
-
-            /* اللمعة الذهبية على الأسماء */
-            .footer-text span {
-                color: var(--gold);
-                font-weight: 900;
-                text-shadow: 0 0 10px var(--gold-glow); /* تأثير اللمعة */
-                position: relative;
-            }
-
-            /* الخط الذهبي المضيء */
-            .shining-line {
-                width: 80px;
-                height: 2px;
-                background: var(--gold);
-                margin: 15px 0;
-                border-radius: 50px;
-                box-shadow: 0 0 15px var(--gold), 0 0 30px var(--gold-glow);
-                animation: line-pulse 2s infinite ease-in-out;
-            }
-
-            @keyframes line-pulse {
-                0%, 100% { transform: scaleX(1); opacity: 0.8; }
-                50% { transform: scaleX(1.3); opacity: 1; }
-            }
-
-            .copyright {
-                font-size: 0.7rem;
-                opacity: 0.4;
-                margin-top: 15px;
-                letter-spacing: 1px;
-            }
+        /* كروت المواد باللون النبيتي */
         .subject-card {
-            background: rgba(168, 168, 168, 0.089);
-            border: 1px solid rgba(251, 255, 0, 0.425);
+            background: rgba(128, 0, 32, 0.15);
+            border: 1px solid rgba(152, 255, 152, 0.1);
             border-radius: 25px; padding: 20px; margin-bottom: 20px;
             backdrop-filter: blur(10px); transition: 0.3s;
         }
         .subject-card:active { transform: scale(0.96); }
 
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .stat-item { padding: 10px; border-radius: 15px; background: rgba(0,0,0,0.3); text-align: center; border: 1px solid rgba(255,255,255,0.05); }
-        .stat-num { font-size: 1.5rem; font-weight: 900; display: block; }
+        .stat-item { padding: 10px; border-radius: 15px; background: rgba(0,0,0,0.4); text-align: center; border: 1px solid rgba(152, 255, 152, 0.05); }
+        .stat-num { font-size: 1.5rem; font-weight: 900; display: block; color: var(--accent); }
         .stat-label { font-size: 0.7rem; opacity: 0.6; }
 
         .memo-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(212, 175, 55, 0.2);
+            background: rgba(128, 0, 32, 0.1);
+            border: 1px solid rgba(152, 255, 152, 0.15);
             border-radius: 20px; margin-bottom: 15px; overflow: hidden;
         }
 
         .memo-preview {
-            height: 90px; background: linear-gradient(45deg, #111, #222);
+            height: 90px; background: linear-gradient(45deg, var(--secondary), var(--bg));
             display: flex; align-items: center; justify-content: center; position: relative;
         }
-        .preview-label { position: absolute; top: 10px; right: 15px; font-size: 10px; color: var(--gold); letter-spacing: 1px; }
+        .preview-label { position: absolute; top: 10px; right: 15px; font-size: 10px; color: var(--accent); font-weight: bold; opacity: 0.7; }
 
         .memo-details { padding: 15px; }
         .memo-name { display: block; font-weight: 700; font-size: 1rem; color: #fff; }
-        .memo-info { font-size: 0.75rem; color: var(--gold); opacity: 0.7; }
+        .memo-info { font-size: 0.75rem; color: var(--accent); opacity: 0.8; }
 
-        .memo-actions { display: flex; gap: 8px; padding: 12px; background: rgba(0,0,0,0.3); }
+        .memo-actions { display: flex; gap: 8px; padding: 12px; background: rgba(0,0,0,0.4); }
         
         .btn { flex: 1; padding: 12px; border-radius: 12px; text-align: center; text-decoration: none; font-weight: 800; font-size: 0.85rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; transition: 0.3s; }
         
-        .btn-watch { background: var(--clr-shrah); color: #fff; box-shadow: 0 4px 15px rgba(255, 75, 43, 0.3); }
+        .btn-watch { background: var(--clr-shrah); color: #fff; }
         .btn-open { background: #fff; color: #000; }
-        .btn-dl { background: var(--gold); color: #000; }
+        .btn-dl { background: var(--accent); color: #000; }
 
-        .modal { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.96); backdrop-filter: blur(25px); overflow-y: auto; }
+        .modal { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(11, 11, 11, 0.98); backdrop-filter: blur(25px); overflow-y: auto; }
         .modal-content { padding: 25px; max-width: 500px; margin: auto; }
-        .close-modal { font-size: 30px; color: var(--gold); cursor: pointer; display: block; margin-bottom: 10px; }
-        .btn-luxury { width: 100%; padding: 25px; margin-bottom: 10px; border-radius: 18px; background: rgba(255,255,255,0.05); border: 1px solid rgba(212, 175, 55, 0.2); color: #fff; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+        .close-modal { font-size: 30px; color: var(--accent); cursor: pointer; display: block; margin-bottom: 10px; }
+        .btn-luxury { width: 100%; padding: 25px; margin-bottom: 10px; border-radius: 18px; background: rgba(128, 0, 32, 0.1); border: 1px solid rgba(152, 255, 152, 0.1); color: #fff; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
 
-        .shrah { color: var(--clr-shrah); }
-        .mozakrat { color: var(--clr-mozakrat); }
-        .books { color: var(--clr-books); }
-        .exams { color: var(--clr-exams); }
+        footer {
+            margin-top: 50px; padding: 40px 20px; text-align: center; 
+            border-top: 1px solid rgba(152, 255, 152, 0.1);
+            background: linear-gradient(transparent, rgba(128, 0, 32, 0.05));
+        }
+        footer span { color: var(--accent); font-weight: 900; text-shadow: 0 0 10px var(--gold-glow); }
     </style>
 </head>
 <body>
-
-<div id="welcome-screen">
-    <div class="welcome-content">
-        <img src="IMG/RR.png" alt="Logo" style="width: 120px; margin-bottom: 20px;">
-        <h2 style="color: var(--gold); font-weight: 900;">مرحباً بك في مكتبتك</h2>
-        <p style="opacity: 0.6;">جاري تحضير المحتوى...</p>
-    </div>
-</div>
-
-<div id="toast">جاري تحميل الملف.. ستجده في قائمة التحميلات 📂</div>
-
-<canvas id="bgCanvas"></canvas>
-
-<header>
-    <img src="IMG/RR.png" alt="Logo" class="main-logo">
-    <h1>مكتبة أجهزة</h1>
-    <p style="font-size: 0.9rem; opacity: 0.7;">الصف الثاني - الترم الثاني</p>
-</header>
-
-<div class="container" id="subjectsGrid"></div>
-
-<div id="modal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closeModal()">✕</span>
-        <h2 id="modalTitle" style="color: var(--gold); margin: 10px 0 25px; text-align: center;"></h2>
-        
-        <div id="mainOptions">
-            <button class="btn-luxury" onclick="showSubSection('shrah')">🎬 فيديوهات الشرح <span class="shrah">❯</span></button>
-            <button class="btn-luxury" onclick="showSubSection('mozakrat')">📜 المذكرات <span class="mozakrat">❯</span></button>
-            <button class="btn-luxury" onclick="showSubSection('books')">📚 الكتب <span class="books">❯</span></button>
-            <button class="btn-luxury" onclick="showSubSection('exams')">✍️ امتحانات <span class="exams">❯</span></button>
-        </div>
-
-        <div id="subSection" style="display: none;">
-            <button class="btn-luxury" onclick="backToMain()" style="background: var(--gold); color: #000; padding: 15px; margin-bottom: 25px;">🔙 العودة للقائمة</button>
-            <div id="itemsList"></div>
+    <div id="welcome-screen">
+        <div class="welcome-content">
+            <img src="IMG/RR.png" alt="Logo" style="width: 120px; margin-bottom: 20px;">
+            <h2 style="color: var(--accent); font-weight: 900;">مرحباً بك</h2>
         </div>
     </div>
-</div>
+
+    <div id="toast">جاري تحميل الملف.. ستجده في التحميلات 📂</div>
+
+    <canvas id="bgCanvas"></canvas>
+
+    <header>
+        <img src="IMG/RR.png" alt="Logo" class="main-logo">
+        <h1>مكتبة أجهزة</h1>
+    </header>
+
+    <div class="container" id="subjectsGrid"></div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">✕</span>
+            <h2 id="modalTitle" style="color: var(--accent); margin: 10px 0 25px; text-align: center;"></h2>
+            
+            <div id="mainOptions">
+                <button class="btn-luxury" onclick="showSubSection('shrah')">🎬 فيديوهات الشرح ❯</button>
+                <button class="btn-luxury" onclick="showSubSection('mozakrat')">📜 المذكرات ❯</button>
+                <button class="btn-luxury" onclick="showSubSection('books')">📚 الكتب ❯</button>
+                <button class="btn-luxury" onclick="showSubSection('exams')">✍️ امتحانات ❯</button>
+            </div>
+
+            <div id="subSection" style="display: none;">
+                <button class="btn-luxury" onclick="backToMain()" style="background: var(--accent); color: #000; padding: 15px; margin-bottom: 25px;">🔙 العودة للقائمة</button>
+                <div id="itemsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>تم التطوير بواسطة <span>معرفش</span> & <span>معرفش</span></p>
+    </footer>
 
 <script>
     window.addEventListener('load', () => {
@@ -410,12 +364,5 @@ async function getFileSize(url) {
     return "1.5 MB";
 }
 </script>
-<footer>
-    <div class="footer-content">
-        <div class="shining-line"></div>
-        <p class="footer-text">تم التطوير بواسطة <span>Raouf</span></p>
-        <div class="shining-line"></div>
-    </div>
-</footer>
 </body>
 </html>
