@@ -149,14 +149,51 @@
             setTimeout(() => screen.style.display = 'none', 500);
         }, 800); 
     });
+    function showDownloadToast() {
+    const toast = document.getElementById('toast');
+    
+    // 1. ارفع الرسالة لفوق عشان تبان
+    toast.style.bottom = '30px'; 
+    
+    // 2. استنى 3 ثواني وبعدين نزلها تاني تحت الشاشة
+    setTimeout(() => {
+        toast.style.bottom = '-100px';
+    }, 3500); 
+}
 
+    // دالة التنبيه الأصلية
     function showDownloadToast() {
         const toast = document.getElementById('toast');
         toast.style.bottom = '30px';
         setTimeout(() => { toast.style.bottom = '-100px'; }, 3500);
     }
 
-    // --- تعديل الخلفية لجعل الخيوط كثيفة وواضحة جداً ---
+    // دالة التحميل التي تجمع بين التنبيه والتحميل الفعلي
+    function triggerDownload(url, filename) {
+        showDownloadToast(); // إظهار التنبيه أولاً
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // دالة جلب الحجم تلقائياً
+    async function getFileSize(url) {
+        try {
+            const response = await fetch(url, { method: 'HEAD' });
+            const size = response.headers.get('content-length');
+            if (size) {
+                return (size / (1024 * 1024)).toFixed(1) + " MB";
+            }
+        } catch (e) {
+            return "1.5 MB"; 
+        }
+        return "1.5 MB";
+    }
+
+    // --- كود الخلفية ---
     const canvas = document.getElementById('bgCanvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -166,7 +203,6 @@
         width = canvas.width = window.innerWidth;
         height = canvas.height = window.innerHeight;
         particles = [];
-        // زيادة عدد النقاط لـ 100 لجعل الشبكة أضخم
         for(let i=0; i<100; i++) {
             particles.push({ 
                 x: Math.random()*width, 
@@ -180,41 +216,28 @@
 
     function draw() {
         ctx.clearRect(0, 0, width, height);
-        ctx.fillStyle = "rgba(212, 175, 55, 0.6)"; // نقاط ذهبية أوضح
-
+        ctx.fillStyle = "rgba(212, 175, 55, 0.6)";
         particles.forEach((p, i) => {
-            p.x += p.vx;
-            p.y += p.vy;
-
+            p.x += p.vx; p.y += p.vy;
             if(p.x < 0 || p.x > width) p.vx *= -1;
             if(p.y < 0 || p.y > height) p.vy *= -1;
-
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
-            ctx.fill();
-
-            // زيادة المسافة لـ 150 عشان الخيوط تظهر أكتر وتشبك في بعضها
+            ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
             for(let j=i+1; j<particles.length; j++) {
                 let p2 = particles[j];
                 let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
                 if(dist < 150) {
                     ctx.beginPath();
-                    // جعل الخيوط أغمق شوية عشان تبان
                     ctx.strokeStyle = `rgba(212, 175, 55, ${0.5 - dist/150})`;
-                    ctx.lineWidth = 0.8;
-                    ctx.moveTo(p.x, p.y);
-                    ctx.lineTo(p2.x, p2.y);
-                    ctx.stroke();
+                    ctx.lineWidth = 0.8; ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
                 }
             }
         });
         requestAnimationFrame(draw);
     }
     window.addEventListener('resize', init);
-    init();
-    draw();
+    init(); draw();
 
-    // --- البيانات الأصلية ---
+    // --- البيانات ---
     const libraryData = {
         "PLC (متحكمات مبرمجة)": { 
             shrah: [], 
@@ -271,6 +294,8 @@
         let content = "";
         
         for (const item of items) {
+            const fileSize = await getFileSize(item.link); // جلب الحجم تلقائياً
+
             if (t === 'shrah') {
                 content += `
                     <div class="memo-card">
@@ -279,11 +304,20 @@
                         <div class="memo-actions"><a href="${item.link}" target="_blank" class="btn btn-watch">👁️ مشاهدة الآن</a></div>
                     </div>`;
             } else {
+                // جلب الحجم تلقائياً لكل ملف قبل عرضه
+                const size = await getFileSize(item.link);
+                
                 content += `
                     <div class="memo-card">
                         <div class="memo-preview"><span style="font-size:40px;">📂</span><span class="preview-label">DOCUMENT</span></div>
-                        <div class="memo-details"><span class="memo-name">${item.title}</span><span class="memo-info">📂 الحجم: 2.5 MB | PDF</span></div>
-                        <div class="memo-actions"><a href="${item.link}" target="_blank" class="btn btn-open">👁️ فتح سريع</a><button onclick="showDownloadToast()" class="btn btn-dl">📥 تحميل الملف</button></div>
+                        <div class="memo-details">
+                            <span class="memo-name">${item.title}</span>
+                            <span class="memo-info">📂 الحجم: ${size} | PDF</span>
+                        </div>
+                        <div class="memo-actions">
+                            <a href="${item.link}" target="_blank" class="btn btn-open">👁️ فتح سريع</a>
+                            <button onclick="triggerDownload('${item.link}', '${item.title}')" class="btn btn-dl">📥 تحميل الملف</button>
+                        </div>
                     </div>`;
             }
         }
@@ -294,6 +328,31 @@
     function backToMain() { document.getElementById('mainOptions').style.display = 'block'; document.getElementById('subSection').style.display = 'none'; }
 
     renderCards();
+    // دالة بتعمل حاجتين: بتظهر التنبيه وبتبدأ التحميل
+function triggerDownload(url, filename) {
+    showDownloadToast(); // تشغيل رسالة التنبيه اللي عندك
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+// دالة بتعرف حجم الملف لوحدها
+async function getFileSize(url) {
+    try {
+        const response = await fetch(url, { method: 'HEAD' });
+        const size = response.headers.get('content-length');
+        if (size) {
+            return (size / (1024 * 1024)).toFixed(1) + " MB";
+        }
+    } catch (e) {
+        return "1.5 MB"; // لو حصل مشكلة حط حجم افتراضي
+    }
+    return "1.5 MB";
+}
 </script>
 </body>
 </html>
