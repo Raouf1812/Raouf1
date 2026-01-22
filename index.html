@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مكتبة أجهزة - الإصدار الملكي</title>
     <link rel="icon" href="IMG/RR.png" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* تعديل الألوان فقط */
-            --bg: #5d636a; /* الرمادي من الصورة */
-            --gold: #f4d3df; /* الوردي من الصورة */
-            --gold-glow: rgba(244, 211, 223, 0.4);
+            --bg: #050505;
+            --gold: #d4af37;
+            --gold-glow: rgba(212, 175, 55, 0.4);
             --clr-shrah: #ff4b2b;
             --clr-mozakrat: #00f260;
             --clr-books: #fcff32;
@@ -27,9 +27,10 @@
             min-height: 100vh;
         }
 
+
         /* شاشة الترحيب */
         #welcome-screen {
-            position: fixed; inset: 0; background: #3d4248; z-index: 10000;
+            position: fixed; inset: 0; background: #000; z-index: 10000;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             transition: opacity 0.5s ease, visibility 0.5s;
         }
@@ -39,13 +40,13 @@
         /* رسالة التنبيه (Toast) */
         #toast {
             position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
-            background: var(--gold); color: #000; padding: 15px 25px;
+            background: rgba(212, 175, 55, 0.9); color: #000; padding: 15px 25px;
             border-radius: 50px; font-weight: 900; z-index: 10001;
             transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 10px 30px rgba(0,0,0,0.5); white-space: nowrap;
         }
 
-        #bgCanvas { position: fixed; top: 0; left: 0; z-index: -1; background: var(--bg); }
+        #bgCanvas { position: fixed; top: 0; left: 0; z-index: -1; background: #000; }
 
         header { padding: 40px 20px; text-align: center; position: relative; z-index: 10; }
         .main-logo { width: 100px; filter: drop-shadow(0 0 15px var(--gold-glow)); margin-bottom: 10px; }
@@ -53,9 +54,62 @@
 
         .container { padding: 15px; max-width: 450px; margin: auto; position: relative; z-index: 10; }
 
+        footer {
+                margin-top: 60px;
+                padding: 40px 20px;
+                text-align: center;
+                border-top: 1px solid rgba(212, 175, 55, 0.2);
+                background: linear-gradient(to bottom, transparent, rgba(212, 175, 55, 0.02));
+                position: relative;
+                z-index: 10;
+            }
+
+            .footer-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .footer-text {
+                font-size: 0.95rem;
+                color: #ffffff;
+                margin: 0;
+            }
+
+            /* اللمعة الذهبية على الأسماء */
+            .footer-text span {
+                color: var(--gold);
+                font-weight: 900;
+                text-shadow: 0 0 10px var(--gold-glow); /* تأثير اللمعة */
+                position: relative;
+            }
+
+            /* الخط الذهبي المضيء */
+            .shining-line {
+                width: 80px;
+                height: 2px;
+                background: var(--gold);
+                margin: 15px 0;
+                border-radius: 50px;
+                box-shadow: 0 0 15px var(--gold), 0 0 30px var(--gold-glow);
+                animation: line-pulse 2s infinite ease-in-out;
+            }
+
+            @keyframes line-pulse {
+                0%, 100% { transform: scaleX(1); opacity: 0.8; }
+                50% { transform: scaleX(1.3); opacity: 1; }
+            }
+
+            .copyright {
+                font-size: 0.7rem;
+                opacity: 0.4;
+                margin-top: 15px;
+                letter-spacing: 1px;
+            }
         .subject-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(244, 211, 223, 0.1);
+            background: rgba(168, 168, 168, 0.089);
+            border: 1px solid rgba(251, 255, 0, 0.425);
             border-radius: 25px; padding: 20px; margin-bottom: 20px;
             backdrop-filter: blur(10px); transition: 0.3s;
         }
@@ -68,15 +122,15 @@
 
         .memo-card {
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(244, 211, 223, 0.2);
+            border: 1px solid rgba(212, 175, 55, 0.2);
             border-radius: 20px; margin-bottom: 15px; overflow: hidden;
         }
 
         .memo-preview {
-            height: 90px; background: linear-gradient(45deg, #4b5157, var(--gold));
+            height: 90px; background: linear-gradient(45deg, #111, #222);
             display: flex; align-items: center; justify-content: center; position: relative;
         }
-        .preview-label { position: absolute; top: 10px; right: 15px; font-size: 10px; color: #000; font-weight: bold; }
+        .preview-label { position: absolute; top: 10px; right: 15px; font-size: 10px; color: var(--gold); letter-spacing: 1px; }
 
         .memo-details { padding: 15px; }
         .memo-name { display: block; font-weight: 700; font-size: 1rem; color: #fff; }
@@ -90,10 +144,10 @@
         .btn-open { background: #fff; color: #000; }
         .btn-dl { background: var(--gold); color: #000; }
 
-        .modal { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(61, 66, 72, 0.98); backdrop-filter: blur(25px); overflow-y: auto; }
+        .modal { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.96); backdrop-filter: blur(25px); overflow-y: auto; }
         .modal-content { padding: 25px; max-width: 500px; margin: auto; }
         .close-modal { font-size: 30px; color: var(--gold); cursor: pointer; display: block; margin-bottom: 10px; }
-        .btn-luxury { width: 100%; padding: 25px; margin-bottom: 10px; border-radius: 18px; background: rgba(255,255,255,0.05); border: 1px solid rgba(244, 211, 223, 0.2); color: #fff; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+        .btn-luxury { width: 100%; padding: 25px; margin-bottom: 10px; border-radius: 18px; background: rgba(255,255,255,0.05); border: 1px solid rgba(212, 175, 55, 0.2); color: #fff; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
 
         .shrah { color: var(--clr-shrah); }
         .mozakrat { color: var(--clr-mozakrat); }
@@ -150,11 +204,49 @@
             setTimeout(() => screen.style.display = 'none', 500);
         }, 800); 
     });
+    function showDownloadToast() {
+    const toast = document.getElementById('toast');
+    
+    // 1. ارفع الرسالة لفوق عشان تبان
+    toast.style.bottom = '30px'; 
+    
+    // 2. استنى 3 ثواني وبعدين نزلها تاني تحت الشاشة
+    setTimeout(() => {
+        toast.style.bottom = '-100px';
+    }, 3500); 
+}
 
+
+    // دالة التنبيه الأصلية
     function showDownloadToast() {
         const toast = document.getElementById('toast');
         toast.style.bottom = '30px';
         setTimeout(() => { toast.style.bottom = '-100px'; }, 3500);
+    }
+
+    // دالة التحميل التي تجمع بين التنبيه والتحميل الفعلي
+    function triggerDownload(url, filename) {
+        showDownloadToast(); // إظهار التنبيه أولاً
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // دالة جلب الحجم تلقائياً
+    async function getFileSize(url) {
+        try {
+            const response = await fetch(url, { method: 'HEAD' });
+            const size = response.headers.get('content-length');
+            if (size) {
+                return (size / (1024 * 1024)).toFixed(1) + " MB";
+            }
+        } catch (e) {
+            return "1.5 MB"; 
+        }
+        return "1.5 MB";
     }
 
     // --- كود الخلفية ---
@@ -180,7 +272,7 @@
 
     function draw() {
         ctx.clearRect(0, 0, width, height);
-        ctx.fillStyle = "rgba(244, 211, 223, 0.4)";
+        ctx.fillStyle = "rgba(212, 175, 55, 0.6)";
         particles.forEach((p, i) => {
             p.x += p.vx; p.y += p.vy;
             if(p.x < 0 || p.x > width) p.vx *= -1;
@@ -191,7 +283,7 @@
                 let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
                 if(dist < 150) {
                     ctx.beginPath();
-                    ctx.strokeStyle = `rgba(244, 211, 223, ${0.4 - dist/150})`;
+                    ctx.strokeStyle = `rgba(212, 175, 55, ${0.5 - dist/150})`;
                     ctx.lineWidth = 0.8; ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
                 }
             }
@@ -254,25 +346,34 @@
             return;
         }
 
-        list.innerHTML = "<p style='text-align:center; color:var(--gold);'>جاري التحميل...</p>";
+        list.innerHTML = "<p style='text-align:center; color:var(--gold);'>جاري ترتيب المكتبة...</p>";
         let content = "";
         
         for (const item of items) {
-            const fileSize = await getFileSize(item.link);
+            const fileSize = await getFileSize(item.link); // جلب الحجم تلقائياً
 
             if (t === 'shrah') {
                 content += `
-                    <div class=\"memo-card\">
-                        <div class=\"memo-preview\"><span style=\"font-size:40px;\">🎬</span><span class=\"preview-label\">VIDEO PLAYER</span></div>
-                        <div class=\"memo-details\"><span class=\"memo-name\">${item.title}</span><span class=\"memo-info\">دقة عالية | MP4</span></div>
-                        <div class=\"memo-actions\"><a href=\"${item.link}\" target=\"_blank\" class=\"btn btn-watch\">👁️ مشاهدة الآن</a></div>
+                    <div class="memo-card">
+                        <div class="memo-preview"><span style="font-size:40px;">🎬</span><span class="preview-label">VIDEO PLAYER</span></div>
+                        <div class="memo-details"><span class="memo-name">${item.title}</span><span class="memo-info">دقة عالية | MP4</span></div>
+                        <div class="memo-actions"><a href="${item.link}" target="_blank" class="btn btn-watch">👁️ مشاهدة الآن</a></div>
                     </div>`;
             } else {
+                // جلب الحجم تلقائياً لكل ملف قبل عرضه
+                const size = await getFileSize(item.link);
+                
                 content += `
-                    <div class=\"memo-card\">
-                        <div class=\"memo-preview\"><span style=\"font-size:40px;\">📂</span><span class=\"preview-label\">DOCUMENT</span></div>
-                        <div class=\"memo-details\"><span class=\"memo-name\">${item.title}</span><span class=\"memo-info\">📂 الحجم: ${fileSize} | PDF</span></div>
-                        <div class=\"memo-actions\"><a href=\"${item.link}\" target=\"_blank\" class=\"btn btn-open\">👁️ فتح سريع</a><button onclick=\"triggerDownload('${item.link}', '${item.title}')\" class=\"btn btn-dl\">📥 تحميل الملف</button></div>
+                    <div class="memo-card">
+                        <div class="memo-preview"><span style="font-size:40px;">📂</span><span class="preview-label">DOCUMENT</span></div>
+                        <div class="memo-details">
+                            <span class="memo-name">${item.title}</span>
+                            <span class="memo-info">📂 الحجم: ${size} | PDF</span>
+                        </div>
+                        <div class="memo-actions">
+                            <a href="${item.link}" target="_blank" class="btn btn-open">👁️ فتح سريع</a>
+                            <button onclick="triggerDownload('${item.link}', '${item.title}')" class="btn btn-dl">📥 تحميل الملف</button>
+                        </div>
                     </div>`;
             }
         }
@@ -283,29 +384,38 @@
     function backToMain() { document.getElementById('mainOptions').style.display = 'block'; document.getElementById('subSection').style.display = 'none'; }
 
     renderCards();
+    // دالة بتعمل حاجتين: بتظهر التنبيه وبتبدأ التحميل
+function triggerDownload(url, filename) {
+    showDownloadToast(); // تشغيل رسالة التنبيه اللي عندك
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 
-    function triggerDownload(url, filename) {
-        showDownloadToast();
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-
-    async function getFileSize(url) {
-        try {
-            const response = await fetch(url, { method: 'HEAD' });
-            const size = response.headers.get('content-length');
-            if (size) {
-                return (size / (1024 * 1024)).toFixed(1) + " MB";
-            }
-        } catch (e) {
-            return "1.5 MB";
+// دالة بتعرف حجم الملف لوحدها
+async function getFileSize(url) {
+    try {
+        const response = await fetch(url, { method: 'HEAD' });
+        const size = response.headers.get('content-length');
+        if (size) {
+            return (size / (1024 * 1024)).toFixed(1) + " MB";
         }
-        return "1.5 MB";
+    } catch (e) {
+        return "1.5 MB"; // لو حصل مشكلة حط حجم افتراضي
     }
+    return "1.5 MB";
+}
 </script>
+<footer>
+    <div class="footer-content">
+        <div class="shining-line"></div>
+        <p class="footer-text">تم التطوير بواسطة <span>Raouf</span></p>
+        <div class="shining-line"></div>
+    </div>
+</footer>
 </body>
 </html>
