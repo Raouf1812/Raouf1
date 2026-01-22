@@ -9,13 +9,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* توزيع الألوان 60-30-10 */
-            --bg: #4a0404;           /* 60% الأساسي: نبيتي غامق للخلفية */
-            --secondary: #d1d1d1;    /* 30% الثانوي: رمادي للكلام والعناصر */
-            --accent: #98ff98;       /* 10% البارز: مينت للأزرار والتوهج */
+            /* تطبيق قاعدة 60-30-10 */
+            --bg: #000000;           /* 60% الأساسي: أسود */
+            --secondary: #2e3b23;    /* 30% الثانوي: زيتي وقور */
+            --accent: #ffffff;       /* 10% البارز: أبيض ناصع */
             
             --gold: var(--accent); 
-            --gold-glow: rgba(152, 255, 152, 0.4);
+            --gold-glow: rgba(255, 255, 255, 0.3);
             --clr-shrah: #ff4b2b;
             --clr-mozakrat: #00f260;
             --clr-books: #fcff32;
@@ -27,77 +27,79 @@
         body {
             font-family: 'Cairo', sans-serif;
             background: var(--bg);
-            color: var(--secondary);
+            color: #ccc; /* رمادي خفيف للنصوص العادية */
             margin: 0; overflow-x: hidden;
             min-height: 100vh;
         }
 
+        /* شاشة الترحيب */
         #welcome-screen {
-            position: fixed; inset: 0; background: #300202; z-index: 10000;
+            position: fixed; inset: 0; background: var(--bg); z-index: 10000;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             transition: opacity 0.5s ease, visibility 0.5s;
         }
-
         .welcome-content { text-align: center; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } }
 
+        /* رسالة التنبيه */
         #toast {
             position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
             background: var(--accent); color: #000; padding: 15px 25px;
             border-radius: 50px; font-weight: 900; z-index: 10001;
             transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); white-space: nowrap;
+            box-shadow: 0 10px 30px rgba(255,255,255,0.2); white-space: nowrap;
         }
 
         #bgCanvas { position: fixed; top: 0; left: 0; z-index: -1; background: var(--bg); }
 
         header { padding: 40px 20px; text-align: center; position: relative; z-index: 10; }
         .main-logo { width: 100px; filter: drop-shadow(0 0 15px var(--gold-glow)); margin-bottom: 10px; }
-        header h1 { font-size: 2.2rem; margin: 0; color: var(--secondary); font-weight: 900; }
+        header h1 { font-size: 2.2rem; margin: 0; color: var(--accent); font-weight: 900; }
 
         .container { padding: 15px; max-width: 450px; margin: auto; position: relative; z-index: 10; }
 
+        /* الكروت باللون الزيتي */
         .subject-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(209, 209, 209, 0.2);
+            background: rgba(46, 59, 35, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 25px; padding: 20px; margin-bottom: 20px;
             backdrop-filter: blur(10px); transition: 0.3s;
         }
         .subject-card:active { transform: scale(0.96); }
 
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .stat-item { padding: 10px; border-radius: 15px; background: rgba(0,0,0,0.3); text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .stat-item { padding: 10px; border-radius: 15px; background: rgba(0,0,0,0.5); text-align: center; border: 1px solid rgba(255,255,255,0.05); }
         .stat-num { font-size: 1.5rem; font-weight: 900; display: block; color: var(--accent); }
-        .stat-label { font-size: 0.7rem; opacity: 0.6; color: var(--secondary); }
+        .stat-label { font-size: 0.7rem; opacity: 0.6; }
 
         .memo-card {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(209, 209, 209, 0.1);
+            background: rgba(46, 59, 35, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px; margin-bottom: 15px; overflow: hidden;
         }
 
         .memo-preview {
-            height: 90px; background: linear-gradient(45deg, #300202, #5a0505);
+            height: 90px; background: linear-gradient(45deg, #1a2214, var(--secondary));
             display: flex; align-items: center; justify-content: center; position: relative;
         }
-        .preview-label { position: absolute; top: 10px; right: 15px; font-size: 10px; color: var(--secondary); font-weight: bold; opacity: 0.5; }
+        .preview-label { position: absolute; top: 10px; right: 15px; font-size: 10px; color: var(--accent); font-weight: bold; opacity: 0.5; }
 
         .memo-details { padding: 15px; }
-        .memo-name { display: block; font-weight: 700; font-size: 1rem; color: var(--secondary); }
-        .memo-info { font-size: 0.75rem; color: var(--accent); opacity: 0.8; }
+        .memo-name { display: block; font-weight: 700; font-size: 1rem; color: var(--accent); }
+        .memo-info { font-size: 0.75rem; color: #ccc; opacity: 0.8; }
 
-        .memo-actions { display: flex; gap: 8px; padding: 12px; background: rgba(0,0,0,0.3); }
+        .memo-actions { display: flex; gap: 8px; padding: 12px; background: rgba(0,0,0,0.4); }
         
         .btn { flex: 1; padding: 12px; border-radius: 12px; text-align: center; text-decoration: none; font-weight: 800; font-size: 0.85rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; transition: 0.3s; }
         
         .btn-watch { background: var(--clr-shrah); color: #fff; }
-        .btn-open { background: var(--secondary); color: #000; }
-        .btn-dl { background: var(--accent); color: #000; }
+        .btn-open { background: #fff; color: #000; }
+        .btn-dl { background: var(--secondary); color: #fff; border: 1px solid var(--accent); }
 
-        .modal { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(48, 2, 2, 0.98); backdrop-filter: blur(25px); overflow-y: auto; }
+        .modal { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0, 0, 0, 0.98); backdrop-filter: blur(25px); overflow-y: auto; }
         .modal-content { padding: 25px; max-width: 500px; margin: auto; }
         .close-modal { font-size: 30px; color: var(--accent); cursor: pointer; display: block; margin-bottom: 10px; }
-        .btn-luxury { width: 100%; padding: 25px; margin-bottom: 10px; border-radius: 18px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(209, 209, 209, 0.1); color: var(--secondary); font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+        .btn-luxury { width: 100%; padding: 25px; margin-bottom: 10px; border-radius: 18px; background: rgba(46, 59, 35, 0.3); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--accent); font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
 
         .shrah { color: var(--clr-shrah); }
         .mozakrat { color: var(--clr-mozakrat); }
@@ -106,7 +108,7 @@
 
         footer {
             margin-top: 50px; padding: 40px 20px; text-align: center; 
-            border-top: 1px solid rgba(209, 209, 209, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
         footer span { color: var(--accent); font-weight: 900; }
     </style>
@@ -116,7 +118,7 @@
 <div id="welcome-screen">
     <div class="welcome-content">
         <img src="IMG/RR.png" alt="Logo" style="width: 120px; margin-bottom: 20px;">
-        <h2 style="color: var(--secondary); font-weight: 900;">مرحباً بك</h2>
+        <h2 style="color: var(--accent); font-weight: 900;">مكتبة أجهزة</h2>
     </div>
 </div>
 
@@ -134,7 +136,7 @@
 <div id="modal" class="modal">
     <div class="modal-content">
         <span class="close-modal" onclick="closeModal()">✕</span>
-        <h2 id="modalTitle" style="color: var(--secondary); margin: 10px 0 25px; text-align: center;"></h2>
+        <h2 id="modalTitle" style="color: var(--accent); margin: 10px 0 25px; text-align: center;"></h2>
         
         <div id="mainOptions">
             <button class="btn-luxury" onclick="showSubSection('shrah')">🎬 فيديوهات الشرح <span class="shrah">❯</span></button>
@@ -191,7 +193,7 @@
 
     function draw() {
         ctx.clearRect(0, 0, width, height);
-        ctx.fillStyle = "rgba(152, 255, 152, 0.4)";
+        ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
         particles.forEach((p, i) => {
             p.x += p.vx; p.y += p.vy;
             if(p.x < 0 || p.x > width) p.vx *= -1;
@@ -202,7 +204,7 @@
                 let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
                 if(dist < 150) {
                     ctx.beginPath();
-                    ctx.strokeStyle = `rgba(152, 255, 152, ${0.4 - dist/150})`;
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${0.3 - dist/150})`;
                     ctx.lineWidth = 0.8; ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
                 }
             }
@@ -234,7 +236,7 @@
             const d = libraryData[sub];
             grid.innerHTML += `
                 <div class="subject-card" onclick="openModal('${sub}')">
-                    <h3 style="margin:0; font-size:1.3rem; color:var(--secondary);">${sub}</h3>
+                    <h3 style="margin:0; font-size:1.3rem; color:var(--accent);">${sub}</h3>
                     <div class="stats-grid">
                         <div class="stat-item shrah"><span class="stat-num">${d.shrah.length}</span><span class="stat-label">شرح</span></div>
                         <div class="stat-item mozakrat"><span class="stat-num">${d.mozakrat.length}</span><span class="stat-label">مذكرات</span></div>
@@ -260,7 +262,7 @@
         const items = libraryData[currentSub][t];
 
         if(items.length === 0) {
-            list.innerHTML = "<div style='text-align:center; padding:40px; opacity:0.3;'>لا يوجد محتوى متوفر حالياً</div>";
+            list.innerHTML = "<div style='text-align:center; padding:40px; opacity:0.3;'>قريباً...</div>";
             return;
         }
 
@@ -284,7 +286,7 @@
                         <div class="memo-details"><span class="memo-name">${item.title}</span><span class="memo-info">📂 الحجم: ${fileSize} | PDF</span></div>
                         <div class="memo-actions">
                             <a href="${item.link}" target="_blank" class="btn btn-open">👁️ فتح سريع</a>
-                            <button onclick="triggerDownload('${item.link}', '${item.title}')" class="btn btn-dl">📥 تحميل الملف</button>
+                            <button onclick="triggerDownload('${item.link}', '${item.title}')" class="btn btn-dl">📥 تحميل</button>
                         </div>
                     </div>`;
             }
