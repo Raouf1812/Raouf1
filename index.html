@@ -208,6 +208,11 @@
                 letter-spacing: 1px;
                 text-shadow: 0 0 5px var(--gold-glow);
             }
+            #online-count, #total-visitors {
+    transition: all 0.5s ease;
+    display: inline-block;
+    min-width: 20px;
+}
     </style>
 </head>
 <body>
@@ -247,10 +252,6 @@
 <footer>
 
     <div class="footer-stats">
-        <div class="stat-badge online-now">
-            <span>المتواجدون الآن :</span>
-            <span id="online-count" style="color: #00f260; font-weight: 900;">1</span>
-        </div>
         <div class="stat-badge">
         <span>👥 عدد الزيارات الكلي :</span>
         <span id="total-visitors">جارِ التحميل...</span>
@@ -262,7 +263,7 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js";
-    import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js";
+    import { getDatabase, ref, runTransaction, onValue, onDisconnect, set, push } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyADtj_iYU1wn3kBaaPfXTqMqEAClVJRVNE",
@@ -278,22 +279,56 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // --- العداد العادي (زيارة جديدة = رقم جديد) ---
-    const visitorRef = ref(db, 'stats/total_visitors');
-
-    // زيادة العداد فوراً عند فتح الصفحة
-    runTransaction(visitorRef, (currentValue) => {
-        return (currentValue || 0) + 1;
+    // --- 1. عداد إجمالي الزيارات (ذكي لا يتأثر بالريفريش) ---
+    const totalRef = ref(db, 'stats/total_visitors');
+    if (!sessionStorage.getItem('total_counted')) {
+        runTransaction(totalRef, (curr) => (curr || 0) + 1);
+        sessionStorage.setItem('total_counted', 'true');
+    }
+    onValue(totalRef, (snap) => {
+        const el = document.getElementById('total-visitors');
+        if(el) el.innerText = snap.val() || 0;
     });
 
-    // عرض الرقم وتحديثه أمام المستخدم
-    onValue(visitorRef, (snap) => {
-        const count = snap.val() || 0;
-        const display = document.getElementById('total-visitors');
-        if(display) display.innerText = count;
+    // --- 2. عداد المتواجدون الآن (حل مشكلة الريفريش) ---
+    const onlineRef = ref(db, 'stats/online_now');
+    
+    // نستخدم sessionStorage لحفظ مفتاح الجلسة لكي لا يحسبك شخصاً جديداً عند كل ريفريش
+    let sessionKey = sessionStorage.getItem('presence_key');
+    let presenceRef;
+
+    if (sessionKey) {
+        presenceRef = ref(db, 'stats/presence/' + sessionKey);
+    } else {
+        const newRef = push(ref(db, 'stats/presence/'));
+        sessionKey = newRef.key;
+        sessionStorage.setItem('presence_key', sessionKey);
+        presenceRef = newRef;
+    }
+
+    onValue(ref(db, '.info/connected'), (snap) => {
+        if (snap.val() === true) {
+            // التحقق إذا كان المستخدم مسجلاً بالفعل لتجنب التكرار عند الريفريش
+            onValue(presenceRef, (pSnap) => {
+                if (!pSnap.exists()) {
+                    set(presenceRef, true);
+                    runTransaction(onlineRef, (curr) => (curr || 0) + 1);
+                }
+            }, { onlyOnce: true });
+
+            // المسح عند إغلاق المتصفح نهائياً
+            onDisconnect(presenceRef).remove();
+            onDisconnect(onlineRef).runTransaction((curr) => (curr || 0) - 1);
+        }
     });
 
-    // --- عداد تحميل الملفات ---
+    onValue(onlineRef, (snap) => {
+        const val = snap.val();
+        const display = document.getElementById('online-count');
+        if(display) display.innerText = (val && val > 0) ? val : 1;
+    });
+
+    // --- 3. عداد التحميلات ---
     window.updateDL = (id) => {
         if(!id) return;
         runTransaction(ref(db, 'counts/' + id), (curr) => (curr || 0) + 1);
