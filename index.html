@@ -15,6 +15,8 @@
             --clr-mozakrat: #00f260;
             --clr-books: #fcff32;
             --clr-exams: #b5ffdf;
+            --clr-exams: #b5ffdf;
+            --clr-solved: #d663a6; 
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -68,8 +70,12 @@
         }
         .subject-card:active { transform: scale(0.96); }
 
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .stat-item { padding: 10px; border-radius: 15px; background: rgba(0,0,0,0.3); text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .stats-grid { 
+            display: grid; 
+            grid-template-columns: repeat(6, 1fr); /* قسمنا العرض لـ 6 وحدات لسهولة التوزيع */
+            gap: 10px; 
+            margin-top: 15px; 
+}        .stat-item { padding: 10px; border-radius: 15px; background: rgba(0,0,0,0.3); text-align: center; border: 1px solid rgba(255,255,255,0.05); }
         .stat-num { font-size: 1.5rem; font-weight: 900; display: block; }
         .stat-label { font-size: 0.7rem; opacity: 0.6; }
 
@@ -107,7 +113,7 @@
         .mozakrat { color: var(--clr-mozakrat); }
         .books { color: var(--clr-books); }
         .exams { color: var(--clr-exams); }
-
+        .solved { color: var(--clr-solved); }
         footer { margin-top: 50px; padding: 40px 20px; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.1); }
         footer span { color: var(--gold); font-weight: 900; }
         #total-visitors { transition: all 0.5s ease; display: inline-block; min-width: 20px; }
@@ -118,14 +124,16 @@
 <div id="welcome-screen">
     <img src="IMG/RR.png" alt="Logo" style="width: 100px;">
     <h2 style="color: var(--gold); margin-top: 20px; font-weight: 900;">مرحباً بك</h2>
+    <h6 style="color: var(--gold); margin-top: 20px; font-weight: 800;">جاري التحميل...</h6>
 </div>
 
-<div id="toast">جاري تحميل الملف.. ستجده في التحميلات 📂</div>
+<div id="toast">جاري تحميل الملف... ستجده في التحميلات 📂</div>
 <canvas id="bgCanvas"></canvas>
 
 <header>
     <img src="IMG/RR.png" alt="Logo" class="main-logo">
     <h1>مكتبة أجهزة</h1>
+    <h5>الصف الثاني  -  الترم الثاني</h5>
 </header>
 
 <div class="container" id="subjectsGrid"></div>
@@ -139,6 +147,7 @@
             <button class="btn-luxury" onclick="showSubSection('mozakrat')">📜 المذكرات <span class="mozakrat">❯</span></button>
             <button class="btn-luxury" onclick="showSubSection('books')">📚 الكتب <span class="books">❯</span></button>
             <button class="btn-luxury" onclick="showSubSection('exams')">✍️ امتحانات <span class="exams">❯</span></button>
+            <button class="btn-luxury" onclick="showSubSection('solvedExams')">✅ امتحانات محلولة <span class="solved">❯</span></button>
         </div>
         <div id="subSection" style="display: none;">
             <button class="btn-luxury" onclick="backToMain()" style="background: var(--gold); color: #000; padding: 15px; margin-bottom: 25px;">🔙 العودة للقائمة</button>
@@ -154,7 +163,11 @@
             <span id="total-visitors">جارِ التحميل...</span>
         </div>
     </div>
-    <p>تم التطوير بواسطة <span>RR</span></p>
+    <p>تم التطوير بواسطة <span>~ Raouf ~</span></p>
+    <p>بمساعدة <span>Banan &
+        Donia &
+        Arwa 
+    </span></p>
 </footer>
 
 <script type="module">
@@ -205,15 +218,187 @@
     const libraryData = {
         "PLC (متحكمات مبرمجة)": { 
             shrah: [], 
-            mozakrat: [{ id: "plc_1", link: "PDF/PLC/مذكرة_plc_معهد_قويسنا.pdf" }],
-            books: [], exams: [] 
+            mozakrat: [
+                { id: "13", link: "PDF/PLC/PLC_الباب_الاول.pdf" },
+                { id: "14", link: "PDF/PLC/PLC_الباب_الثانى.pdf" },
+                { id: "15", link: "PDF/PLC/PLC_الباب_الثالث.pdf" },
+                { id: "16", link: "PDF/PLC/Plc_افضل_اختيار.pdf" },
+                { id: "17", link: "PDF/PLC/اسكتش_شرح_(plc).pdf" },
+                { id: "18", link: "PDF/PLC/باب_اول_plc_لولة_🍟.pdf" },
+                { id: "19", link: "PDF/PLC/باب_تاني_plc_لولة_🍟.pdf" },
+                { id: "20", link: "PDF/PLC/باب_تالت_و_رابع_لولة_🍟.pdf" },
+                { id: "21", link: "PDF/PLC/م_عبدالحميد_plc_الجديدة_كاملة.pdf" },
+                { id: "22", link: "PDF/PLC/مادة_PLC_Abdelmonem_sengab.pdf" },
+                { id: "23", link: "PDF/PLC/مذكرة_plc_(م_سامح_الحريف).pdf" },
+                { id: "24", link: "PDF/PLC/مذكرة_plc_م_هبة_معهد_الزقازيق.pdf" },
+                { id: "25", link: "PDF/PLC/مذكرة_plc_معهد_قويسنا.pdf" },
+                { id: "26", link: "PDF/PLC/مراجعة_لولة_🍟.pdf" },
+                { id: "27", link: "PDF/PLC/مراجعه_ليلي_plc.pdf" },
+                { id: "54", link: "PDF/PLC/م_سامح_الحريف_PLC_مذكرة_مش_كاملة_.pdf" },
+
+
+            ],
+            books: [],
+            exams: [],
+            solvedExams: [] 
         },
-        "صيانة وإصلاح أجهزة إلكترونية": { shrah: [], mozakrat: [], books: [], exams: [] },
-        "إتصالات": { shrah: [], mozakrat: [], books: [], exams: [] },
-        "KAB (مشروع وثقافة العمل الحر )": { shrah: [], mozakrat: [], books: [], exams: [] },
-        "معامل تطبيقية": { shrah: [], mozakrat: [], books: [] },
-        "تقارير فنية": { shrah: [], mozakrat: [], books: [] },
-        "دوائر متقدمة": { shrah: [], mozakrat: [], books: [] },
+        "صيانة وإصلاح أجهزة إلكترونية": { shrah: [
+
+        ],
+        mozakrat: [
+        { id: "47", link: "PDF/صيانة/El-Banhawey_صيانه_وإصلاح.pdf" },
+        { id: "48", link: "PDF/صيانة/اسكتش_صيانه.pdf" },
+        { id: "49", link: "PDF/صيانة/م_كريم_صيانه_و_اصلاح .pdf" },
+        { id: "50", link: "PDF/صيانة/مادة_صيانة_و_اصلاح_Abdelmonem.pdf" },
+        { id: "51", link: "PDF/صيانة/ماده_صيانه_و_اصلاح.pdf" },
+        { id: "52", link: "PDF/صيانة/مذكرة_صيانة_و_إصلاح_الاجهزة_الكترونية.pdf" },
+        { id: "53", link: "PDF/صيانة/من_1ل_6صيانه_وإصلاح.pdf" },
+
+        ],
+        books: [
+
+        ],
+        exams: [
+
+        ], 
+        solvedExams: [
+
+        ]
+         },
+        "إتصالات": {
+             shrah: [
+
+        ],
+        mozakrat: [
+        { id: "55", link: "PDF/إتصالات/اتصالات_الباب_الاول.pdf" },
+        { id: "56", link: "PDF/إتصالات/اتصالات_الباب_التاني.pdf" },
+        { id: "57", link: "PDF/إتصالات/الاتصالات_الباب_الثالث.pdf" },
+        { id: "58", link: "PDF/إتصالات/اتصالات_الباب _الرابع.pdf" },
+        { id: "59", link: "PDF/إتصالات/اتصالات_الباب_الخامس.pdf" },
+        { id: "60", link: "PDF/إتصالات/مذكرة_اتصالات_م_سمر_كاملة.pdf" },
+        { id: "61", link: "PDF/إتصالات/مذكرة_الاتصالات_م_نور_جودة.pdf" },
+        { id: "62", link: "PDF/إتصالات/م_شيرين_باب_اول.pdf" },
+        { id: "63", link: "PDF/إتصالات/م_شيرين_باب_التاني.pdf" },
+        { id: "64", link: "PDF/إتصالات/م_شيرين_باب_التالت.pdf" },
+        { id: "65", link: "PDF/إتصالات/م_شيرين_باب_رابع.pdf" },
+        { id: "66", link: "PDF/إتصالات/اتصالات_الباب_الخامس.pdf" },
+        ],
+        books: [
+
+        ],
+        exams: [
+
+        ],
+        solvedExams: [
+
+        ]
+         },
+        "KAB (مشروع وثقافة العمل الحر )": { 
+        shrah: [
+
+        ],
+         mozakrat: [
+        { id: "2", link: "PDF/KAB/منهج_كاب_كامل.pdf" },
+        { id: "3", link: "PDF/KAB/مسائل_محاضرات_كاب_محلولة.pdf" },
+        { id: "4", link: "PDF/KAB/مسائل_مادة_كاب_مايو_من_2024_الي_2020.pdf" },
+        { id: "5", link: "PDF/KAB/مسائل_مادة_كاب.pdf" },
+        { id: "6", link: "PDF/KAB/مراجعة_كاب.pdf" },
+        { id: "7", link: "PDF/KAB/مذكرة_كاب_ملخص.pdf" },
+        { id: "8", link: "PDF/KAB/مذكرة_كاب_معهد_المطرية.pdf" },
+        { id: "9", link: "PDF/KAB/م_شيرين_كاب_اسئلة.pdf" },
+        { id: "10", link: "PDF/KAB/كـــــــــاب_كمبيوتر_منظمة.pdf" },
+        { id: "11", link: "PDF/KAB/كاب_ملخص_عظمة.pdf" },
+        { id: "12", link: "PDF/KAB/كاب_م_شرين_مذكره_الشرح.pdf" },
+        { id: "13", link: "PDF/KAB/أسئلة_الكاب_محلول_كمبيوتر.pdf" },
+        { id: "14", link: "PDF/KAB/KAP_COMPUTER.pdf" },
+        { id: "15", link: "PDF/KAB/kab.pdf" },
+        { id: "16", link: "PDF/KAB/2_بنك_الاسئله_كاب.pdf" },
+        { id: "17", link: "PDF/KAB/1_بنك_الاسئلة_كاب.pdf" },
+        { id: "12", link: "PDF/KAB/100_سؤال_مادا_كاب.pdf" },
+         ],
+        books: [
+
+          ],
+        exams: [
+            
+           ],
+        solvedExams: [
+
+        ] 
+    },
+        "معامل تطبيقية": { 
+        shrah: [
+
+        ],
+        mozakrat: [
+        { id: "67", link: "PDF/معامل/مادة معامل تطبيقية Abdelmonem.pdf" },
+        { id: "68", link: "PDF/معامل/مذكرة معامل تطبيقية.pdf" },
+        { id: "69", link: "PDF/معامل/مذكرة_معامل_تطبيقية_م_عبدالحميد_الجديدة.pdf" },
+        { id: "70", link: "PDF/معامل/معامل تطبيقية رسم ذا  بيست.pdf" },
+        { id: "71", link: "PDF/معامل/معامل تطبيقية عظمه.pdf" },
+        { id: "72", link: "PDF/معامل/معامل تطبيقية م.عبدالرحمن.pdf" },
+        { id: "73", link: "PDF/معامل/معامل تطبيقية-1.pdf" },
+        { id: "74", link: "PDF/معامل/معمل معامل تطبيقيه .pdf" },
+        { id: "75", link: "PDF/معامل/ملخص_رسومات_معامل.pdf" },
+        { id: "76", link: "PDF/معامل/ملزمة شعبان معامل تطبيقية.pdf" },
+        ],
+        books: [
+
+        ], 
+        solvedExams: [
+
+        ]
+    },
+        "تقارير فنية": { shrah: [
+
+        ],
+        mozakrat: [
+        { id: "28", link: "PDF/تقارير/تقارير_افضل_اختيار.pdf" },
+        { id: "29", link: "PDF/تقارير/تقارير_فنيه_م_سيد_عطا.pdf" },
+        { id: "30", link: "PDF/تقارير/تقارير_فنيه_ملخص_حلو.pdf" },
+        { id: "31", link: "PDF/تقارير/تقارير_كتابه_كمبيوتر.pdf" },
+        { id: "32", link: "PDF/تقارير/تقارير_مذكره_ملخصه.PDF" },
+        { id: "33", link: "PDF/تقارير/تقارير_ملخص.pdf" },
+        { id: "34", link: "PDF/تقارير/تقاير_فنية_في_8_ورقات.pdf" },
+        { id: "35", link: "PDF/تقارير/كتابة_التقارير_الفنية_مذكرة.pdf" },
+        { id: "36", link: "PDF/تقارير/م_إسراء_أشرف_تقارير_فنية.pdf" },
+        { id: "37", link: "PDF/تقارير/م_كريم_تقارير_فنية.pdf" },
+        { id: "38", link: "PDF/تقارير/ملزمة_تقارير_شعبان.pdf" },
+        { id: "39", link: "PDF/تقارير/ملخص_تقارير_كامل.pdf" },
+        { id: "40", link: "PDF/تقارير/مسائل_تقارير.pdf" },
+        { id: "41", link: "PDF/تقارير/مذكرة_تقارير_م_سامح_الحريف.pdf" },
+        { id: "42", link: "PDF/تقارير/مذكرة_تقارير_فنيهم_محمد_عبدالبديع.pdf" },
+        { id: "43", link: "PDF/تقارير/مذكرة_تقارير_فنيه2_.pdf" },
+        { id: "44", link: "PDF/تقارير/مادة_تقارير_فنيه.pdf" },
+        { id: "45", link: "PDF/تقارير/مادة_تقارير_فنية_Abdelmonem.pdf" },
+        ],
+        books: [
+        { id: "46", link: "PDF/تقارير/كتاب_التقارير.pdf" },
+        ],
+        solvedExams: [
+            
+        ]
+    },
+        "دوائر متقدمة": {
+        shrah: [
+
+        ],
+        mozakrat: [
+        { id: "77", link: "PDF/دوائر/باب_اول_وثانى_دوائر_الكترونيه_متقدمه_م_سوسن.pdf" },
+        { id: "78", link: "PDF/دوائر/دوائر متقدمه 4و5و6 سوسن.pdf" },
+        { id: "79", link: "PDF/دوائر/دوائر الكترونيه متقدمه .pdf" },
+        { id: "80", link: "PDF/دوائر/دوائر متقدمة Abdelmonem.pdf" },
+        { id: "81", link: "PDF/دوائر/م_كريم دوائر الكترونيه .pdf" },
+        { id: "82", link: "PDF/دوائر/مذكرة_دوائر_الكترونية_متقدمة_معهد_الزقازيق.pdf" },
+        { id: "83", link: "PDF/دوائر/ملخص دوائر متقدمه .pdf" },
+        ],
+        books: [
+
+        ], 
+        solvedExams: [
+
+        ]
+    },
     };
 
     function getFileName(path) {
@@ -281,14 +466,37 @@
     });
 
     let currentSub = "";
-    function renderCards() {
-        const grid = document.getElementById('subjectsGrid');
-        grid.innerHTML = "";
-        for (let sub in libraryData) {
-            const d = libraryData[sub];
-            grid.innerHTML += `<div class="subject-card" onclick="openModal('${sub}')"><h3 style="margin:0; font-size:1.3rem; color:var(--gold);">${sub}</h3><div class="stats-grid"><div class="stat-item shrah"><span class="stat-num">${d.shrah.length}</span><span class="stat-label">شرح</span></div><div class="stat-item mozakrat"><span class="stat-num">${d.mozakrat.length}</span><span class="stat-label">مذكرات</span></div><div class="stat-item books"><span class="stat-num">${d.books.length}</span><span class="stat-label">كتب</span></div><div class="stat-item exams"><span class="stat-num">${d.exams ? d.exams.length : 0}</span><span class="stat-label">امتحان</span></div></div></div>`;
-        }
+function renderCards() {
+    const grid = document.getElementById('subjectsGrid');
+    grid.innerHTML = "";
+    for (let sub in libraryData) {
+        const d = libraryData[sub];
+        grid.innerHTML += `
+            <div class="subject-card" onclick="openModal('${sub}')">
+                <h3 style="margin:0; font-size:1.3rem; color:var(--gold);">${sub}</h3>
+                <div class="stats-grid">
+                    <div class="stat-item shrah" style="grid-column: span 2;">
+                        <span class="stat-num">${d.shrah.length}</span><span class="stat-label">شرح</span>
+                    </div>
+                    <div class="stat-item mozakrat" style="grid-column: span 2;">
+                        <span class="stat-num">${d.mozakrat.length}</span><span class="stat-label">مذكرات</span>
+                    </div>
+                    <div class="stat-item books" style="grid-column: span 2;">
+                        <span class="stat-num">${d.books.length}</span><span class="stat-label">كتب</span>
+                    </div>
+                    
+                    <div class="stat-item exams" style="grid-column: span 3;">
+                        <span class="stat-num">${d.exams ? d.exams.length : 0}</span>
+                        <span class="stat-label">امتحانات</span>
+                    </div>
+                    <div class="stat-item solved" style="grid-column: span 3;">
+                        <span class="stat-num">${d.solvedExams ? d.solvedExams.length : 0}</span>
+                        <span class="stat-label">امتحانات محلولة</span>
+                    </div>
+                </div>
+            </div>`;
     }
+}
 
     function openModal(n) { currentSub = n; document.getElementById('modalTitle').innerText = n; document.getElementById('modal').style.display = 'block'; backToMain(); }
     function closeModal() { document.getElementById('modal').style.display = 'none'; }
