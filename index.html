@@ -26,6 +26,79 @@
             margin: 0; overflow-x: hidden;
             min-height: 100vh;
         }
+                /* تأثير اللمعة المتحركة على الكروت */
+        .subject-card, .memo-card {
+            position: relative;
+            overflow: hidden; /* لمنع اللمعة من الخروج عن حدود الكارت */
+        }
+                /* تأثير الزجاج اللامع */
+        .subject-card, .memo-card {
+            position: relative;
+            overflow: hidden;
+        }
+        .subject-card::before, .memo-card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: -150%;
+            width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: skewX(-25deg);
+            transition: 0.8s;
+        }
+        .subject-card:hover::before, .memo-card:hover::before { left: 150%; }
+
+        /* تنسيق عداد الزوار المطور */
+        .footer-stats {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .stat-badge {
+            background: rgba(168, 202, 215, 0.08);
+            padding: 8px 20px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(168, 202, 215, 0.2);
+            font-size: 0.85rem;
+        }
+        .online-now::before {
+            content: "";
+            width: 8px; height: 8px;
+            background: #00f260;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00f260;
+            animation: pulse-dot 1.5s infinite;
+        }
+        @keyframes pulse-dot {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .subject-card::before, .memo-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(
+                to right,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            transform: skewX(-25deg);
+            transition: 0.8s;
+        }
+
+        .subject-card:hover::before, .memo-card:hover::before {
+            left: 150%; /* تحرك اللمعة من اليمين لليسار عند التمرير */
+        }
 
         #welcome-screen {
             position: fixed; inset: 0; background: #000; z-index: 10000;
@@ -102,11 +175,39 @@
         footer span { color: var(--gold); font-weight: 900; }
 
         .visitor-counter {
-            margin-bottom: 15px; background: rgba(168, 202, 215, 0.05);
-            padding: 8px 20px; border-radius: 50px; display: inline-flex;
-            align-items: center; gap: 10px; border: 1px solid var(--gold-glow);
-            font-size: 0.9rem;
-        }
+                margin-bottom: 15px;
+                background: rgba(168, 202, 215, 0.08);
+                padding: 10px 25px;
+                border-radius: 50px;
+                display: inline-flex;
+                align-items: center;
+                gap: 12px;
+                border: 1px solid rgba(168, 202, 215, 0.2);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            }
+
+            /* دائرة النبض الخضراء */
+            .visitor-counter::before {
+                content: "";
+                width: 8px;
+                height: 8px;
+                background: #00f260;
+                border-radius: 50%;
+                display: inline-block;
+                box-shadow: 0 0 10px #00f260;
+                animation: pulse-dot 1.5s infinite;
+            }
+
+            @keyframes pulse-dot {
+                0% { transform: scale(1); opacity: 1; }
+                50% { transform: scale(1.5); opacity: 0.5; }
+                100% { transform: scale(1); opacity: 1; }
+            }
+
+            #global-visitors {
+                letter-spacing: 1px;
+                text-shadow: 0 0 5px var(--gold-glow);
+            }
     </style>
 </head>
 <body>
@@ -144,11 +245,19 @@
 </div>
 
 <footer>
-    <div class="visitor-counter">
-        <span>👥 زوار الموقع:</span>
-        <span id="global-visitors" style="color: var(--gold); font-weight: 900;">...</span>
+
+    <div class="footer-stats">
+        <div class="stat-badge online-now">
+            <span>المتواجدون الآن :</span>
+            <span id="online-count" style="color: #00f260; font-weight: 900;">1</span>
+        </div>
+        <div class="stat-badge">
+        <span>👥 عدد الزيارات الكلي :</span>
+        <span id="total-visitors">جارِ التحميل...</span>
+    </div>
     </div>
     <p>تم التطوير بواسطة <span>RR</span></p>
+
 </footer>
 
 <script type="module">
@@ -169,29 +278,33 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // عداد الزوار
-    const visitorRef = ref(db, 'stats/visitors');
-    runTransaction(visitorRef, (curr) => (curr || 0) + 1);
-    onValue(visitorRef, (snap) => {
-        const val = snap.val();
-        if(document.getElementById('global-visitors')) 
-            document.getElementById('global-visitors').innerText = val || 0;
+    // --- العداد العادي (زيارة جديدة = رقم جديد) ---
+    const visitorRef = ref(db, 'stats/total_visitors');
+
+    // زيادة العداد فوراً عند فتح الصفحة
+    runTransaction(visitorRef, (currentValue) => {
+        return (currentValue || 0) + 1;
     });
 
-    // تحديث التحميلات
-    window.updateDL = function(id) {
-        if(!id || id === 'none') return;
+    // عرض الرقم وتحديثه أمام المستخدم
+    onValue(visitorRef, (snap) => {
+        const count = snap.val() || 0;
+        const display = document.getElementById('total-visitors');
+        if(display) display.innerText = count;
+    });
+
+    // --- عداد تحميل الملفات ---
+    window.updateDL = (id) => {
+        if(!id) return;
         runTransaction(ref(db, 'counts/' + id), (curr) => (curr || 0) + 1);
     };
 
-    // مزامنة العدادات
-    window.syncCounts = function() {
+    window.syncCounts = () => {
         onValue(ref(db, 'counts/'), (snap) => {
-            const data = snap.val();
-            if(!data) return;
+            const data = snap.val(); if(!data) return;
             for(let id in data) {
                 const el = document.getElementById('c-'+id);
-                if(el) el.innerText = data[id] + " تحميلة";
+                if(el) el.innerText = "تم التحميل " + data[id] + " مرة";
             }
         });
     };
@@ -284,7 +397,7 @@
                             <span class="memo-name">${item.title}</span>
                             <small style="opacity:0.5">حجم: 1.5 MB</small>
                         </div>
-                        <div class="memo-count-side" id="c-${item.id || 'none'}">0 تحميلة</div>
+                        <div class="memo-count-side" id="c-${item.id || 'none'}"> تم التحميل 0 مره</div>
                     </div>
                     <div class="memo-actions">
                         <a href="${item.link}" target="_blank" class="btn btn-open">👁️ فتح</a>
