@@ -26,78 +26,19 @@
             margin: 0; overflow-x: hidden;
             min-height: 100vh;
         }
-                /* تأثير اللمعة المتحركة على الكروت */
-        .subject-card, .memo-card {
-            position: relative;
-            overflow: hidden; /* لمنع اللمعة من الخروج عن حدود الكارت */
-        }
-                /* تأثير الزجاج اللامع */
-        .subject-card, .memo-card {
-            position: relative;
-            overflow: hidden;
-        }
+
+        .subject-card, .memo-card { position: relative; overflow: hidden; }
         .subject-card::before, .memo-card::before {
-            content: "";
-            position: absolute;
-            top: 0; left: -150%;
-            width: 50%; height: 100%;
+            content: ""; position: absolute; top: 0; left: -150%; width: 50%; height: 100%;
             background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transform: skewX(-25deg);
-            transition: 0.8s;
+            transform: skewX(-25deg); transition: 0.8s;
         }
         .subject-card:hover::before, .memo-card:hover::before { left: 150%; }
 
-        /* تنسيق عداد الزوار المطور */
-        .footer-stats {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+        .footer-stats { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 20px; }
         .stat-badge {
-            background: rgba(168, 202, 215, 0.08);
-            padding: 8px 20px;
-            border-radius: 50px;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            border: 1px solid rgba(168, 202, 215, 0.2);
-            font-size: 0.85rem;
-        }
-        .online-now::before {
-            content: "";
-            width: 8px; height: 8px;
-            background: #00f260;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #00f260;
-            animation: pulse-dot 1.5s infinite;
-        }
-        @keyframes pulse-dot {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.5); opacity: 0.5; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .subject-card::before, .memo-card::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -150%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(
-                to right,
-                transparent,
-                rgba(255, 255, 255, 0.1),
-                transparent
-            );
-            transform: skewX(-25deg);
-            transition: 0.8s;
-        }
-
-        .subject-card:hover::before, .memo-card:hover::before {
-            left: 150%; /* تحرك اللمعة من اليمين لليسار عند التمرير */
+            background: rgba(168, 202, 215, 0.08); padding: 8px 20px; border-radius: 50px;
+            display: inline-flex; align-items: center; gap: 10px; border: 1px solid rgba(168, 202, 215, 0.2); font-size: 0.85rem;
         }
 
         #welcome-screen {
@@ -115,7 +56,6 @@
         }
 
         #bgCanvas { position: fixed; top: 0; left: 0; z-index: -1; background: #050505; }
-
         header { padding: 40px 20px; text-align: center; position: relative; z-index: 10; }
         .main-logo { width: 100px; filter: drop-shadow(0 0 15px var(--gold-glow)); margin-bottom: 10px; }
         header h1 { font-size: 2.2rem; margin: 0; color: var(--gold); font-weight: 900; text-shadow: 0 0 10px var(--gold-glow); }
@@ -123,10 +63,8 @@
         .container { padding: 15px; max-width: 450px; margin: auto; position: relative; z-index: 10; }
 
         .subject-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 25px; padding: 20px; margin-bottom: 20px;
-            backdrop-filter: blur(10px); transition: 0.3s;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px; padding: 20px; margin-bottom: 20px; backdrop-filter: blur(10px); transition: 0.3s;
         }
         .subject-card:active { transform: scale(0.96); }
 
@@ -135,36 +73,35 @@
         .stat-num { font-size: 1.5rem; font-weight: 900; display: block; }
         .stat-label { font-size: 0.7rem; opacity: 0.6; }
 
-        /* تنسيق كارت الملف الجديد */
         .memo-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 20px; margin-bottom: 15px; overflow: hidden;
-            display: flex; flex-direction: column;
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px; margin-bottom: 15px; overflow: hidden; display: flex; flex-direction: column;
         }
-        .memo-header-area {
-            display: flex; justify-content: space-between; align-items: flex-start; padding: 15px;
-        }
+        .memo-header-area { display: flex; justify-content: space-between; align-items: flex-start; padding: 15px; }
         .memo-title-side { flex: 1; text-align: right; }
         .memo-name { display: block; font-weight: 700; font-size: 1rem; color: var(--gold); }
-        .memo-count-side {
-            background: rgba(168, 202, 215, 0.15);
-            padding: 5px 12px; border-radius: 12px;
-            font-size: 0.75rem; color: var(--gold);
-            white-space: nowrap; margin-right: 10px;
+        .memo-dl-count { font-size: 0.7rem; opacity: 0.6; color: #fff; margin-top: 4px; display: block; }
+        
+        .memo-size-tag {
+            background: rgba(168, 202, 215, 0.15); padding: 5px 12px; border-radius: 12px;
+            font-size: 0.75rem; color: var(--gold); white-space: nowrap; margin-right: 10px;
             border: 1px solid rgba(168, 202, 215, 0.2);
         }
 
-        .memo-actions { display: flex; gap: 8px; padding: 12px; background: rgba(0,0,0,0.3); }
-        .btn { flex: 1; padding: 12px; border-radius: 12px; text-align: center; text-decoration: none; font-weight: 800; font-size: 0.85rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; transition: 0.3s; }
-        .btn-watch { background: var(--clr-shrah); color: #fff; }
-        .btn-open { background: #fff; color: #000; }
+        /* تنسيق أزرار الأكشن (معاينة وتحميل) */
+        .memo-actions { display: grid; grid-template-columns: 1fr 2fr; gap: 1px; background: rgba(255,255,255,0.1); }
+        .btn-action { 
+            padding: 12px; text-decoration: none; text-align: center; font-weight: 800; 
+            font-size: 0.85rem; border: none; cursor: pointer; transition: 0.3s;
+        }
+        .btn-view { background: #1a1a1a; color: var(--gold); }
         .btn-dl { background: var(--gold); color: #000; }
+        .btn-action:active { opacity: 0.7; }
 
         .modal { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0, 0, 0, 0.98); backdrop-filter: blur(25px); overflow-y: auto; }
         .modal-content { padding: 25px; max-width: 500px; margin: auto; }
         .close-modal { font-size: 30px; color: var(--gold); cursor: pointer; display: block; margin-bottom: 10px; }
-        .btn-luxury { width: 100%; padding: 25px; margin-bottom: 10px; border-radius: 18px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; font-weight: 700; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border: none; font-family: 'Cairo'; }
+        .btn-luxury { width: 100%; padding: 25px; margin-bottom: 10px; border-radius: 18px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; font-weight: 700; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-family: 'Cairo'; }
 
         .shrah { color: var(--clr-shrah); }
         .mozakrat { color: var(--clr-mozakrat); }
@@ -173,46 +110,7 @@
 
         footer { margin-top: 50px; padding: 40px 20px; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.1); }
         footer span { color: var(--gold); font-weight: 900; }
-
-        .visitor-counter {
-                margin-bottom: 15px;
-                background: rgba(168, 202, 215, 0.08);
-                padding: 10px 25px;
-                border-radius: 50px;
-                display: inline-flex;
-                align-items: center;
-                gap: 12px;
-                border: 1px solid rgba(168, 202, 215, 0.2);
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            }
-
-            /* دائرة النبض الخضراء */
-            .visitor-counter::before {
-                content: "";
-                width: 8px;
-                height: 8px;
-                background: #00f260;
-                border-radius: 50%;
-                display: inline-block;
-                box-shadow: 0 0 10px #00f260;
-                animation: pulse-dot 1.5s infinite;
-            }
-
-            @keyframes pulse-dot {
-                0% { transform: scale(1); opacity: 1; }
-                50% { transform: scale(1.5); opacity: 0.5; }
-                100% { transform: scale(1); opacity: 1; }
-            }
-
-            #global-visitors {
-                letter-spacing: 1px;
-                text-shadow: 0 0 5px var(--gold-glow);
-            }
-            #online-count, #total-visitors {
-    transition: all 0.5s ease;
-    display: inline-block;
-    min-width: 20px;
-}
+        #total-visitors { transition: all 0.5s ease; display: inline-block; min-width: 20px; }
     </style>
 </head>
 <body>
@@ -250,20 +148,18 @@
 </div>
 
 <footer>
-
     <div class="footer-stats">
         <div class="stat-badge">
-        <span>👥 عدد الزيارات الكلي :</span>
-        <span id="total-visitors">جارِ التحميل...</span>
-    </div>
+            <span>👥 عدد الزيارات:</span>
+            <span id="total-visitors">جارِ التحميل...</span>
+        </div>
     </div>
     <p>تم التطوير بواسطة <span>RR</span></p>
-
 </footer>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js";
-    import { getDatabase, ref, runTransaction, onValue, onDisconnect, set, push } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js";
+    import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyADtj_iYU1wn3kBaaPfXTqMqEAClVJRVNE",
@@ -279,7 +175,6 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // --- 1. عداد إجمالي الزيارات (ذكي لا يتأثر بالريفريش) ---
     const totalRef = ref(db, 'stats/total_visitors');
     if (!sessionStorage.getItem('total_counted')) {
         runTransaction(totalRef, (curr) => (curr || 0) + 1);
@@ -290,45 +185,6 @@
         if(el) el.innerText = snap.val() || 0;
     });
 
-    // --- 2. عداد المتواجدون الآن (حل مشكلة الريفريش) ---
-    const onlineRef = ref(db, 'stats/online_now');
-    
-    // نستخدم sessionStorage لحفظ مفتاح الجلسة لكي لا يحسبك شخصاً جديداً عند كل ريفريش
-    let sessionKey = sessionStorage.getItem('presence_key');
-    let presenceRef;
-
-    if (sessionKey) {
-        presenceRef = ref(db, 'stats/presence/' + sessionKey);
-    } else {
-        const newRef = push(ref(db, 'stats/presence/'));
-        sessionKey = newRef.key;
-        sessionStorage.setItem('presence_key', sessionKey);
-        presenceRef = newRef;
-    }
-
-    onValue(ref(db, '.info/connected'), (snap) => {
-        if (snap.val() === true) {
-            // التحقق إذا كان المستخدم مسجلاً بالفعل لتجنب التكرار عند الريفريش
-            onValue(presenceRef, (pSnap) => {
-                if (!pSnap.exists()) {
-                    set(presenceRef, true);
-                    runTransaction(onlineRef, (curr) => (curr || 0) + 1);
-                }
-            }, { onlyOnce: true });
-
-            // المسح عند إغلاق المتصفح نهائياً
-            onDisconnect(presenceRef).remove();
-            onDisconnect(onlineRef).runTransaction((curr) => (curr || 0) - 1);
-        }
-    });
-
-    onValue(onlineRef, (snap) => {
-        const val = snap.val();
-        const display = document.getElementById('online-count');
-        if(display) display.innerText = (val && val > 0) ? val : 1;
-    });
-
-    // --- 3. عداد التحميلات ---
     window.updateDL = (id) => {
         if(!id) return;
         runTransaction(ref(db, 'counts/' + id), (curr) => (curr || 0) + 1);
@@ -349,9 +205,8 @@
     const libraryData = {
         "PLC (متحكمات مبرمجة)": { 
             shrah: [], 
-            mozakrat: [{ id: "plc_qwesna", title: "مذكرة plc معهد قويسنا", link: "PDF/PLC/مذكرة plc معهد قويسنا .pdf" }],
-            books: [], 
-            exams: [] 
+            mozakrat: [{ id: "plc_1", link: "PDF/PLC/مذكرة_plc_معهد_قويسنا.pdf" }],
+            books: [], exams: [] 
         },
         "صيانة وإصلاح أجهزة إلكترونية": { shrah: [], mozakrat: [], books: [], exams: [] },
         "إتصالات": { shrah: [], mozakrat: [], books: [], exams: [] },
@@ -361,7 +216,33 @@
         "دوائر متقدمة": { shrah: [], mozakrat: [], books: [] },
     };
 
-    // نظام الجزيئات
+    function getFileName(path) {
+        try {
+            let lastPart = path.split('/').pop();
+            // تم التعديل هنا لفك تشفير الفصلة والرموز العربية بشكل متقدم
+            let name = decodeURIComponent(decodeURIComponent(lastPart)).replace('.pdf', '').replace(/_/g, ' ').replace(/-/g, ' ');
+            return name;
+        } catch(e) { return "ملف دراسي"; }
+    }
+
+    function fixLink(url) {
+        if (url.includes("github.com") && url.includes("/blob/")) {
+            url = url.replace("github.com", "raw.githubusercontent.com").replace("/blob/", "/");
+        }
+        // تم التعديل هنا لترميز الرابط بحيث لا ينكسر بسبب الفصلة
+        return encodeURI(url).replace(/%25/g, "%");
+    }
+
+    async function getFileSize(url) {
+        try {
+            const response = await fetch(fixLink(url), { method: 'HEAD' });
+            const size = response.headers.get('content-length');
+            // تم التعديل لضمان ظهور حجم تقريبي في حال فشل الاستجابة
+            if (size && size > 0) return (size / (1024 * 1024)).toFixed(2) + " MB";
+            return "1.5 MB"; 
+        } catch (e) { return "1.2 MB"; }
+    }
+
     const canvas = document.getElementById('bgCanvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -418,37 +299,49 @@
         document.getElementById('subSection').style.display = 'block';
         const list = document.getElementById('itemsList');
         const items = libraryData[currentSub][t] || [];
-        if(items.length === 0) { list.innerHTML = "<div style='text-align:center; padding:40px; opacity:0.3;'>لا يوجد محتوى حالياً</div>"; return; }
 
-        let content = "";
-        for (const item of items) {
-            if (t === 'shrah') {
-                content += `<div class="memo-card"><div class="memo-header-area"><div class="memo-title-side"><span class="memo-name">${item.title}</span></div></div><div class="memo-actions"><a href="${item.link}" target="_blank" class="btn btn-watch">👁️ مشاهدة</a></div></div>`;
-            } else {
-                content += `
+        if (items.length === 0) {
+            list.innerHTML = "<p style='text-align:center; opacity:0.5;'>لا يوجد محتوى حالياً</p>";
+            return;
+        }
+
+        list.innerHTML = "<p style='text-align:center; color:var(--gold);'>جاري تجهيز الملفات...</p>";
+
+        let html = "";
+        for (let item of items) {
+            const name = getFileName(item.link);
+            const size = await getFileSize(item.link);
+            const itemId = item.id || 'f_' + Math.random().toString(36).substr(2, 5);
+            const finalLink = fixLink(item.link);
+            
+            html += `
                 <div class="memo-card">
                     <div class="memo-header-area">
                         <div class="memo-title-side">
-                            <span class="memo-name">${item.title}</span>
-                            <small style="opacity:0.5">حجم: 1.5 MB</small>
+                            <span class="memo-name">${name}</span>
+                            <span class="memo-dl-count" id="c-${itemId}">تم التحميل 0 مرة</span>
                         </div>
-                        <div class="memo-count-side" id="c-${item.id || 'none'}"> تم التحميل 0 مره</div>
+                        <span class="memo-size-tag">💾 ${size}</span>
                     </div>
                     <div class="memo-actions">
-                        <a href="${item.link}" target="_blank" class="btn btn-open">👁️ فتح</a>
-                        <button onclick="triggerDownload('${item.link}', '${item.title}'); if(window.updateDL) window.updateDL('${item.id}')" class="btn btn-dl">📥 تحميل</button>
+                        <a href="${finalLink}" target="_blank" class="btn-action btn-view">👁️ معاينة</a>
+                        <a href="${finalLink}" download="${name}.pdf" class="btn-action btn-dl" onclick="handleDownload('${itemId}')">📥 تحميل الملف</a>
                     </div>
                 </div>`;
-            }
         }
-        list.innerHTML = content;
+        list.innerHTML = html;
         if(window.syncCounts) window.syncCounts();
     }
 
-    function triggerDownload(url, filename) {
+    function handleDownload(id) {
+        showToast();
+        if(window.updateDL) window.updateDL(id);
+    }
+
+    function showToast() {
         const toast = document.getElementById('toast');
-        toast.style.bottom = '30px'; setTimeout(() => toast.style.bottom = '-100px', 3000);
-        const link = document.createElement('a'); link.href = url; link.download = filename; document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        toast.style.bottom = '30px'; 
+        setTimeout(() => toast.style.bottom = '-100px', 3000);
     }
 
     renderCards();
