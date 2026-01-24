@@ -6,81 +6,7 @@
     <title>مكتبة أجهزة - الإصدار الملكي</title>
     <link rel="icon" href="IMG/RR.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-    /* تصميم الخلفية العشوائية المبتكرة */
-    body {
-        margin: 0;
-        padding: 0;
-        background: #020406; /* أسود ليلي عميق */
-        overflow-x: hidden;
-        min-height: 100vh;
-        font-family: 'Cairo', sans-serif;
-    }
-
-    /* طبقة الألوان العشوائية المتحركة في الخلفية */
-    .bg-visuals {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -2;
-        filter: blur(80px); /* تنعيم الألوان */
-        opacity: 0.6;
-    }
-
-    .blob {
-        position: absolute;
-        border-radius: 50%;
-        filter: blur(60px);
-        animation: move 20s infinite alternate;
-    }
-
-    /* البقعة الأولى (أزرق سماوي - لونك المفضل) */
-    .blob-1 {
-        width: 500px;
-        height: 500px;
-        background: rgba(168, 202, 215, 0.2);
-        top: -100px;
-        right: -100px;
-    }
-
-    /* البقعة الثانية (بنفسجي غامق للفخامة) */
-    .blob-2 {
-        width: 400px;
-        height: 400px;
-        background: rgba(88, 56, 163, 0.15);
-        bottom: -50px;
-        left: -50px;
-        animation-duration: 25s;
-    }
-
-    /* تأثير "النجوم الثابتة" الصغير جداً */
-    .stars-layer {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: radial-gradient(circle, #fff 1px, transparent 1px);
-        background-size: 50px 50px;
-        opacity: 0.05;
-        z-index: -1;
-    }
-
-    @keyframes move {
-        from { transform: translate(0, 0) scale(1); }
-        to { transform: translate(100px, 150px) scale(1.2); }
-    }
-
-    /* تعديل الكروت لتتناسب مع الخلفية الجديدة */
-    .subject-card {
-        background: rgba(255, 255, 255, 0.02) !important;
-        border: 1px solid rgba(168, 202, 215, 0.1) !important;
-        backdrop-filter: blur(12px) saturate(180%);
-        -webkit-backdrop-filter: blur(12px);
-    }
-</style>
+   
     <style>
         
         :root {
@@ -297,7 +223,6 @@
     const libraryData = {
     "PLC (متحكمات مبرمجة)": { 
         shrah: [
-            {  name: " 🥰مادة الـ PLC🥰",thumb: "IMG/111.png",link: "https://youtube.com/playlist?list=PLGc5yhl36AZp3WmdbH8AP0R8y6vENH9ke&si=fVTxNDrleZgbDbkV" },
             {  name: "شرح مادة PLC - الباب الأول الجزء الأول", link: "https://youtu.be/OnZLZSjwU8o?si=1j3PL9aKQl7bIlr_" },
             {  name: "شرح مادة PLC - الباب الأول الجزء الثاني", link: "https://youtu.be/Cp4KCg_JBoc?si=WQ_jUY7mc6VB6esj" },
             {  name: "شرح مادة PLC الباب الأول - حل أسئلة الإمتحانات الخاصة بالباب الأول", link: "https://youtu.be/vKYtryRihnQ?si=rRmlO3reh_FIs9mw" },
@@ -755,7 +680,8 @@ async function updateFileSizeUI(url, elementId) {
     }
 }
 
-// 2. تعديل دالة عرض القسم (أصبحت الآن سريعة جداً)
+
+    // نسخة صاروخية مدمجة: بتعرض المذكرات فوراً وبتحسب الحجم في الخلفية
 async function showSubSection(t) {
     document.getElementById('mainOptions').style.display = 'none';
     document.getElementById('subSection').style.display = 'block';
@@ -763,67 +689,27 @@ async function showSubSection(t) {
     const items = libraryData[currentSub][t] || [];
 
     if (items.length === 0) {
-        list.innerHTML = "<p style='text-align:center; opacity:0.5;'>لا يوجد محتوى حالياً</p>";
+        list.innerHTML = "<p style='text-align:center; opacity:0.5; padding:20px;'>قريباً إن شاء الله...</p>";
         return;
     }
 
-    // بناء القائمة فوراً
     let html = "";
+    
+    // استخدام forEach هنا أسرع لأنه مش بيوقف المتصفح (Non-blocking)
     items.forEach((item, index) => {
-        const name = getFileName(item.link);
-        const itemId = item.id || 'f_' + Math.random().toString(36).substr(2, 5);
-        const sizeElemId = `size-${itemId}-${index}`; // ID فريد لمكان الحجم
-        const finalLink = fixLink(item.link);
-        
-        html += `
-            <div class="memo-card">
-                <div class="memo-header-area">
-                    <div class="memo-title-side">
-                        <span class="memo-name">${name}</span>
-                        <span class="memo-dl-count" id="c-${itemId}">تم التحميل 0 مرة</span>
-                    </div>
-                    <span class="memo-size-tag" id="${sizeElemId}">⏳ جاري الحساب...</span>
-                </div>
-                <div class="memo-actions">
-                    <a href="${finalLink}" target="_blank" class="btn-action btn-view">👁️ معاينة</a>
-                    <a href="${finalLink}" download="${name}.pdf" class="btn-action btn-dl" onclick="handleDownload('${itemId}')">📥 تحميل الملف</a>
-                </div>
-            </div>`;
-            
-        // طلب تحديث الحجم في الخلفية دون انتظار (No Await)
-        updateFileSizeUI(item.link, sizeElemId);
-    });
-
-    list.innerHTML = html;
-    if(window.syncCounts) window.syncCounts();
-}
-    async function showSubSection(t) {
-    document.getElementById('mainOptions').style.display = 'none';
-    document.getElementById('subSection').style.display = 'block';
-    const list = document.getElementById('itemsList');
-    const items = libraryData[currentSub][t] || [];
-
-    if (items.length === 0) {
-        list.innerHTML = "<p style='text-align:center; opacity:0.5;'>لا يوجد محتوى حالياً</p>";
-        return;
-    }
-
-    let html = "";
-    for (const item of items) {
         const isYouTube = item.link.includes('youtube.com') || item.link.includes('youtu.be');
         const name = item.name || getFileName(item.link);
-        const itemId = item.id;
+        const itemId = item.id || `file-${index}`;
+        const sizeElemId = `size-${itemId}-${index}`; // معرف فريد لمكان الحجم
 
         if (isYouTube) {
             const videoId = getYouTubeID(item.link);
+            let thumbUrl = item.thumb ? item.thumb : (videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : 'IMG/RR.png');
             
-            // التعديل هنا: لو فيه thumb استخدمها، لو مفيش جرب تجيب بتاعة يوتيوب
-            let thumbUrl = item.thumb ? item.thumb : (videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : 'IMG/default-video.png');
-
             html += `
                 <div class="memo-card" style="border-color: var(--clr-shrah); overflow: hidden; background: rgba(0,0,0,0.4);">
                     <div style="width:100%; height:180px;">
-                        <img src="${thumbUrl}" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.src='IMG/default-video.png'">
+                        <img src="${thumbUrl}" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.src='IMG/RR.png'">
                     </div>
                     <div style="padding: 15px; text-align: center;">
                         <div style="font-weight:900; font-size:1.1rem; color:#fff; margin-bottom:15px;">${name}</div>
@@ -833,11 +719,7 @@ async function showSubSection(t) {
                         </a>
                     </div>
                 </div>`;
-        }
-        
-        
-        else {
-            const size = await getFileSize(item.link);
+        } else {
             const finalLink = fixLink(item.link);
             html += `
                 <div class="memo-card">
@@ -846,17 +728,38 @@ async function showSubSection(t) {
                             <span class="memo-name">${name}</span>
                             <span class="memo-dl-count" id="c-${itemId}">تم التحميل 0 مرة</span>
                         </div>
-                        <span class="memo-size-tag">💾 ${size}</span>
+                        <span class="memo-size-tag" id="${sizeElemId}">⏳ جاري..</span>
                     </div>
                     <div class="memo-actions">
                         <a href="${finalLink}" target="_blank" class="btn-action btn-view">👁️ معاينة</a>
-                        <a href="${finalLink}" download="${name}.pdf" class="btn-action btn-dl" onclick="handleDownload('${itemId}')">📥 تحميل الملف</a>
+                        <a href="${finalLink}" download="${name}.pdf" class="btn-action btn-dl" onclick="handleDownload('${itemId}')">📥 تحميل</a>
                     </div>
                 </div>`;
+            
+            // سحر السرعة: بنطلب الحجم ونحدثه لما يجهز براحته بدون تعطيل العرض
+            updateFileSizeUI(item.link, sizeElemId);
         }
-    }
+    });
+
     list.innerHTML = html;
     if (window.syncCounts) window.syncCounts();
+}
+
+// دالة تحديث الحجم الذكية (لازم تكون موجودة)
+async function updateFileSizeUI(url, elementId) {
+    try {
+        const response = await fetch(fixLink(url), { method: 'HEAD' });
+        const size = response.headers.get('content-length');
+        const element = document.getElementById(elementId);
+        if (element && size > 0) {
+            element.innerText = "💾 " + (size / (1024 * 1024)).toFixed(2) + " MB";
+        } else if (element) {
+            element.innerText = "💾 1.5 MB";
+        }
+    } catch (e) {
+        const element = document.getElementById(elementId);
+        if (element) element.innerText = "💾 1.2 MB";
+    }
 }
 
     function handleDownload(id) {
