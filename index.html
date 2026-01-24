@@ -7,6 +7,82 @@
     <link rel="icon" href="IMG/RR.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
+    /* تصميم الخلفية العشوائية المبتكرة */
+    body {
+        margin: 0;
+        padding: 0;
+        background: #020406; /* أسود ليلي عميق */
+        overflow-x: hidden;
+        min-height: 100vh;
+        font-family: 'Cairo', sans-serif;
+    }
+
+    /* طبقة الألوان العشوائية المتحركة في الخلفية */
+    .bg-visuals {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -2;
+        filter: blur(80px); /* تنعيم الألوان */
+        opacity: 0.6;
+    }
+
+    .blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(60px);
+        animation: move 20s infinite alternate;
+    }
+
+    /* البقعة الأولى (أزرق سماوي - لونك المفضل) */
+    .blob-1 {
+        width: 500px;
+        height: 500px;
+        background: rgba(168, 202, 215, 0.2);
+        top: -100px;
+        right: -100px;
+    }
+
+    /* البقعة الثانية (بنفسجي غامق للفخامة) */
+    .blob-2 {
+        width: 400px;
+        height: 400px;
+        background: rgba(88, 56, 163, 0.15);
+        bottom: -50px;
+        left: -50px;
+        animation-duration: 25s;
+    }
+
+    /* تأثير "النجوم الثابتة" الصغير جداً */
+    .stars-layer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+        background-size: 50px 50px;
+        opacity: 0.05;
+        z-index: -1;
+    }
+
+    @keyframes move {
+        from { transform: translate(0, 0) scale(1); }
+        to { transform: translate(100px, 150px) scale(1.2); }
+    }
+
+    /* تعديل الكروت لتتناسب مع الخلفية الجديدة */
+    .subject-card {
+        background: rgba(255, 255, 255, 0.02) !important;
+        border: 1px solid rgba(168, 202, 215, 0.1) !important;
+        backdrop-filter: blur(12px) saturate(180%);
+        -webkit-backdrop-filter: blur(12px);
+    }
+</style>
+    <style>
+        
         :root {
             --bg: #050505;
             --gold: #a8cad7; 
@@ -57,7 +133,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5); white-space: nowrap;
         }
 
-        #bgCanvas { position: fixed; top: 0; left: 0; z-index: -1; background: #050505; }
+        #bgCanvas { position: fixed; top: 0; left: 0; z-index: -1; background: #000000; }
         header { padding: 40px 20px; text-align: center; position: relative; z-index: 10; }
         .main-logo { width: 100px; filter: drop-shadow(0 0 15px var(--gold-glow)); margin-bottom: 10px; }
         header h1 { font-size: 2.2rem; margin: 0; color: var(--gold); font-weight: 900; text-shadow: 0 0 10px var(--gold-glow); }
@@ -120,7 +196,11 @@
     </style>
 </head>
 <body>
-
+<div class="bg-visuals">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+</div>
+<div class="stars-layer"></div>
 <div id="welcome-screen">
     <img src="IMG/RR.png" alt="Logo" style="width: 100px;">
     <h2 style="color: var(--gold); margin-top: 20px; font-weight: 900;">مرحباً بك</h2>
@@ -213,266 +293,316 @@
         });
     };
 </script>
-
 <script>
     const libraryData = {
-        "PLC (متحكمات مبرمجة)": { 
-            shrah: [
-                
-            ], 
-            mozakrat: [
-                { id: "13", link: "PDF/PLC/PLC_الباب_الاول.pdf" },
-                { id: "14", link: "PDF/PLC/PLC_الباب_الثانى.pdf" },
-                { id: "15", link: "PDF/PLC/PLC_الباب_الثالث.pdf" },
-                { id: "16", link: "PDF/PLC/Plc_افضل_اختيار.pdf" },
-                { id: "17", link: "PDF/PLC/اسكتش_شرح_(plc).pdf" },
-                { id: "18", link: "PDF/PLC/باب_اول_plc_لولة_🍟.pdf" },
-                { id: "19", link: "PDF/PLC/باب_تاني_plc_لولة_🍟.pdf" },
-                { id: "20", link: "PDF/PLC/باب_تالت_و_رابع_لولة_🍟.pdf" },
-                { id: "21", link: "PDF/PLC/م_عبدالحميد_plc_الجديدة_كاملة.pdf" },
-                { id: "22", link: "PDF/PLC/مادة_PLC_Abdelmonem_sengab.pdf" },
-                { id: "23", link: "PDF/PLC/مذكرة_plc_(م_سامح_الحريف).pdf" },
-                { id: "24", link: "PDF/PLC/مذكرة_plc_م_هبة_معهد_الزقازيق.pdf" },
-                { id: "25", link: "PDF/PLC/مذكرة_plc_معهد_قويسنا.pdf" },
-                { id: "26", link: "PDF/PLC/مراجعة_لولة_🍟.pdf" },
-                { id: "27", link: "PDF/PLC/مراجعه_ليلي_plc.pdf" },
-                { id: "54", link: "PDF/PLC/م_سامح_الحريف_PLC_مذكرة_مش_كاملة_.pdf" },
-
-
-            ],
-            books: [
-
-            ],
-            exams: [
-
-            ],
-            solvedExams: [
-                { id: "130", link: "EXM/PLC/حل امتحان plc مايو 2024.pdf" },
-                { id: "131", link: "EXM/PLC/حل امتحان plc مايو 2023.pdf" },
-                { id: "132", link: "EXM/PLC/حل امتحان plc مايو 2022.pdf" },
-                { id: "133", link: "EXM/PLC/حل امتحان plc مايو 2021.pdf" },
-                { id: "134", link: "EXM/PLC/حل امتحان plc مايو 2020.pdf" },
-
-            ] 
-        },
-        "صيانة وإصلاح أجهزة إلكترونية": { shrah: [
-
-        ],
-        mozakrat: [
-        { id: "47", link: "PDF/صيانة/El-Banhawey_صيانه_وإصلاح.pdf" },
-        { id: "48", link: "PDF/صيانة/اسكتش_صيانه.pdf" },
-        { id: "49", link: "PDF/صيانة/م_كريم_صيانه_و_اصلاح .pdf" },
-        { id: "50", link: "PDF/صيانة/مادة_صيانة_و_اصلاح_Abdelmonem.pdf" },
-        { id: "51", link: "PDF/صيانة/ماده_صيانه_و_اصلاح.pdf" },
-        { id: "52", link: "PDF/صيانة/مذكرة_صيانة_و_إصلاح_الاجهزة_الكترونية.pdf" },
-        { id: "53", link: "PDF/صيانة/من_1ل_6صيانه_وإصلاح.pdf" },
-
-        ],
-        books: [
-
-        ],
-        exams: [
-
-        ], 
-        solvedExams: [
-
-        ]
-         },
-        "إتصالات": {
-             shrah: [
-
-        ],
-        mozakrat: [
-        { id: "55", link: "PDF/إتصالات/اتصالات_الباب_الاول.pdf" },
-        { id: "56", link: "PDF/إتصالات/اتصالات_الباب_التاني.pdf" },
-        { id: "57", link: "PDF/إتصالات/الاتصالات_الباب_الثالث.pdf" },
-        { id: "58", link: "PDF/إتصالات/اتصالات_الباب _الرابع.pdf" },
-        { id: "59", link: "PDF/إتصالات/اتصالات_الباب_الخامس.pdf" },
-        { id: "60", link: "PDF/إتصالات/مذكرة_اتصالات_م_سمر_كاملة.pdf" },
-        { id: "61", link: "PDF/إتصالات/مذكرة_الاتصالات_م_نور_جودة.pdf" },
-        { id: "62", link: "PDF/إتصالات/م_شيرين_باب_اول.pdf" },
-        { id: "63", link: "PDF/إتصالات/م_شيرين_باب_التاني.pdf" },
-        { id: "64", link: "PDF/إتصالات/م_شيرين_باب_التالت.pdf" },
-        { id: "65", link: "PDF/إتصالات/م_شيرين_باب_رابع.pdf" },
-        { id: "66", link: "PDF/إتصالات/اتصالات_الباب_الخامس.pdf" },
-        ],
-        books: [
-
-        ],
-        exams: [
-
-        ],
-        solvedExams: [
-        { id: "124", link: "EXM/إتصالات/حل_امتحان_اتصالا_٢٠٢٤_.pdf" },
-        { id: "125", link: "EXM/إتصالات/حل امتحان اتصالات 2023.pdf" },
-        { id: "126", link: "EXM/إتصالات/حل امتحان اتصالات 2022.pdf" },
-        { id: "127", link: "EXM/إتصالات/حل امتحان اتصالات 2021.pdf" },
-        { id: "128", link: "EXM/إتصالات/حل امتحان اتصالات 2019.pdf" },
-        { id: "129", link: "EXM/إتصالات/حل امتحان اتصالات 2018.pdf" },
-
-        ]
-         },
-        "KAB (مشروع وثقافة العمل الحر )": { 
+    "PLC (متحكمات مبرمجة)": { 
         shrah: [
-
+            {  name: " 🥰مادة الـ PLC🥰",thumb: "IMG/111.png",link: "https://youtube.com/playlist?list=PLGc5yhl36AZp3WmdbH8AP0R8y6vENH9ke&si=fVTxNDrleZgbDbkV" },
+            {  name: "شرح مادة PLC - الباب الأول الجزء الأول", link: "https://youtu.be/OnZLZSjwU8o?si=1j3PL9aKQl7bIlr_" },
+            {  name: "شرح مادة PLC - الباب الأول الجزء الثاني", link: "https://youtu.be/Cp4KCg_JBoc?si=WQ_jUY7mc6VB6esj" },
+            {  name: "شرح مادة PLC الباب الأول - حل أسئلة الإمتحانات الخاصة بالباب الأول", link: "https://youtu.be/vKYtryRihnQ?si=rRmlO3reh_FIs9mw" },
+            {  name: "شرح مادة ال PLC - الباب الثاني الجزء الأول - الفرق بين لغات ال Ladder و STL و FBD", link: "https://youtu.be/BADN2ObQrmU?si=XVikkC6hJbVugmTZ" },
+            {  name: "شرح مادة PLC - الباب الثاني الجزء الثاني - حل أمثلة على برامج ال LAD و STL و FBD", link: "https://youtu.be/BhBfwnyJUDk?si=_ziizxW96dy79Wms" },
+            {  name: "شرح مادة PLC - الباب الثاني الجزء الثالث - حل أفكار جديدة عن STL & FBD & LAD + حل أمثلة أمتحان 2019", link: "https://youtu.be/-8FLDUET5Dc?si=Rn1BX4jBOcm64eiL" },
+            {  name: "مادة ال PLC - الباب الثاني - شرح البوابات المنطقية الجزء الأول - AND & OR & NOT & NAND", link: "https://youtu.be/awnQwjSiv4Y?si=jp9eFkJlrHJgdJFf" },
+            {  name: "شرح مادة PLC - الباب الثاني - شرح الدوائر المنطقية الجزء الثاني - NOR & XOR & XNOR", link: "https://youtu.be/aHJnVlQ4jJc?si=E1I_b_izriypYv4i" },
+            {  name: "مادة PLC - الباب الثاني - حل بعض مسائل الإمتحانات عن الدوائر المنطقية", link: "https://youtu.be/THYiXfNSzvk?si=Gvb0QM4gyPhxZr1x" },
+            {  name: "شرح مادة PLC - الباب الثاني - المسائل اللفظية الجزء الأول", link: "https://youtu.be/_5NGW7gv59Q?si=bC67-21o9Lk9PIWE" },
+            {  name: "شرح مادة PLC - الباب الثاني - المسائل اللفظية الجزء الثاني", link: "https://youtu.be/9R3-ySymBnM?si=JO9mR99Y5UCDEFJI" },
+            {  name: "شرح مادة PLC - الباب الثاني - المسائل اللفظية الجزء الثالث - مسألة دائرة الخزان", link: "https://youtu.be/Yc-PtoFn02k?si=RsUXZc-pAhnnysKb" },
+            {  name: "شرح مادة PLC - الباب الثالث - الأنظمة العددية", link: "https://youtu.be/M2OTCgaE-Z8?si=kBZoKDZ5w1JPqVgq" },
+            {  name: "شرح مادة PLC - الباب الثالث - برمجة دوال التوحيد والتصفير Set/Reset", link: "https://youtu.be/4Z7HBO5CNxc?si=UpysixRw7uMLUaNV" },
+            {  name: "شرح مادة PLC - الباب الثالث شرح أنواع المؤقتات الزمنية حسب زمن التأخير On-Delay & Off-Delay Timers", link: "https://youtu.be/HGJTspYHWhc?si=YTVEeGHwGre-tFYs" },
+            {  name: "مادة PLC-الباب3-المؤقتات الزمية Pulse/Extended pulse/ Latched On-Delay/On-Delay/Off-Delay Timers", link: "https://youtu.be/dIqjcXA1pQQ?si=mdG9SzwQomHEh1HE" },
+            {  name: "مادة PLC -أنواع المؤقتات حسب الأساس الزمني Time base ورسم مخطط ال Ladder+مثال على On/Off Delay Timer", link: "https://youtu.be/r7ieyw6uVFQ?si=gEC_mMXPRltocJTW" },
+            {  name: "مادة PLC-الباب3 العدادات - العداد التصاعدي والتناولي والتصاعدي/التنازلي Up & Down & Up/Down Counters", link: "https://youtu.be/ImG_vtsDH2k?si=PXPIA4rqbqSlsbVN" },
+            {  name: "شرح مادة PLC - الباب الثالث - مثال على الـ Up/Down Counter مع رسم مخطط الـ Ladder", link: "https://youtu.be/zNSIUZy65jU?si=hF1sGPUOYMpxygcC" },
+            {  name: "مادة PLC - الباب الثالث - شرح وظائف الإزاحة", link: "https://youtu.be/vFnMaZjWfTw?si=tz89V5oOmJDsqLgy" },
+            {  name: "مادة PLC - الباب الثالث - شرح مسائل وظائف الإزاحة", link: "https://youtu.be/1JLPd5IZRoc?si=AaiilYppCU5vv1sZ" },
+            {  name: "مادة PLC - الباب الثالث - شرح أوامر المقارنة", link: "https://youtu.be/EqnwRbFqGrE?si=l6Gg668HE7pJp44Y" },
+            {  name: "شرح PLC - أوامر القفز Jump Instructions - القفز غير المشروط - القفز المشروط - القفز ذو الشرط المنفي", link: "https://youtu.be/tvdNM5kcJl8?si=hQJqwKaNTPQ-JCok" },
+            {  name: "شرح PLC - حل أسئلة الباب الثالث - أسئلة وظائف الإزاحة وأوامر المقارنة وأوامر القفز", link: "https://youtu.be/gYjNu9kkjAQ?si=V88v3WO_nRhKl1I6" },
+            {  name: "المراجعة النهائية علي مادة PLC 💝 ، الجزء الأول .", link: "https://youtu.be/K91LLVf-ALg?si=r0xnBzMt_3yie49j" },
+            {  name: "المراجعة النهائية علي مادة PLC 💝 ، الجزء الثاني .", link: "https://youtu.be/PT96pqzGHJc?si=5nrprIqDHp809wJx" },
+            {  name: "المراجعة النهائية علي مادة PLC 💝 ، الجزء الرابع .", link: "https://youtu.be/7dgkzIUh5JU?si=bczAn3BbKiYc0-_Q" },
+            {  name: "المراجعة النهائية علي مادة PLC 💝 ، الجزء الثالث .", link: "https://youtu.be/xrN64w9bxqU?si=QkKgFeLXA0FJ4A0f" },
+            {  name: "المراجعة النهائية علي مادة PLC 💝 ، الجزء الخامس", link: "https://youtu.be/gpZVZy05Scw?si=-jdSF1fWpm8cuurm" },
+            {  name: "المراجعة النهائية علي مادة PLC 💝، الجزء السادس", link: "https://youtu.be/aEdQBjbZLOE?si=2pAIQWLJWF58UuXp" },
+        ], 
+        mozakrat: [
+            { id: "1", link: "PDF/PLC/PLC_الباب_الاول.pdf" },
+            { id: "2", link: "PDF/PLC/PLC_الباب_الثانى.pdf" },
+            { id: "3", link: "PDF/PLC/PLC_الباب_الثالث.pdf" },
+            { id: "4", link: "PDF/PLC/Plc_افضل_اختيار.pdf" },
+            { id: "5", link: "PDF/PLC/اسكتش_شرح_(plc).pdf" },
+            { id: "6", link: "PDF/PLC/باب_اول_plc_لولة_🍟.pdf" },
+            { id: "7", link: "PDF/PLC/باب_تاني_plc_لولة_🍟.pdf" },
+            { id: "8", link: "PDF/PLC/باب_تالت_و_رابع_لولة_🍟.pdf" },
+            { id: "9", link: "PDF/PLC/م_عبدالحميد_plc_الجديدة_كاملة.pdf" },
+            { id: "10", link: "PDF/PLC/مادة_PLC_Abdelmonem_sengab.pdf" },
+            { id: "11", link: "PDF/PLC/مذكرة_plc_(م_سامح_الحريف).pdf" },
+            { id: "12", link: "PDF/PLC/مذكرة_plc_م_هبة_معهد_الزقازيق.pdf" },
+            { id: "13", link: "PDF/PLC/مذكرة_plc_معهد_قويسنا.pdf" },
+            { id: "14", link: "PDF/PLC/مراجعة_لولة_🍟.pdf" },
+            { id: "15", link: "PDF/PLC/مراجعه_ليلي_plc.pdf" },
+            { id: "16", link: "PDF/PLC/م_سامح_الحريف_PLC_مذكرة_مش_كاملة_.pdf" }
         ],
-         mozakrat: [
-        { id: "2", link: "PDF/KAB/منهج_كاب_كامل.pdf" },
-        { id: "3", link: "PDF/KAB/مسائل_محاضرات_كاب_محلولة.pdf" },
-        { id: "4", link: "PDF/KAB/مسائل_مادة_كاب_مايو_من_2024_الي_2020.pdf" },
-        { id: "5", link: "PDF/KAB/مسائل_مادة_كاب.pdf" },
-        { id: "6", link: "PDF/KAB/مراجعة_كاب.pdf" },
-        { id: "7", link: "PDF/KAB/مذكرة_كاب_ملخص.pdf" },
-        { id: "8", link: "PDF/KAB/مذكرة_كاب_معهد_المطرية.pdf" },
-        { id: "9", link: "PDF/KAB/م_شيرين_كاب_اسئلة.pdf" },
-        { id: "10", link: "PDF/KAB/كـــــــــاب_كمبيوتر_منظمة.pdf" },
-        { id: "11", link: "PDF/KAB/كاب_ملخص_عظمة.pdf" },
-        { id: "12", link: "PDF/KAB/كاب_م_شرين_مذكره_الشرح.pdf" },
-        { id: "13", link: "PDF/KAB/أسئلة_الكاب_محلول_كمبيوتر.pdf" },
-        { id: "14", link: "PDF/KAB/KAP_COMPUTER.pdf" },
-        { id: "15", link: "PDF/KAB/kab.pdf" },
-        { id: "16", link: "PDF/KAB/2_بنك_الاسئله_كاب.pdf" },
-        { id: "17", link: "PDF/KAB/1_بنك_الاسئلة_كاب.pdf" },
-        { id: "12", link: "PDF/KAB/100_سؤال_مادا_كاب.pdf" },
-         ],
-        books: [
-
-          ],
-        exams: [
-            
-           ],
+        books: [],
+        exams: [],
         solvedExams: [
-
+            { id: "17", link: "EXM/PLC/حل امتحان plc مايو 2024.pdf" },
+            { id: "18", link: "EXM/PLC/حل امتحان plc مايو 2023.pdf" },
+            { id: "19", link: "EXM/PLC/حل امتحان plc مايو 2022.pdf" },
+            { id: "20", link: "EXM/PLC/حل امتحان plc مايو 2021.pdf" },
+            { id: "21", link: "EXM/PLC/حل امتحان plc مايو 2020.pdf" }
         ] 
     },
-        "معامل تطبيقية": { 
-        shrah: [
-
-        ],
+    "صيانة وإصلاح أجهزة إلكترونية": { 
+        shrah: [],
         mozakrat: [
-        { id: "67", link: "PDF/معامل/مادة معامل تطبيقية Abdelmonem.pdf" },
-        { id: "68", link: "PDF/معامل/مذكرة معامل تطبيقية.pdf" },
-        { id: "69", link: "PDF/معامل/مذكرة_معامل_تطبيقية_م_عبدالحميد_الجديدة.pdf" },
-        { id: "70", link: "PDF/معامل/معامل تطبيقية رسم ذا  بيست.pdf" },
-        { id: "71", link: "PDF/معامل/معامل تطبيقية عظمه.pdf" },
-        { id: "72", link: "PDF/معامل/معامل تطبيقية م.عبدالرحمن.pdf" },
-        { id: "73", link: "PDF/معامل/معامل تطبيقية-1.pdf" },
-        { id: "74", link: "PDF/معامل/معمل معامل تطبيقيه .pdf" },
-        { id: "75", link: "PDF/معامل/ملخص_رسومات_معامل.pdf" },
-        { id: "76", link: "PDF/معامل/ملزمة شعبان معامل تطبيقية.pdf" },
+            { id: "22", link: "PDF/صيانة/El-Banhawey_صيانه_وإصلاح.pdf" },
+            { id: "23", link: "PDF/صيانة/اسكتش_صيانه.pdf" },
+            { id: "24", link: "PDF/صيانة/م_كريم_صيانه_و_اصلاح .pdf" },
+            { id: "25", link: "PDF/صيانة/مادة_صيانة_و_اصلاح_Abdelmonem.pdf" },
+            { id: "26", link: "PDF/صيانة/ماده_صيانه_و_اصلاح.pdf" },
+            { id: "27", link: "PDF/صيانة/مذكرة_صيانة_و_إصلاح_الاجهزة_الكترونية.pdf" },
+            { id: "28", link: "PDF/صيانة/من_1ل_6صيانه_وإصلاح.pdf" }
         ],
-        books: [
-
+        books: [],
+        exams: [], 
+        solvedExams: []
+    },
+    "إتصالات": {
+        shrah: [],
+        mozakrat: [
+            { id: "29", link: "PDF/إتصالات/اتصالات_الباب_الاول.pdf" },
+            { id: "30", link: "PDF/إتصالات/اتصالات_الباب_التاني.pdf" },
+            { id: "31", link: "PDF/إتصالات/الاتصالات_الباب_الثالث.pdf" },
+            { id: "32", link: "PDF/إتصالات/اتصالات_الباب _الرابع.pdf" },
+            { id: "33", link: "PDF/إتصالات/اتصالات_الباب_الخامس.pdf" },
+            { id: "34", link: "PDF/إتصالات/مذكرة_اتصالات_م_سمر_كاملة.pdf" },
+            { id: "35", link: "PDF/إتصالات/مذكرة_الاتصالات_م_نور_جودة.pdf" },
+            { id: "36", link: "PDF/إتصالات/م_شيرين_باب_اول.pdf" },
+            { id: "37", link: "PDF/إتصالات/م_شيرين_باب_التاني.pdf" },
+            { id: "38", link: "PDF/إتصالات/م_شيرين_باب_التالت.pdf" },
+            { id: "39", link: "PDF/إتصالات/م_شيرين_باب_رابع.pdf" },
+            { id: "40", link: "PDF/إتصالات/اتصالات_الباب_الخامس.pdf" }
         ],
+        books: [],
+        exams: [],
+        solvedExams: [
+            { id: "41", link: "EXM/إتصالات/حل_امتحان_اتصالا_٢٠٢٤_.pdf" },
+            { id: "42", link: "EXM/إتصالات/حل امتحان اتصالات 2023.pdf" },
+            { id: "43", link: "EXM/إتصالات/حل امتحان اتصالات 2022.pdf" },
+            { id: "44", link: "EXM/إتصالات/حل امتحان اتصالات 2021.pdf" },
+            { id: "45", link: "EXM/إتصالات/حل امتحان اتصالات 2019.pdf" },
+            { id: "46", link: "EXM/إتصالات/حل امتحان اتصالات 2018.pdf" }
+        ]
+    },
+    "KAB (مشروع وثقافة العمل الحر )": { 
+        shrah: [],
+        mozakrat: [
+            { id: "47", link: "PDF/KAB/منهج_كاب_كامل.pdf" },
+            { id: "48", link: "PDF/KAB/مسائل_محاضرات_كاب_محلولة.pdf" },
+            { id: "49", link: "PDF/KAB/مسائل_مادة_كاب_مايو_من_2024_الي_2020.pdf" },
+            { id: "50", link: "PDF/KAB/مسائل_مادة_كاب.pdf" },
+            { id: "51", link: "PDF/KAB/مراجعة_كاب.pdf" },
+            { id: "52", link: "PDF/KAB/مذكرة_كاب_ملخص.pdf" },
+            { id: "53", link: "PDF/KAB/مذكرة_كاب_معهد_المطرية.pdf" },
+            { id: "54", link: "PDF/KAB/م_شيرين_كاب_اسئلة.pdf" },
+            { id: "55", link: "PDF/KAB/كـــــــــاب_كمبيوتر_منظمة.pdf" },
+            { id: "56", link: "PDF/KAB/كاب_ملخص_عظمة.pdf" },
+            { id: "57", link: "PDF/KAB/كاب_م_شرين_مذكره_الشرح.pdf" },
+            { id: "58", link: "PDF/KAB/أسئلة_الكاب_محلول_كمبيوتر.pdf" },
+            { id: "59", link: "PDF/KAB/KAP_COMPUTER.pdf" },
+            { id: "60", link: "PDF/KAB/kab.pdf" },
+            { id: "61", link: "PDF/KAB/2_بنك_الاسئله_كاب.pdf" },
+            { id: "62", link: "PDF/KAB/1_بنك_الاسئلة_كاب.pdf" },
+            { id: "63", link: "PDF/KAB/100_سؤال_مادا_كاب.pdf" }
+        ],
+        books: [],
+        exams: [],
+        solvedExams: [] 
+    },
+    "معامل تطبيقية": { 
+        shrah: [],
+        mozakrat: [
+            { id: "64", link: "PDF/معامل/مادة معامل تطبيقية Abdelmonem.pdf" },
+            { id: "65", link: "PDF/معامل/مذكرة معامل تطبيقية.pdf" },
+            { id: "66", link: "PDF/معامل/مذكرة_معامل_تطبيقية_م_عبدالحميد_الجديدة.pdf" },
+            { id: "67", link: "PDF/معامل/معامل تطبيقية رسم ذا  بيست.pdf" },
+            { id: "68", link: "PDF/معامل/معامل تطبيقية عظمه.pdf" },
+            { id: "69", link: "PDF/معامل/معامل تطبيقية م.عبدالرحمن.pdf" },
+            { id: "70", link: "PDF/معامل/معامل تطبيقية-1.pdf" },
+            { id: "71", link: "PDF/معامل/معمل معامل تطبيقيه .pdf" },
+            { id: "72", link: "PDF/معامل/ملخص_رسومات_معامل.pdf" },
+            { id: "73", link: "PDF/معامل/ملزمة شعبان معامل تطبيقية.pdf" }
+        ],
+        books: [],
         exams: [
-        { id: "84", link: "EXM/معامل/2023 مايو.jpg" },
-        { id: "85", link: "EXM/معامل/2022 مايو.jpg" },
-        { id: "86", link: "EXM/معامل/2022 سبتمبر.jpg" },
-        { id: "87", link: "EXM/معامل/2021 مايو.jpg" },
-        { id: "88", link: "EXM/معامل/2021 سبتمبر.jpg" },
-        { id: "89", link: "EXM/معامل/2020 مايو.jpg" },
-        { id: "90", link: "EXM/معامل/2020 سبتمبر.jpg" },
-        { id: "91", link: "EXM/معامل/2019 مايو.jpg" },
-        { id: "92", link: "EXM/معامل/2018 مايو.jpg" },
-        { id: "93", link: "EXM/معامل/2017 ورقه اولي مايو.jpg" },
-        { id: "94", link: "EXM/معامل/2017 ورقه ثانيه مايو.jpg" },
-        { id: "95", link: "EXM/معامل/2016 ورقه اولي مايو.jpg" },
-        { id: "96", link: "EXM/معامل/2016 ورقه ثانيه مايو.jpg" },
-        { id: "97", link: "EXM/معامل/2015 ورقه اولي مايو.jpg" },
-        { id: "98", link: "EXM/معامل/2015 ورقه ثانيه مايو.jpg" },
-
-
-           ], 
-        solvedExams: [
-        { id: "99", link: "EXM/معامل/حل مايو 2019 معامل تطبيقية.pdf" },
-        { id: "100", link: "EXM/معامل/حل مايو 2018 معامل تطبيقية.pdf" },
-        { id: "101", link: "EXM/معامل/حل مايو 2017 معامل تطبيقية.pdf" },
-        { id: "102", link: "EXM/معامل/حل مايو 2016 معامل تطبيقية.pdf" },
-        { id: "103", link: "EXM/معامل/حل مايو 2015 معامل تطبيقية.pdf" },
-        ]
-    },
-        "تقارير فنية":
-         { shrah: [
-
-        ],
-        mozakrat: [
-        { id: "28", link: "PDF/تقارير/تقارير_افضل_اختيار.pdf" },
-        { id: "29", link: "PDF/تقارير/تقارير_فنيه_م_سيد_عطا.pdf" },
-        { id: "30", link: "PDF/تقارير/تقارير_فنيه_ملخص_حلو.pdf" },
-        { id: "31", link: "PDF/تقارير/تقارير_كتابه_كمبيوتر.pdf" },
-        { id: "32", link: "PDF/تقارير/تقارير_مذكره_ملخصه.PDF" },
-        { id: "33", link: "PDF/تقارير/تقارير_ملخص.pdf" },
-        { id: "34", link: "PDF/تقارير/تقاير_فنية_في_8_ورقات.pdf" },
-        { id: "35", link: "PDF/تقارير/كتابة_التقارير_الفنية_مذكرة.pdf" },
-        { id: "36", link: "PDF/تقارير/م_إسراء_أشرف_تقارير_فنية.pdf" },
-        { id: "37", link: "PDF/تقارير/م_كريم_تقارير_فنية.pdf" },
-        { id: "38", link: "PDF/تقارير/ملزمة_تقارير_شعبان.pdf" },
-        { id: "39", link: "PDF/تقارير/ملخص_تقارير_كامل.pdf" },
-        { id: "40", link: "PDF/تقارير/مسائل_تقارير.pdf" },
-        { id: "41", link: "PDF/تقارير/مذكرة_تقارير_م_سامح_الحريف.pdf" },
-        { id: "42", link: "PDF/تقارير/مذكرة_تقارير_فنيهم_محمد_عبدالبديع.pdf" },
-        { id: "43", link: "PDF/تقارير/مذكرة_تقارير_فنيه2_.pdf" },
-        { id: "44", link: "PDF/تقارير/مادة_تقارير_فنيه.pdf" },
-        { id: "45", link: "PDF/تقارير/مادة_تقارير_فنية_Abdelmonem.pdf" },
-        ],
-        books: [
-        { id: "46", link: "PDF/تقارير/كتاب_التقارير.pdf" },
-        ],
-        solvedExams: [
-        { id: "135", link: "EXM/تقارير/حل أمتحان تقارير فنية 2024.pdf" },
-        { id: "136", link: "EXM/تقارير/حل أمتحان تقارير فنية 2023.pdf" },
-        { id: "137", link: "EXM/تقارير/حل أمتحان تقارير فنية 2022.pdf" },
-        { id: "138", link: "EXM/تقارير/حل أمتحان تقارير فنية 2021.pdf" },
-        { id: "139", link: "EXM/تقارير/حل أمتحان تقارير فنية 2020.pdf" },
-
-     
-        ]
-    },
-        "دوائر متقدمة": {
-        shrah: [
-
-        ],
-        mozakrat: [
-        { id: "77", link: "PDF/دوائر/باب_اول_وثانى_دوائر_الكترونيه_متقدمه_م_سوسن.pdf" },
-        { id: "78", link: "PDF/دوائر/دوائر متقدمه 4و5و6 سوسن.pdf" },
-        { id: "79", link: "PDF/دوائر/دوائر الكترونيه متقدمه .pdf" },
-        { id: "80", link: "PDF/دوائر/دوائر متقدمة Abdelmonem.pdf" },
-        { id: "81", link: "PDF/دوائر/م_كريم دوائر الكترونيه .pdf" },
-        { id: "82", link: "PDF/دوائر/مذكرة_دوائر_الكترونية_متقدمة_معهد_الزقازيق.pdf" },
-        { id: "83", link: "PDF/دوائر/ملخص دوائر متقدمه .pdf" },
-        ],
-        books: [
-
+            { id: "74", link: "EXM/معامل/2023 مايو.jpg" },
+            { id: "75", link: "EXM/معامل/2022 مايو.jpg" },
+            { id: "76", link: "EXM/معامل/2022 سبتمبر.jpg" },
+            { id: "77", link: "EXM/معامل/2021 مايو.jpg" },
+            { id: "78", link: "EXM/معامل/2021 سبتمبر.jpg" },
+            { id: "79", link: "EXM/معامل/2020 مايو.jpg" },
+            { id: "80", link: "EXM/معامل/2020 سبتمبر.jpg" },
+            { id: "81", link: "EXM/معامل/2019 مايو.jpg" },
+            { id: "82", link: "EXM/معامل/2018 مايو.jpg" },
+            { id: "83", link: "EXM/معامل/2017 ورقه اولي مايو.jpg" },
+            { id: "84", link: "EXM/معامل/2017 ورقه ثانيه مايو.jpg" },
+            { id: "85", link: "EXM/معامل/2016 ورقه اولي مايو.jpg" },
+            { id: "86", link: "EXM/معامل/2016 ورقه ثانيه مايو.jpg" },
+            { id: "87", link: "EXM/معامل/2015 ورقه اولي مايو.jpg" },
+            { id: "88", link: "EXM/معامل/2015 ورقه ثانيه مايو.jpg" }
         ], 
-        exams: [
-        { id: "104", link: "EXM/دوائر/2024 مايو.jpg" },
-        { id: "105", link: "EXM/دوائر/2023 مايو.jpg" },
-        { id: "106", link: "EXM/دوائر/2022 مايو.jpg" },
-        { id: "107", link: "EXM/دوائر/2021 مايو.jpg" },
-        { id: "108", link: "EXM/دوائر/2020 مايو.jpg" },
-        { id: "109", link: "EXM/دوائر/2019 مايو.jpg" },
-        { id: "110", link: "EXM/دوائر/2018 مايو.jpg" },
-        { id: "111", link: "EXM/دوائر/2018 سبتمبر.jpg" },
-        { id: "112", link: "EXM/دوائر/2017 مايو.jpg" },
-        { id: "113", link: "EXM/دوائر/2016  مايو.jpg" },
-        { id: "114", link: "EXM/دوائر/2015 مايو.jpg" },
-        { id: "115", link: "EXM/دوائر/2012 مايو.jpg" },
-        { id: "116", link: "EXM/دوائر/2009 مايو.jpg" },
-        { id: "117", link: "EXM/دوائر/2008 مايو.jpg" },
-            
-           ],
         solvedExams: [
-        { id: "118", link: "EXM/دوائر/حل امتحان دوائر متقدمه مايو 2024.pdf" },
-        { id: "119", link: "EXM/دوائر/حل امتحان دوائر متقدمه مايو 2022.pdf" },
-        { id: "120", link: "EXM/دوائر/حل امتحان دوائر متقدمه مايو 2021.pdf" },
-        { id: "121", link: "EXM/دوائر/حل_امتحان_دوائر_الكترونية_متقدمة_2020.pdf" },
-        { id: "122", link: "EXM/دوائر/حل امتحان دوائر متقدمه مايو 2018.pdf" },
-        { id: "123", link: "EXM/دوائر/حل امتحان دوائر متقدمه مايو 2017.pdf" },
-
+            { id: "89", link: "EXM/معامل/حل مايو 2019 معامل تطبيقية.pdf" },
+            { id: "90", link: "EXM/معامل/حل مايو 2018 معامل تطبيقية.pdf" },
+            { id: "91", link: "EXM/معامل/حل مايو 2017 معامل تطبيقية.pdf" },
+            { id: "92", link: "EXM/معامل/حل مايو 2016 معامل تطبيقية.pdf" },
+            { id: "93", link: "EXM/معامل/حل مايو 2015 معامل تطبيقية.pdf" }
         ]
     },
-    };
+    "تقارير فنية": { 
+        shrah: [],
+        mozakrat: [
+            { id: "94", link: "PDF/تقارير/تقارير_افضل_اختيار.pdf" },
+            { id: "95", link: "PDF/تقارير/تقارير_فنيه_م_سيد_عطا.pdf" },
+            { id: "96", link: "PDF/تقارير/تقارير_فنيه_ملخص_حلو.pdf" },
+            { id: "97", link: "PDF/تقارير/تقارير_كتابه_كمبيوتر.pdf" },
+            { id: "98", link: "PDF/تقارير/تقارير_مذكره_ملخصه.PDF" },
+            { id: "99", link: "PDF/تقارير/تقارير_ملخص.pdf" },
+            { id: "100", link: "PDF/تقارير/تقاير_فنية_في_8_ورقات.pdf" },
+            { id: "101", link: "PDF/تقارير/كتابة_التقارير_الفنية_مذكرة.pdf" },
+            { id: "102", link: "PDF/تقارير/م_إسراء_أشرف_تقارير_فنية.pdf" },
+            { id: "103", link: "PDF/تقارير/م_كريم_تقارير_فنية.pdf" },
+            { id: "104", link: "PDF/تقارير/ملزمة_تقارير_شعبان.pdf" },
+            { id: "105", link: "PDF/تقارير/ملخص_تقارير_كامل.pdf" },
+            { id: "106", link: "PDF/تقارير/مسائل_تقارير.pdf" },
+            { id: "107", link: "PDF/تقارير/مذكرة_تقارير_م_سامح_الحريف.pdf" },
+            { id: "108", link: "PDF/تقارير/مذكرة_تقارير_فنيهم_محمد_عبدالبديع.pdf" },
+            { id: "109", link: "PDF/تقارير/مذكرة_تقارير_فنيه2_.pdf" },
+            { id: "110", link: "PDF/تقارير/مادة_تقارير_فنيه.pdf" },
+            { id: "111", link: "PDF/تقارير/مادة_تقارير_فنية_Abdelmonem.pdf" }
+        ],
+        books: [
+            { id: "112", link: "PDF/تقارير/كتاب_التقارير.pdf" }
+        ],
+        exams: [],
+        solvedExams: [
+            { id: "113", link: "EXM/تقارير/حل أمتحان تقارير فنية 2024.pdf" },
+            { id: "114", link: "EXM/تقارير/حل أمتحان تقارير فنية 2023.pdf" },
+            { id: "115", link: "EXM/تقارير/حل أمتحان تقارير فنية 2022.pdf" },
+            { id: "116", link: "EXM/تقارير/حل أمتحان تقارير فنية 2021.pdf" },
+            { id: "117", link: "EXM/تقارير/حل أمتحان تقارير فنية 2020.pdf" }
+        ]
+    },
+    "دوائر متقدمة": {
+        shrah: [],
+        mozakrat: [
+            { id: "118", link: "PDF/دوائر/باب_اول_وثانى_دوائر_الكترونيه_متقدمه_م_سوسن.pdf" },
+            { id: "119", link: "PDF/دوائر/دوائر متقدمه 4و5و6 سوسن.pdf" },
+            { id: "120", link: "PDF/دوائر/دوائر الكترونيه متقدمه .pdf" },
+            { id: "121", link: "PDF/دوائر/دوائر متقدمة Abdelmonem.pdf" },
+            { id: "122", link: "PDF/دوائر/م_كريم دوائر الكترونيه .pdf" },
+            { id: "123", link: "PDF/دوائر/مذكرة_دوائر_الكترونية_متقدمة_معهد_الزقازيق.pdf" },
+            { id: "124", link: "PDF/دوائر/ملخص دوائر متقدمه .pdf" }
+        ],
+        books: [], 
+        exams: [
+            { id: "125", link: "EXM/دوائر/2024 مايو.jpg" },
+            { id: "126", link: "EXM/دوائر/2023 مايو.jpg" },
+            { id: "127", link: "EXM/دوائر/2022 مايو.jpg" },
+            { id: "128", link: "EXM/دوائر/2021 مايو.jpg" },
+            { id: "129", link: "EXM/دوائر/2020 مايو.jpg" },
+            { id: "130", link: "EXM/دوائر/2019 مايو.jpg" },
+            { id: "131", link: "EXM/دوائر/2018 مايو.jpg" },
+            { id: "132", link: "EXM/دوائر/2018 سبتمبر.jpg" },
+            { id: "133", link: "EXM/دوائر/2017 مايو.jpg" },
+            { id: "134", link: "EXM/دوائر/2016  مايو.jpg" },
+            { id: "135", link: "EXM/دوائر/2015 مايو.jpg" },
+            { id: "136", link: "EXM/دوائر/2012 مايو.jpg" },
+            { id: "137", link: "EXM/دوائر/2009 مايو.jpg" },
+            { id: "138", link: "EXM/دوائر/2008 مايو.jpg" }
+        ],
+        solvedExams: [
+            { id: "139", link: "EXM/دوائر/حل امتحان دوائر متقدمه مايو 2024.pdf" },
+            { id: "140", link: "EXM/دوائر/حل امتحان دوائر متقدمه مايو 2022.pdf" },
+            { id: "141", link: "EXM/دوائر/حل امتحان دوائر متقدمه مايو 2021.pdf" },
+            { id: "142", link: "EXM/دوائر/حل_امتحان_دوائر_الكترونية_متقدمة_2020.pdf" },
+            { id: "143", link: "EXM/دوائر/حل امتحان دوائر متقدمه مايو 2018.pdf" },
+            { id: "144", link: "EXM/دوائر/حل امتحان دوائر متقدمه مايو 2017.pdf" }
+        ]
+    }
+};
+async function openCategory(cat) {
+    document.getElementById('categoryMenu').style.display = 'none';
+    document.getElementById('filesMenu').style.display = 'block';
+    const list = document.getElementById('filesList');
+    const items = libraryData[currentSub][cat] || [];
+    
+    if (items.length === 0) {
+        list.innerHTML = "<p style='text-align:center; opacity:0.5; padding:20px;'>قريباً إن شاء الله...</p>";
+        return;
+    }
 
+    let html = "";
+
+    for (const item of items) {
+        const isYouTube = item.link.includes('youtube.com') || item.link.includes('youtu.be');
+        const name = item.name || "فيديو شرح"; 
+        const itemId = item.id;
+
+        if (isYouTube) {
+            // استخراج معرف الفيديو لجلب الصورة
+            const videoId = item.link.match(/(?:youtu\.be\/|youtube\.com\/(?:.*v=|\/embed\/))([^?& ]+)/)[1];
+            const thumbUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+
+            html += `
+                <div class="memo-card" style="border-color: var(--clr-shrah); overflow: hidden; background: rgba(0,0,0,0.4);">
+                    <div style="position:relative; width:100%; height:180px;">
+                        <img src="${thumbUrl}" style="width:100%; height:100%; object-fit:cover; display:block;">
+                        <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.8), transparent); display:flex; align-items:center; justify-content:center;">
+                             <div style="width:60px; height:60px; background:var(--clr-shrah); border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow: 0 0 20px var(--clr-shrah);">
+                                <span style="font-size:30px; margin-left:5px;">▶</span>
+                             </div>
+                        </div>
+                    </div>
+                    
+                    <div style="padding: 15px; text-align: center;">
+                        <div style="font-weight:900; font-size:1.1rem; color:#fff; margin-bottom:15px;">${name}</div>
+                        
+                        <a href="${item.link}" target="_blank" 
+                           class="btn-action" 
+                           style="background: var(--clr-shrah); color:#fff; border:none; width:100%; display:block; text-decoration:none; padding:12px; border-radius:10px; font-weight:900; font-size:1rem;">
+                           🎬 مشاهدة الآن
+                        </a>
+                    </div>
+                </div>`;
+        } else {
+            // هذا الكود للملفات العادية (مذكرات/امتحانات) كما كان
+            const size = await getFileSize(item.link);
+            const finalLink = fixLink(item.link);
+            html += `
+                <div class="memo-card">
+                    <div class="memo-header-area">
+                        <div class="memo-title-side">
+                            <span class="memo-name">${name}</span>
+                            <span class="memo-dl-count" id="c-${itemId}">تم التحميل 0 مرة</span>
+                        </div>
+                        <span class="memo-size-tag">💾 ${size}</span>
+                    </div>
+                    <div class="memo-actions">
+                        <a href="${finalLink}" target="_blank" class="btn-action btn-view">👁️ معاينة</a>
+                        <a href="${finalLink}" download="${name}.pdf" class="btn-action btn-dl" onclick="handleDownload('${itemId}')">📥 تحميل الملف</a>
+                    </div>
+                </div>`;
+        }
+    }
+    list.innerHTML = html;
+    if (window.syncCounts) window.syncCounts();
+}
     function getFileName(path) {
         try {
             let lastPart = path.split('/').pop();
@@ -509,20 +639,52 @@
         width = canvas.width = window.innerWidth;
         height = canvas.height = window.innerHeight;
         particles = [];
-        for(let i=0; i<80; i++) {
-            particles.push({ x: Math.random()*width, y: Math.random()*height, vx: (Math.random()-0.5)*0.5, vy: (Math.random()-0.5)*0.5, size: Math.random()*2+1 });
+        // عدد الذرات - 60 رقم مثالي للأداء والجمال
+        for(let i=0; i<60; i++) {
+            particles.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                vx: (Math.random() - 0.5) * 0.6, // سرعة الحركة أفقياً
+                vy: (Math.random() - 0.5) * 0.6, // سرعة الحركة رأسياً
+                size: Math.random() * 2 + 1.5    // حجم الذرة
+            });
         }
     }
+
     function drawCanvas() {
-        ctx.clearRect(0,0,width,height);
-        ctx.fillStyle = "rgba(168, 202, 215, 0.3)";
+        ctx.clearRect(0, 0, width, height);
+        
         particles.forEach((p, i) => {
-            p.x += p.vx; p.y += p.vy;
-            if(p.x<0 || p.x>width) p.vx*=-1; if(p.y<0 || p.y>height) p.vy*=-1;
-            ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
-            for(let j=i+1; j<particles.length; j++){
-                let p2 = particles[j]; let d = Math.hypot(p.x-p2.x, p.y-p2.y);
-                if(d<120){ ctx.beginPath(); ctx.strokeStyle=`rgba(168,202,215,${0.3-d/120})`; ctx.moveTo(p.x,p.y); ctx.lineTo(p2.x,p2.y); ctx.stroke(); }
+            // تحديث مكان الذرة
+            p.x += p.vx;
+            p.y += p.vy;
+
+            // الارتداد عند حواف الشاشة
+            if(p.x < 0 || p.x > width) p.vx *= -1;
+            if(p.y < 0 || p.y > height) p.vy *= -1;
+
+            // رسم الذرة نفسها
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(168, 202, 215, 0.8)"; // لون الذرة (الذهبي المائل للأزرق الخاص بك)
+            ctx.fill();
+
+            // منطق الترابط (الخيوط بين الذرات)
+            for(let j = i + 1; j < particles.length; j++) {
+                let p2 = particles[j];
+                let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                
+                // إذا كانت المسافة أقل من 150 بكسل، ارسم رابطاً
+                if(dist < 150) {
+                    ctx.beginPath();
+                    // شفافية الخط تعتمد على المسافة (يختفي كلما ابتعدا)
+                    let opacity = 1 - (dist / 150);
+                    ctx.strokeStyle = `rgba(168, 202, 215, ${opacity * 0.4})`;
+                    ctx.lineWidth = 0.8;
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(p2.x, p2.y);
+                    ctx.stroke();
+                }
             }
         });
         requestAnimationFrame(drawCanvas);
@@ -573,27 +735,110 @@ function renderCards() {
     function openModal(n) { currentSub = n; document.getElementById('modalTitle').innerText = n; document.getElementById('modal').style.display = 'block'; backToMain(); }
     function closeModal() { document.getElementById('modal').style.display = 'none'; }
     function backToMain() { document.getElementById('mainOptions').style.display = 'block'; document.getElementById('subSection').style.display = 'none'; }
-
-    async function showSubSection(t) {
-        document.getElementById('mainOptions').style.display = 'none';
-        document.getElementById('subSection').style.display = 'block';
-        const list = document.getElementById('itemsList');
-        const items = libraryData[currentSub][t] || [];
-
-        if (items.length === 0) {
-            list.innerHTML = "<p style='text-align:center; opacity:0.5;'>لا يوجد محتوى حالياً</p>";
-            return;
+// 1. تعديل دالة جلب الحجم لتحديث العنصر مباشرة
+async function updateFileSizeUI(url, elementId) {
+    try {
+        const response = await fetch(fixLink(url), { method: 'HEAD' });
+        const size = response.headers.get('content-length');
+        const element = document.getElementById(elementId);
+        
+        if (element) {
+            if (size && size > 0) {
+                element.innerText = "💾 " + (size / (1024 * 1024)).toFixed(2) + " MB";
+            } else {
+                element.innerText = "💾 1.5 MB"; // حجم افتراضي في حال فشل السيرفر
+            }
         }
+    } catch (e) {
+        const element = document.getElementById(elementId);
+        if (element) element.innerText = "💾 1.2 MB"; 
+    }
+}
 
-        list.innerHTML = "<p style='text-align:center; color:var(--gold);'>جاري تجهيز الملفات...</p>";
+// 2. تعديل دالة عرض القسم (أصبحت الآن سريعة جداً)
+async function showSubSection(t) {
+    document.getElementById('mainOptions').style.display = 'none';
+    document.getElementById('subSection').style.display = 'block';
+    const list = document.getElementById('itemsList');
+    const items = libraryData[currentSub][t] || [];
 
-        let html = "";
-        for (let item of items) {
-            const name = getFileName(item.link);
-            const size = await getFileSize(item.link);
-            const itemId = item.id || 'f_' + Math.random().toString(36).substr(2, 5);
-            const finalLink = fixLink(item.link);
+    if (items.length === 0) {
+        list.innerHTML = "<p style='text-align:center; opacity:0.5;'>لا يوجد محتوى حالياً</p>";
+        return;
+    }
+
+    // بناء القائمة فوراً
+    let html = "";
+    items.forEach((item, index) => {
+        const name = getFileName(item.link);
+        const itemId = item.id || 'f_' + Math.random().toString(36).substr(2, 5);
+        const sizeElemId = `size-${itemId}-${index}`; // ID فريد لمكان الحجم
+        const finalLink = fixLink(item.link);
+        
+        html += `
+            <div class="memo-card">
+                <div class="memo-header-area">
+                    <div class="memo-title-side">
+                        <span class="memo-name">${name}</span>
+                        <span class="memo-dl-count" id="c-${itemId}">تم التحميل 0 مرة</span>
+                    </div>
+                    <span class="memo-size-tag" id="${sizeElemId}">⏳ جاري الحساب...</span>
+                </div>
+                <div class="memo-actions">
+                    <a href="${finalLink}" target="_blank" class="btn-action btn-view">👁️ معاينة</a>
+                    <a href="${finalLink}" download="${name}.pdf" class="btn-action btn-dl" onclick="handleDownload('${itemId}')">📥 تحميل الملف</a>
+                </div>
+            </div>`;
             
+        // طلب تحديث الحجم في الخلفية دون انتظار (No Await)
+        updateFileSizeUI(item.link, sizeElemId);
+    });
+
+    list.innerHTML = html;
+    if(window.syncCounts) window.syncCounts();
+}
+    async function showSubSection(t) {
+    document.getElementById('mainOptions').style.display = 'none';
+    document.getElementById('subSection').style.display = 'block';
+    const list = document.getElementById('itemsList');
+    const items = libraryData[currentSub][t] || [];
+
+    if (items.length === 0) {
+        list.innerHTML = "<p style='text-align:center; opacity:0.5;'>لا يوجد محتوى حالياً</p>";
+        return;
+    }
+
+    let html = "";
+    for (const item of items) {
+        const isYouTube = item.link.includes('youtube.com') || item.link.includes('youtu.be');
+        const name = item.name || getFileName(item.link);
+        const itemId = item.id;
+
+        if (isYouTube) {
+            const videoId = getYouTubeID(item.link);
+            
+            // التعديل هنا: لو فيه thumb استخدمها، لو مفيش جرب تجيب بتاعة يوتيوب
+            let thumbUrl = item.thumb ? item.thumb : (videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : 'IMG/default-video.png');
+
+            html += `
+                <div class="memo-card" style="border-color: var(--clr-shrah); overflow: hidden; background: rgba(0,0,0,0.4);">
+                    <div style="width:100%; height:180px;">
+                        <img src="${thumbUrl}" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.src='IMG/default-video.png'">
+                    </div>
+                    <div style="padding: 15px; text-align: center;">
+                        <div style="font-weight:900; font-size:1.1rem; color:#fff; margin-bottom:15px;">${name}</div>
+                        <a href="${item.link}" target="_blank" class="btn-action" 
+                           style="background: var(--clr-shrah); color:#fff; border:none; width:100%; display:block; text-decoration:none; padding:12px; border-radius:10px; font-weight:900;">
+                           🎬 مشاهدة الشرح
+                        </a>
+                    </div>
+                </div>`;
+        }
+        
+        
+        else {
+            const size = await getFileSize(item.link);
+            const finalLink = fixLink(item.link);
             html += `
                 <div class="memo-card">
                     <div class="memo-header-area">
@@ -609,9 +854,10 @@ function renderCards() {
                     </div>
                 </div>`;
         }
-        list.innerHTML = html;
-        if(window.syncCounts) window.syncCounts();
     }
+    list.innerHTML = html;
+    if (window.syncCounts) window.syncCounts();
+}
 
     function handleDownload(id) {
         showToast();
@@ -623,7 +869,18 @@ function renderCards() {
         toast.style.bottom = '30px'; 
         setTimeout(() => toast.style.bottom = '-100px', 3000);
     }
+    // دالة لاستخراج معرف الفيديو من رابط يوتيوب
+    function getYouTubeID(url) {
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? match[2] : null;
+    }
 
+    // دالة لجلب رابط الصورة المصغرة
+    function getYTThumb(url) {
+        const id = getYouTubeID(url);
+        return id ? `https://img.youtube.com/vi/${id}/mqdefault.jpg` : 'IMG/default-video.png';
+    }
     renderCards();
 </script>
 </body>
