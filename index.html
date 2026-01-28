@@ -705,10 +705,12 @@ async function openCategory(cat) {
                         </div>
                         <span class="memo-size-tag">💾 ${size}</span>
                     </div>
-                    <div class="memo-actions">
-                        <a href="${finalLink}" target="_blank" class="btn-action btn-view">👁️ معاينة</a>
-                        <a href="${finalLink}" download="${name}.pdf" class="btn-action btn-dl" onclick="handleDownload('${itemId}')">📥 تحميل الملف</a>
-                    </div>
+                  <div class="memo-actions">
+    <a href="https://raouf1812.github.io/Raouf1//${item.link}&embedded=true" class="btn-action btn-view" target="_blank">معاينة</a>
+    
+    <a href="${item.link}" class="btn-action btn-dl" onclick="handleDownload('${item.id}')" download>تحميل</a>
+</div>
+
                 </div>`;
         }
     }
