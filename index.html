@@ -918,8 +918,8 @@ async function showSubSection(t) {
                         <span class="memo-size-tag" id="${sizeElemId}">⏳ جاري..</span>
                     </div>
                     <div class="memo-actions">
-                        <a href="${finalLink}" target="_blank" class="btn-action btn-view">👁️ معاينة</a>
-                        <a href="${finalLink}" download="${name}.pdf" class="btn-action btn-dl" onclick="handleDownload('${itemId}')">📥 تحميل</a>
+                        <a href="${item.link}" class="btn-action btn-view" target="_blank">👁️ معاينة</a>
+                        <a href="${item.link}" class="btn-action btn-dl" onclick="handleDownload('${item.id}')" download>📥 تحميل</a>
                     </div>
                 </div>`;
             
