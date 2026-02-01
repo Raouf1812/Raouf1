@@ -119,6 +119,108 @@
         footer { margin-top: 50px; padding: 40px 20px; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.1); }
         footer span { color: var(--gold); font-weight: 900; }
         #total-visitors { transition: all 0.5s ease; display: inline-block; min-width: 20px; }
+
+      :root {
+    --xx-gold-color: #D4AF37;
+    --xx-blur: 12px;
+        }
+
+        .xx-glass-card {
+            position: relative;
+            width: 320px;
+            padding: 35px 25px;
+            /* خلفية شفافة زجاجية */
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(var(--xx-blur));
+            -webkit-backdrop-filter: blur(var(--xx-blur));
+            
+            /* حدود خفيفة جداً لإظهار حواف الزجاج */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            
+            text-align: center;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            margin: 20px auto;
+        }
+
+        /* الخط الدهبي العلوي */
+        .xx-gold-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, transparent, var(--xx-gold-color), transparent);
+        }
+
+        /* تأثير عند الوقوف بالماوس */
+        .xx-glass-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .xx-card-wrapper {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.5s;
+        }
+
+        .xx-glass-card:hover .xx-card-wrapper {
+            background: var(--xx-gold-color);
+            box-shadow: 0 0 20px var(--xx-gold-color);
+        }
+
+        .xx-card-icon {
+            font-size: 38px;
+            transition: 0.5s;
+        }
+
+        .xx-glass-card:hover .xx-card-icon {
+            transform: rotateY(360deg); /* حركة لفة للأيقونة */
+        }
+
+        .xx-card-title {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .xx-card-text {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* تأثير الوميض اللي بيعدي بالعرض */
+        .xx-glass-card::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 20%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(30deg);
+            transition: 0.8s;
+        }
+
+        .xx-glass-card:hover::after {
+            left: 120%;
+        }
+
+
     </style>
 </head>
 <body>
@@ -143,7 +245,19 @@
 </header>
 
 <div class="container" id="subjectsGrid"></div>
-
+<section class="main-content">
+    <div class="container"> 
+        <div class="xx-glass-card" onclick="location.href='index - 2.html'">
+            <div class="xx-card-wrapper">
+                <div class="xx-card-icon">📑</div>
+            </div>
+            <div class="xx-card-body">
+                <h3 class="xx-card-title">قسم الشيتات</h3>
+                <p class="xx-card-text">تصفح جميع الشيتات والملفات</p>
+            </div>
+            <div class="xx-gold-line"></div>
+        </div>
+</section>
 <div id="modal" class="modal">
     <div class="modal-content">
         <span class="close-modal" onclick="closeModal()">✕</span>
