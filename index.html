@@ -195,10 +195,8 @@
     const db = getDatabase(app);
 
     const totalRef = ref(db, 'stats/total_visitors');
-    if (!sessionStorage.getItem('total_counted')) {
         runTransaction(totalRef, (curr) => (curr || 0) + 1);
-        sessionStorage.setItem('total_counted', 'true');
-    }
+    
     onValue(totalRef, (snap) => {
         const el = document.getElementById('total-visitors');
         if(el) el.innerText = snap.val() || 0;
