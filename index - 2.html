@@ -3,200 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>صفحة الشيتات</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>مكتبة الشيتات | RAOUF</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
-        :root { 
-            --bg: #050608; 
-            --accent: #ffd700; 
-            --card: #11141a; 
-        }
-        
-        body { 
-            font-family: 'Cairo', sans-serif; 
-            background: var(--bg); 
-            color: #fff; 
-            margin: 0; padding: 0; 
-            text-align: center;
+        :root {
+            --bg: #080808;
+            --gold: #a8cad7;
+            --gold-glow: rgba(168, 202, 215, 0.3);
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
 
-        /* هيدر بسيط بدون رمضان */
-        header { padding: 60px 0 30px; position: relative; border-bottom: 1px solid rgba(255,215,0,0.05); }
-        
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg);
+            color: #fff;
+            margin: 0; padding: 0;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(168, 202, 215, 0.07) 0%, transparent 35%),
+                radial-gradient(circle at 90% 90%, rgba(168, 202, 215, 0.07) 0%, transparent 35%);
+            background-attachment: fixed;
+        }
+
+        #toast {
+            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
+            background: var(--gold); color: #050505; padding: 14px 30px;
+            border-radius: 15px; font-weight: 700; z-index: 10000;
+            transition: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+        }
+        #toast.show { top: 30px; }
+
+        header { padding: 80px 20px 40px; text-align: center; }
         header h1 { 
-            font-size: 45px; font-weight: 900; color: var(--accent); 
-            margin: 0;
+            font-size: 42px; font-weight: 900; color: var(--gold); 
+            margin: 0; text-shadow: 0 0 20px var(--gold-glow);
         }
 
-        .grid { 
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; 
-            max-width: 600px; margin: 20px auto; padding: 20px;
+        .back-btn {
+            display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; 
+            padding: 10px 25px; background: var(--glass); color: #fff; 
+            text-decoration: none; border-radius: 12px; border: 1px solid var(--glass-border);
+            font-size: 14px; transition: 0.4s; backdrop-filter: blur(10px);
+        }
+        .back-btn:hover { background: var(--gold); color: #000; transform: translateY(-3px); }
+
+        .cards-list {
+            max-width: 600px; margin: 20px auto; padding: 0 20px;
+            display: flex; flex-direction: column; gap: 18px;
         }
 
-        .card { 
-            background: var(--card); padding: 25px 15px; 
-            border-radius: 20px; border: 1px solid rgba(255,215,0,0.1); 
-            cursor: pointer; font-weight: 700; transition: 0.3s;
+        .card {
+            background: var(--glass); padding: 25px; border-radius: 24px;
+            border: 1px solid var(--glass-border); backdrop-filter: blur(20px);
+            cursor: pointer; transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            display: flex; justify-content: space-between; align-items: center;
+            position: relative; overflow: hidden;
         }
-        .card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        
+        .card:hover {
+            border-color: var(--gold); transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px var(--gold-glow);
+        }
 
-        .sheet-item { 
-            background: #161b22; margin: 12px auto; padding: 20px; 
-            border-radius: 15px; display: flex; justify-content: space-between; 
-            border-right: 5px solid var(--accent); cursor: pointer; max-width: 500px;
-            align-items: center;
+        .sub-info h3 { margin: 0; font-size: 20px; font-weight: 700; }
+        .sub-info p { margin: 6px 0 0; font-size: 13px; color: var(--gold); opacity: 0.7; }
+
+        .badge {
+            background: rgba(168, 202, 215, 0.15); color: var(--gold); 
+            padding: 6px 15px; border-radius: 10px; font-size: 12px; font-weight: 800;
         }
+
+        #content { max-width: 600px; margin: 50px auto; padding: 0 20px; }
+        .sheet-item {
+            background: rgba(255,255,255,0.02); margin-bottom: 15px; padding: 20px;
+            border-radius: 20px; display: flex; justify-content: space-between;
+            align-items: center; border-right: 5px solid var(--gold);
+            transition: 0.3s;
+        }
+
+        .btn-group { display: flex; gap: 10px; }
+        .btn { 
+            width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;
+            border-radius: 12px; text-decoration: none; cursor: pointer; transition: 0.3s;
+        }
+        .btn-view { border: 1px solid var(--gold); color: var(--gold); }
+        .btn-down { background: var(--gold); color: #000; }
 
         #viewer { 
-            display:none; position:fixed; inset:0; 
-            background:rgba(0,0,0,0.97); z-index:9999; 
-            align-items:center; justify-content:center; flex-direction: column; 
+            display:none; position:fixed; inset:0; background:rgba(0,0,0,0.98); 
+            z-index:10000; align-items:center; justify-content:center;
+            backdrop-filter: blur(10px);
         }
-        #viewer img { max-width: 90%; max-height: 80%; border: 2px solid var(--accent); border-radius: 20px; }
-        
-        .close-btn { 
-            margin-top: 25px; padding: 15px 60px; 
-            background: var(--accent); color: #000; 
-            border-radius: 40px; font-weight: 900; cursor: pointer; 
-        }
-
-        #music-btn {
-            position: fixed; bottom: 25px; left: 25px;
-            background: #1c222d; color: var(--accent); border: 1px solid var(--accent);
-            padding: 12px 22px; border-radius: 35px;
-            cursor: pointer; font-size: 15px; font-weight: bold; z-index: 1001;
-            display: flex; align-items: center; gap: 10px;
+        #viewer img { max-width: 90%; max-height: 80%; border-radius: 20px; border: 1px solid var(--glass-border); }
+        .close-v { 
+            position: absolute; top: 30px; right: 30px; width: 50px; height: 50px;
+            background: #ff4757; color: #fff; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer;
         }
 
-        footer { margin-top: 100px; padding: 50px; border-top: 1px solid rgba(255,215,0,0.1); }
-        .footer-name { color: var(--accent); font-weight: 900; font-size: 22px; }
+        footer { padding: 80px 20px; text-align: center; font-weight: 900; letter-spacing: 5px; color: var(--gold); opacity: 0.3; }
     </style>
 </head>
 <body>
 
-    <header>
+    <div id="toast">📥 بدأ التحميل..</div>
+
+    <header data-aos="zoom-in">
         <h1>صفحة الشيتات</h1>
-        <a href="index.html" style="
-    display: inline-block;
-    margin-top: 10px;
-    padding: 8px 20px;
-    background: #1c222d;
-    color: var(--accent);
-    text-decoration: none;
-    border-radius: 20px;
-    border: 1px solid var(--accent);
-    font-weight: bold;
-    font-size: 14px;
-">🔙 العودة للمكتبة</a>
+        <a href="index.html" class="back-btn">🏠 العودة للمكتبة الرئيسية</a>
     </header>
 
-    <div class="grid">
-        <div class="card" onclick="loadSheets('plc')">PLC (متحكمات)</div>
-        <div class="card" onclick="loadSheets('صيانة')">صيانة أجهزة</div>
-        <div class="card" onclick="loadSheets('اتصالات')">إتصالات</div>
-        <div class="card" onclick="loadSheets('KAB')">KAB (العمل الحر)</div>
-        <div class="card" onclick="loadSheets('معامل')">معامل تطبيقية</div>
-        <div class="card" onclick="loadSheets('تقارير')">تقارير فنية</div>
-        <div class="card" onclick="loadSheets('دوائر')">دوائر متقدمة</div>
-    </div>
-
+    <div class="cards-list" id="main-list"></div>
     <div id="content"></div>
 
-    <div id="viewer">
-        <img id="vImg" src="">
-        <div class="close-btn" onclick="closeViewer()">إغلاق</div>
+    <div id="viewer" onclick="closeViewer()">
+        <div class="close-v">×</div>
+        <img id="vImg" src="" onclick="event.stopPropagation()">
     </div>
 
-    
-    <audio id="ramadan-audio" loop>
-        <source src="RR/11.mp3" type="audio/mpeg">
-    </audio>
+    <footer>RAOUF</footer>
 
-    <footer>
-        <p style="opacity: 0.6; margin: 0;">تَمَّ التَّصْمِيمُ بِوَاسِطَةِ</p>
-        <div class="footer-name"> - RAOUF - </div>
-    </footer>
-
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        
-        function playInteractionSound(type) {
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-
-            if (type === 'click') {
-                osc.frequency.setValueAtTime(300, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.02, audioCtx.currentTime); 
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-            } else if (type === 'open') {
-                osc.frequency.setValueAtTime(250, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.02, audioCtx.currentTime); 
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.2);
-            }
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.2);
-        }
+        AOS.init({ duration: 800, once: true });
 
         const allData = [
-            { name: "شيت رقم 1", date: "2026-02-01", sub: "plc", url: "RR/pngegg.png" },
+            { name: "شيت رقم 1", date: "2999-09-01", sub: "plc", url: "RR/pngegg.png" },
         ];
 
-        function loadSheets(sub) {
-            playInteractionSound('click');
+        const subjects = [
+            { key: 'plc', label: 'PLC (متحكمات)', eng: 'محمد الجيار' },
+            { key: 'صيانة', label: 'صيانة أجهزة', eng: ' معرفش' },
+            { key: 'اتصالات', label: 'إتصالات', eng: ' معرفش' },
+            { key: 'KAB', label: 'KAB (العمل الحر)', eng: ' معرفش' },
+            { key: 'معامل', label: 'معامل تطبيقية', eng: ' معرفش' },
+            { key: 'تقارير', label: 'تقارير فنية', eng: ' معرفش' },
+            { key: 'دوائر', label: 'دوائر متقدمة', eng: ' معرفش' }
+        ];
+
+        function showToast() {
+            const t = document.getElementById('toast');
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        function renderGrid() {
+            const list = document.getElementById('main-list');
+            list.innerHTML = '';
+            subjects.forEach((s, index) => {
+                const count = allData.filter(i => i.sub === s.key).length;
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.setAttribute('data-aos', 'fade-up');
+                card.setAttribute('data-aos-delay', index * 50);
+                card.onclick = () => loadSheets(s.key, s.label, s.eng);
+                card.innerHTML = `
+                    <div class="sub-info">
+                        <h3>${s.label}</h3>
+                        <p>👤 المهندس: ${s.eng}</p>
+                    </div>
+                    <div class="badge">${count} ملفات</div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        function loadSheets(subKey, label, eng) {
             const container = document.getElementById('content');
-            container.innerHTML = `<h2 style="color:var(--accent); margin-top:40px;">📂 شيتات ${sub}</h2>`;
-            const filtered = allData.filter(i => i.sub === sub);
+            const filtered = allData.filter(i => i.sub === subKey);
+            let html = `<h2 data-aos="fade-left" style="color:var(--gold); margin-bottom:25px; font-size:24px;">📂 <span>${label}</span></h2>`;
             
             if (filtered.length === 0) {
-                container.innerHTML += "<p style='opacity:0.4; margin-top:20px;'>لا توجد ملفات حالياً</p>";
-                return;
+                html += `<div data-aos="zoom-in" style='opacity:0.4; text-align:center; padding:40px; border:1px dashed var(--glass-border); border-radius:20px;'>لا توجد ملفات حالياً</div>`;
+            } else {
+                filtered.forEach((item, idx) => {
+                    html += `
+                        <div class="sheet-item" data-aos="fade-up" data-aos-delay="${idx*100}">
+                            <div>
+                                <div style="font-weight:700; font-size:17px; margin-bottom:4px;">${item.name}</div>
+                                <div style="font-size:12px; opacity:0.6;">📅 ${item.date}</div>
+                            </div>
+                            <div class="btn-group">
+                                <div class="btn btn-view" onclick="viewImg('${item.url}')">👁️</div>
+                                <a href="${item.url}" download onclick="showToast()" class="btn btn-down">📥</a>
+                            </div>
+                        </div>`;
+                });
             }
-
-            filtered.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'sheet-item';
-                div.innerHTML = `
-                    <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 5px; flex:1;" onclick="viewImg('${item.url}')">
-                        <span style="font-weight: 900; color: #fff;">${item.name}</span>
-                        <span style="font-size: 12px; opacity: 0.6;">📅 التاريخ: ${item.date}</span>
-                    </div>
-                    <div style="display: flex; gap: 15px;">
-                        <span style="color:var(--accent); font-weight:bold; cursor:pointer;" onclick="viewImg('${item.url}')">عرض 👁️</span>
-                        <a href="${item.url}" download="${item.name}" style="text-decoration:none; color:#00ff88; font-weight:bold;">تحميل 📥</a>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
+            container.innerHTML = html;
             window.scrollTo({ top: container.offsetTop - 50, behavior: 'smooth' });
         }
 
-        function viewImg(url) {
-            playInteractionSound('open');
-            document.getElementById('viewer').style.display = 'flex';
-            document.getElementById('vImg').src = url;
+        function viewImg(url) { 
+            document.getElementById('viewer').style.display = 'flex'; 
+            document.getElementById('vImg').src = url; 
+            document.body.style.overflow = 'hidden';
         }
-
-        function closeViewer() {
-            playInteractionSound('click');
-            document.getElementById('viewer').style.display = 'none';
-        }
-
-        const audio = document.getElementById('ramadan-audio');
-        audio.volume = 0.08; 
         
-        function toggleMusic() {
-            playInteractionSound('click');
-            const btn = document.getElementById('music-btn');
-            if (audio.paused) { 
-                audio.play(); 
-                btn.innerHTML = '<span id="music-text">إيقاف</span> 🔇';
-            } else { 
-                audio.pause(); 
-                btn.innerHTML = '<span id="music-text">تشغيل</span> 🎵';
-            }
+        function closeViewer() { 
+            document.getElementById('viewer').style.display = 'none'; 
+            document.body.style.overflow = 'auto';
         }
+
+        renderGrid();
     </script>
 </body>
 </html>
