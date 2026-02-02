@@ -121,7 +121,7 @@
         #total-visitors { transition: all 0.5s ease; display: inline-block; min-width: 20px; }
 
       :root {
-    --xx-gold-color: #D4AF37;
+    --xx-gold-color: #00a2ff9f;
     --xx-blur: 12px;
         }
 
@@ -220,7 +220,19 @@
             left: 120%;
         }
 
+        /* ابحث عن الكرت الذي يحتوي على رابط صفحة الشيتات واجعله بهذا التنسيق */
+        .card-sheets {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(168, 202, 215, 0.1);
+            transition: 0.4s ease;
+        }
 
+        .card-sheets:hover {
+            border-color: var(--gold);
+            box-shadow: 0 0 20px var(--gold-glow);
+            transform: translateY(-5px);
+        }
     </style>
 </head>
 <body>
@@ -252,11 +264,22 @@
                 <div class="xx-card-icon">📑</div>
             </div>
             <div class="xx-card-body">
-                <h3 class="xx-card-title">قسم الشيتات</h3>
+                <h3 class="xx-card-title">صفحة الشيتات</h3>
                 <p class="xx-card-text">تصفح جميع الشيتات والملفات</p>
             </div>
             <div class="xx-gold-line"></div>
         </div>
+        <div class="xx-glass-card" onclick="window.open('https://www.moadla.com/Engineering/')">
+            <div class="xx-card-wrapper">
+                <div class="xx-card-icon">🎓</div>
+            </div>
+            <div class="xx-card-body">
+                <h3 class="xx-card-title">صفحة المعادلة</h3>
+                <p class="xx-card-text">تصفح جميع الملفات الخاصه بمعادلة كليه الهندسة</p>
+            </div>
+            <div class="xx-gold-line"></div>
+        </div>
+</div>
 </section>
 <div id="modal" class="modal">
     <div class="modal-content">
