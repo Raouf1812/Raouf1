@@ -60,7 +60,7 @@
         }
 
         #bgCanvas { position: fixed; top: 0; left: 0; z-index: -1; background: #0e0e0e; }
-        header { padding: 40px 20px; text-align: center; position: relative; z-index: 10; }
+        header { padding: 15px 1px; text-align: center; position: relative; z-index: 10; }
         .main-logo { width: 100px; filter: drop-shadow(0 0 15px var(--gold-glow)); margin-bottom: 10px; }
         header h1 { font-size: 2.2rem; margin: 0; color: var(--gold); font-weight: 900; text-shadow: 0 0 10px var(--gold-glow); }
 
@@ -233,6 +233,85 @@
             box-shadow: 0 0 20px var(--gold-glow);
             transform: translateY(-5px);
         }
+
+
+        .exam-countdown-card {
+            background: rgba(168, 202, 215, 0.05); /* لون مستوحى من موقعك */
+            border: 1px solid var(--gold-glow);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 30px auto;
+            max-width: 500px;
+            text-align: center;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .countdown-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .countdown-header .dot {
+            width: 8px;
+            height: 8px;
+            background: var(--gold);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--gold);
+        }
+
+        .countdown-title {
+            font-weight: 900;
+            color: var(--gold);
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .time-block {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 12px 5px;
+            border-radius: 15px;
+            transition: 0.3s;
+        }
+
+        .time-block:hover {
+            border-color: var(--gold);
+            background: rgba(168, 202, 215, 0.1);
+        }
+
+        .time-number {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #fff;
+            font-family: 'Cairo', sans-serif;
+            line-height: 1;
+        }
+
+        .time-label {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--gold);
+            margin-top: 8px;
+            font-weight: bold;
+        }
+
+        /* للموبايل عشان الشكل ميبوظش */
+        @media (max-width: 480px) {
+            .countdown-grid { gap: 8px; }
+            .time-number { font-size: 1.4rem; }
+            .exam-countdown-card { margin: 15px; padding: 15px; }
+        }
     </style>
 </head>
 <body>
@@ -254,8 +333,33 @@
     <img src="IMG/RR.png" alt="Logo" class="main-logo">
     <h1>مكتبة أجهزة</h1>
     <h5>الصف الثاني  -  الترم الثاني</h5>
+        <div class="container">
+                <div class="exam-countdown-card">
+                    <div class="countdown-header">
+                        <span class="dot"></span>
+                        <span class="countdown-title">العد التنازلي للامتحانات</span>
+                        <span class="dot"></span>
+                    </div>
+                    <div id="countdown" class="countdown-grid">
+                        <div class="time-block">
+                            <span id="days" class="time-number">00</span>
+                            <span class="time-label">يوم</span>
+                        </div>
+                        <div class="time-block">
+                            <span id="hours" class="time-number">00</span>
+                            <span class="time-label">ساعة</span>
+                        </div>
+                        <div class="time-block">
+                            <span id="minutes" class="time-number">00</span>
+                            <span class="time-label">دقيقة</span>
+                        </div>
+                        <div class="time-block">
+                            <span id="seconds" class="time-number">00</span>
+                            <span class="time-label">ثانية</span>
+                        </div>
+                    </div>
+                </div>
 </header>
-
 <div class="container" id="subjectsGrid"></div>
 <section class="main-content">
     <div class="container"> 
@@ -307,12 +411,8 @@
         </div>
     </div>
     <p>تم التطوير بواسطة <span>~ Raouf ~</span></p>
-    <p>بمساعدة <span>Banan &
-        Donia &
-        Arwa 
-    </span></p>
+    <p>بمساعدة <span>Banan & Donia & Arwa </span></p>
 </footer>
-
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js";
     import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js";
@@ -1122,6 +1222,32 @@ async function updateFileSizeUI(url, elementId) {
         return id ? `https://img.youtube.com/vi/${id}/mqdefault.jpg` : 'IMG/default-video.png';
     }
     renderCards();
+
+// حدد موعد الامتحان هنا (السنة، الشهر - 1، اليوم، الساعة)
+    const countDownDate = new Date("May 20, 2026 10:00:00").getTime();
+
+    const x = setInterval(function() {
+        const now = new Date().getTime();
+        const distance = countDownDate - now;
+
+        // حسابات الوقت
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // وضع الأرقام في العناصر مع إضافة صفر إذا كان الرقم أقل من 10
+        document.getElementById("days").innerHTML = days < 10 ? "0" + days : days;
+        document.getElementById("hours").innerHTML = hours < 10 ? "0" + hours : hours;
+        document.getElementById("minutes").innerHTML = minutes < 10 ? "0" + minutes : minutes;
+        document.getElementById("seconds").innerHTML = seconds < 10 ? "0" + seconds : seconds;
+
+        // إذا انتهى الوقت
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("countdown").innerHTML = "<h2 style='color:var(--gold); grid-column: span 4;'>بدأت الامتحانات.. بالتوفيق! 🎓</h2>";
+        }
+    }, 1000);
 </script>
 </body>
 </html>
