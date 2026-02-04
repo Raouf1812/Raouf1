@@ -1,0 +1,58 @@
+{
+  "PLC (متحكمات مبرمجة)": {
+    "shrah": [],
+    "mozakrat": [],
+    "books": [],
+    "exams": [],
+    "solvedExams": []
+  },
+  "صيانة وإصلاح أجهزة إلكترونية": {
+    "shrah": [],
+    "mozakrat": [],
+    "books": [],
+    "exams": [],
+    "solvedExams": []
+  },
+  "إتصالات": {
+    "shrah": [],
+    "mozakrat": [],
+    "books": [],
+    "exams": [],
+    "solvedExams": []
+  },
+  "KAB (مشروع وثقافة العمل الحر )": {
+    "shrah": [],
+    "mozakrat": [],
+    "books": [],
+    "exams": [],
+    "solvedExams": []
+  },
+  "معامل تطبيقية": {
+    "shrah": [],
+    "mozakrat": [],
+    "books": [],
+    "exams": [],
+    "solvedExams": []
+  },
+  "تقارير فنية": {
+    "shrah": [],
+    "mozakrat": [],
+    "books": [],
+    "exams": [],
+    "solvedExams": []
+  },
+  "دوائر متقدمة": {
+    "shrah": [
+      {
+        "id": "video_1770247339518",
+        "name": "11111",
+        "link": "https://youtu.be/OnZLZSjwU8o?si=1j3PL9aKQl7bIlr_",
+        "thumb": "https://img.youtube.com/vi/OnZLZSjwU8o/mqdefault.jpg"
+      }
+    ],
+    "mozakrat": [],
+    "books": [],
+    "exams": [],
+    "solvedExams": []
+  }
+}
