@@ -42,7 +42,14 @@
     "solvedExams": []
   },
   "دوائر متقدمة": {
-    "shrah": [],
+    "shrah": [
+      {
+        "id": "video_1770248123310",
+        "name": "111111111111",
+        "link": "https://youtu.be/foq7BrSeAZk",
+        "thumb": "https://img.youtube.com/vi/foq7BrSeAZk/mqdefault.jpg"
+      }
+    ],
     "mozakrat": [],
     "books": [],
     "exams": [],
