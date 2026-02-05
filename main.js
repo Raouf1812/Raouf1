@@ -55,13 +55,12 @@ function fixLink(url) {
     return encodeURI(url).replace(/%25/g, "%");
 }
 
+// ابحث عن دالة getFileSize واستبدلها بهذا:
 async function getFileSize(url) {
-    try {
-        const response = await fetch(fixLink(url), { method: 'HEAD' });
-        const size = response.headers.get('content-length');
-        if (size && size > 0) return (size / (1024 * 1024)).toFixed(2) + " MB";
-        return "1.5 MB";
-    } catch (e) { return "1.2 MB"; }
+    if (url.includes('drive.google.com')) {
+        return "جوجل درايف 💾"; // لأن الدرايف يمنع قراءة الحجم برمجياً قبل التحميل
+    }
+    return "جاهز للتحميل";
 }
 
 (function () {
@@ -181,35 +180,106 @@ async function showSubSection(t) {
     var list = document.getElementById('itemsList');
     if (o) o.style.display = 'none';
     if (s) s.style.display = 'block';
+    
     const items = (typeof libraryData !== 'undefined' && libraryData[currentSub]) ? (libraryData[currentSub][t] || []) : [];
+    
     if (items.length === 0) {
         if (list) list.innerHTML = "<p style='text-align:center; opacity:0.5; padding:20px;'>قريباً إن شاء الله...</p>";
         return;
     }
+
     let html = "";
     items.forEach(function (item, index) {
         const isYouTube = item.link.includes('youtube.com') || item.link.includes('youtu.be');
-        // استخدام الاسم المخزن أو استخراج اسم الملف
-        const name = item.name || getFileName(item.link);
+        const isDrive = item.link.includes('drive.google.com');
+        
+        // --- تعديل الأسماء هنا ---
+        let name = item.name;
+        if (!name || name === "undefined" || name === "") {
+            name = isYouTube ? "فيديو شرح" : getFileName(item.link);
+        }
+        // -----------------------
+
         const itemId = item.id || ('file-' + index);
         const sizeElemId = 'size-' + itemId + '-' + index;
+
+        // تنسيق الحجم
+        const displaySize = item.size ? (item.size.includes('MB') ? item.size :" 💾 "+ item.size + ' MB') : (isDrive ? "Drive 💾" : "⏳ جاري..");
+
         if (isYouTube) {
             const videoId = getYouTubeID(item.link);
             let thumbUrl = item.thumb ? item.thumb : (videoId ? 'https://img.youtube.com/vi/' + videoId + '/mqdefault.jpg' : 'IMG/RR.png');
-            html += '<div class="memo-card" style="border-color: var(--clr-shrah); overflow: hidden; background: rgba(0,0,0,0.4);"><div style="width:100%; height:180px;"><img src="' + thumbUrl + '" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.src=\'IMG/RR.png\'"></div><div style="padding: 15px; text-align: center;"><div style="font-weight:900; font-size:1.1rem; color:#fff; margin-bottom:15px;">' + name + '</div><a href="' + item.link + '" target="_blank" class="btn-action" style="background: var(--clr-shrah); color:#fff; border:none; width:100%; display:block; text-decoration:none; padding:12px; border-radius:10px; font-weight:900;">🎬 مشاهدة الشرح</a></div></div>';
+            
+            html += `
+                <div class="memo-card" style="border-color: var(--clr-shrah); overflow: hidden; background: rgba(0,0,0,0.4);">
+                    <div style="width:100%; height:180px;">
+                        <img src="${thumbUrl}" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.src='IMG/RR.png'">
+                    </div>
+                    <div style="padding: 15px; text-align: center;">
+                        <div style="font-weight:900; font-size:1.1rem; color:#fff; margin-bottom:15px;">${name}</div>
+                        <a href="${item.link}" target="_blank" class="btn-action" style="background: var(--clr-shrah); color:#fff; border:none; width:100%; display:block; text-decoration:none; padding:12px; border-radius:10px; font-weight:900;">🎬 مشاهدة الشرح</a>
+                    </div>
+                </div>`;
         } else {
-            // إضافة download attribute للتحميل المباشر
-            html += '<div class="memo-card"><div class="memo-header-area"><div class="memo-title-side"><span class="memo-name">' + name + '</span><span class="memo-dl-count" id="c-' + itemId + '">تم التحميل 0 مرة</span></div><span class="memo-size-tag" id="' + sizeElemId + '">⏳ جاري..</span></div><div class="memo-actions"><a href="' + item.link + '" class="btn-action btn-view" target="_blank">👁️ معاينة</a><a href="' + item.link + '" class="btn-action btn-dl" onclick="handleDownload(\'' + itemId + '\')" download="' + name + '">📥 تحميل</a></div></div>';
-            updateFileSizeUI(item.link, sizeElemId);
+            let previewLink = item.link;
+            let downloadLink = item.link;
+
+            if (isDrive) {
+                let driveId = "";
+                if (item.link.includes('id=')) driveId = item.link.split('id=')[1].split('&')[0];
+                else if (item.link.includes('/d/')) driveId = item.link.split('/d/')[1].split('/')[0];
+                
+                if (driveId) {
+                    previewLink = `https://drive.google.com/file/d/${driveId}/view`;
+                    downloadLink = `https://drive.google.com/uc?export=download&id=${driveId}`;
+                }
+            }
+
+            html += `
+                <div class="memo-card">
+                    <div class="memo-header-area">
+                        <div class="memo-title-side">
+                            <span class="memo-name">${name}</span>
+                            <span class="memo-dl-count" id="c-${itemId}">تم التحميل 0 مرة</span>
+                        </div>
+                        <span class="memo-size-tag" id="${sizeElemId}">${displaySize}</span>
+                    </div>
+                    <div class="memo-actions">
+                        <a href="${previewLink}" class="btn-action btn-view" target="_blank">👁️ معاينة</a>
+                        <a href="${downloadLink}" class="btn-action btn-dl" onclick="handleDownload('${itemId}')">📥 تحميل</a>
+                    </div>
+                </div>`;
+            
+            if (!item.size && !isDrive) updateFileSizeUI(item.link, sizeElemId);
         }
     });
+
     if (list) list.innerHTML = html;
     if (window.syncCounts) window.syncCounts();
 }
 
 function handleDownload(id) {
-    showToast();
-    if (window.updateDL) window.updateDL(id);
+    showToast(); // إظهار رسالة "جاري التحميل"
+    
+    let itemLink = "";
+    // جلب الرابط من البيانات
+    for (let sub in libraryData) {
+        for (let cat in libraryData[sub]) {
+            const item = libraryData[sub][cat].find(i => i.id == id);
+            if (item) { itemLink = item.link; break; }
+        }
+    }
+
+    if (itemLink) {
+        // إنشاء عنصر رابط مخفي والضغط عليه لإجبار المتصفح على التحميل
+        const a = document.createElement('a');
+        a.href = itemLink;
+        a.target = '_blank'; // يفتح في صفحة جديدة ليبدأ الدرايف التحميل
+        a.rel = 'noopener noreferrer';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
 }
 
 function showToast() {

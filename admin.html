@@ -2,311 +2,147 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>لوحة التحكم</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم | إدارة المكتبة</title>
     <style>
+        :root { --gold: #a8cad7; --bg: #050505; --box-bg: #111; --drive-blue: #1a73e8; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #050505; color: #a8cad7; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; }
-        .container { max-width: 700px; margin: 0 auto; }
-        .box { border: 2px solid #a8cad7; padding: 30px; border-radius: 20px; background: #111; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 30px; }
-        h2 { text-align: center; color: #fff; margin-bottom: 25px; border-bottom: 1px solid #333; padding-bottom: 15px; font-size: 24px; }
-        h3 { color: #00f260; margin-bottom: 15px; font-size: 18px; }
-        label { display: block; margin: 15px 0 8px; font-weight: bold; font-size: 14px; }
-        input, select, textarea { width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: #fff; border-radius: 10px; font-size: 15px; font-family: inherit; }
-        textarea { min-height: 80px; resize: vertical; }
-        input[type="file"] { padding: 10px; cursor: pointer; }
-        button { background: #00f260; color: #000; border: none; padding: 16px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; font-size: 17px; margin-top: 15px; transition: 0.3s; }
-        button:hover { background: #fff; transform: translateY(-2px); }
-        button:disabled { background: #555; cursor: not-allowed; opacity: 0.5; }
-        button.secondary { background: #a8cad7; margin-top: 10px; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 25px; }
-        .tab { flex: 1; padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; cursor: pointer; text-align: center; transition: 0.3s; font-weight: bold; }
-        .tab.active { background: #00f260; color: #000; }
-        .tab:hover:not(.active) { background: rgba(255,255,255,0.1); }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .info-box { background: rgba(0, 242, 96, 0.1); border: 1px solid rgba(0, 242, 96, 0.3); padding: 15px; border-radius: 10px; margin-top: 15px; }
-        .info-box strong { color: #00f260; }
-        .warning-box { background: rgba(255, 200, 0, 0.1); border: 1px solid rgba(255, 200, 0, 0.3); padding: 15px; border-radius: 10px; margin: 15px 0; line-height: 1.8; }
-        .copy-btn { background: #a8cad7; color: #000; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; font-size: 14px; font-weight: bold; display: inline-block; margin-top: 10px; }
-        .copy-btn:hover { background: #fff; }
-        .service-card { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 15px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1); }
-        .service-card h4 { color: #00f260; margin-bottom: 10px; }
-        .service-card p { font-size: 13px; line-height: 1.6; opacity: 0.8; margin-bottom: 15px; }
-        .service-card a { color: #a8cad7; text-decoration: none; font-weight: bold; }
-        .service-card a:hover { color: #fff; }
-        #log { margin-top: 20px; padding: 15px; border-radius: 10px; display: none; text-align: center; font-weight: bold; }
-        .step { background: rgba(168, 202, 215, 0.05); padding: 12px; margin: 8px 0; border-radius: 8px; border-right: 3px solid #00f260; }
-        .name-input { background: rgba(0, 242, 96, 0.05) !important; border: 2px solid #00f260 !important; }
+        body { background: var(--bg); color: var(--gold); font-family: 'Segoe UI', Tahoma, sans-serif; padding: 10px; }
+        
+        .drive-toolbar {
+            background: #1a1a1a; border: 1px dashed var(--gold);
+            padding: 15px; border-radius: 12px; margin-bottom: 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .drive-btn {
+            background: var(--drive-blue); color: white; padding: 10px 15px;
+            border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .container { width: 100%; max-width: 600px; margin: 0 auto; }
+        .box { background: var(--box-bg); border: 2px solid var(--gold); padding: 20px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
+        h2 { text-align: center; color: #fff; margin-bottom: 5px; font-size: 1.3rem; }
+        h4 { text-align: center; color: var(--gold); margin-bottom: 20px; opacity: 0.8; }
+        label { display: block; margin: 15px 0 5px; font-weight: bold; font-size: 0.9rem; color: #fff; }
+        
+        input, select, button { 
+            width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 10px; 
+            border: 1px solid #333; background: #222; color: #fff; font-size: 16px; 
+        }
+        
+        .btn-save { background: var(--gold); color: #000; font-weight: 900; cursor: pointer; border: none; font-size: 18px; transition: 0.3s; margin-top: 10px; }
+        .btn-save:hover { background: #fff; }
+        
+        #status { margin-top: 15px; padding: 12px; border-radius: 8px; text-align: center; display: none; font-weight: bold; }
+        .success { background: rgba(0, 242, 96, 0.1); color: #00f260; border: 1px solid #00f260; }
+        small { color: #888; font-size: 11px; display: block; margin-top: -8px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <div class="drive-toolbar">
+        <span style="font-size: 14px;">ارفع الملف وهات الرابط:</span>
+        <a href="https://drive.google.com/drive/u/0/my-drive" target="_blank" class="drive-btn">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/1/12/Google_Drive_icon_%282020%29.svg" width="18">
+            فتح Google Drive
+        </a>
+    </div>
+
     <div class="box">
-        <h2>لوحة التحكم</h2>
-        <!-- =============== تاب رفع الملف =============== -->
-        <div id="uploadTab" class="tab-content active">
-            <div class="service-card">
-                <h4>🔹 Catbox.moe (مفضل للملفات الكبيرة)</h4>
-                <p>✅ حد أقصى: 200 ميجا | مجاني | روابط دائمة</p>
-                <a href="https://catbox.moe/" target="_blank">↗️ افتح الموقع</a>
-            </div>
+        <h2>بحبك يابنونتي 😘</h2>
+        <h5>🛠️ إضافة مادة للمكتبة</h5>
+        
+        <label>اختر المادة:</label>
+        <select id="subject">
+            <option value="PLC (متحكمات مبرمجة)">PLC (متحكمات مبرمجة)</option>
+            <option value="صيانة وإصلاح أجهزة إلكترونية">صيانة وإصلاح أجهزة إلكترونية</option>
+            <option value="إتصالات">إتصالات</option>
+            <option value="KAB (مشروع وثقافة العمل الحر)">KAB (مشروع وثقافة العمل الحر)</option>
+            <option value="معامل تطبيقية">معامل تطبيقية</option>
+            <option value="تقارير فنية">تقارير فنية</option>
+            <option value="دوائر متقدمة">دوائر متقدمة</option>
+        </select>
 
-            <div class="service-card">
-                <h4>🔹 Pixeldrain (ممتاز)</h4>
-                <p>✅ حد أقصى: 10 جيجا | سريع | روابط دائمة</p>
-                <a href="https://pixeldrain.com/" target="_blank">↗️ افتح الموقع</a>
-            </div>
+        <label>قسم الملف:</label>
+        <select id="category">
+            <option value="mozakrat">مذكرات</option>
+            <option value="shrah">فيديوهات شرح (YouTube)</option>
+            <option value="books">كتب الوزارة</option>
+            <option value="exams">امتحانات</option>
+            <option value="solved">امتحانات محلولة</option>
+        </select>
 
-            <div class="service-card">
-                <h4>🔹 GoFile (للملفات الضخمة)</h4>
-                <p>✅ حد أقصى: غير محدود | مجاني</p>
-                <a href="https://gofile.io/" target="_blank">↗️ افتح الموقع</a>
-            </div>
+        <label>اسم الملف:</label>
+        <input type="text" id="name" placeholder="مثال: ملخص الباب الأول">
 
-            <label>🔗 الصق الرابط المباشر هنا:</label>
-            <input type="url" id="uploadedLink" placeholder="https://...">
+        <label>حجم الملف (اختياري):</label>
+        <input type="text" id="size" placeholder="مثال: 5MB أو 10MB">
+        <small>* لو سيبتها فاضية هيكتب Drive 💾 تلقائياً.</small>
 
-            <label>✏️ اكتب الاسم (مهم جداً!):</label>
-            <input type="text" class="name-input" id="uploadName" placeholder="مثلاً: مذكرة الباب الأول - PLC">
-        </div>
-        <!-- =============== الحقول المشتركة =============== -->
-        <div style="margin-top: 30px; padding-top: 30px; border-top: 2px solid #333;">
-            <h3>⚙️ إعدادات الإضافة</h3>
+        <label>رابط الملف (درايف أو يوتيوب):</label>
+        <input type="text" id="link" placeholder="انسخ الرابط هنا">
+        <small>* روابط الدرايف تتحول لروابط تحميل مباشرة تلقائياً.</small>
 
-            <label>📌 اختر المادة:</label>
-            <select id="subSelect">
-                <option value="PLC (متحكمات مبرمجة)">PLC (متحكمات مبرمجة)</option>
-                <option value="صيانة وإصلاح أجهزة إلكترونية">صيانة وإصلاح أجهزة إلكترونية</option>
-                <option value="إتصالات">إتصالات</option>
-                <option value="KAB (مشروع وثقافة العمل الحر )">KAB (مشروع وثقافة العمل الحر )</option>
-                <option value="معامل تطبيقية">معامل تطبيقية</option>
-                <option value="تقارير فنية">تقارير فنية</option>
-                <option value="دوائر متقدمة">دوائر متقدمة</option>
-            </select>
-
-            <label>📂 اختر القسم:</label>
-            <select id="typeSelect">
-                <option value="shrah">🎬 فيديوهات الشرح</option>
-                <option value="mozakrat">📜 المذكرات</option>
-                <option value="books">📚 الكتب</option>
-                <option value="exams">✍️ امتحانات</option>
-                <option value="solvedExams">✅ امتحانات محلولة</option>
-            </select>
-
-            <button id="addBtn" onclick="addToData()">✅ إضافة وتنزيل data.js الجديد</button>
-        </div>
-
-        <div id="log"></div>
+        <button class="btn-save" onclick="saveData()">✅ إضافة وتنزيل data.js</button>
+        <div id="status"></div>
     </div>
 </div>
 
-<script>
-
-
-    let currentTab = 'upload';
-    let finalLink = '';
-
-    function switchTab(tab) {
-        currentTab = tab;
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-        
-        if (tab === 'upload') {
-            document.querySelectorAll('.tab')[0].classList.add('active');
-            document.getElementById('uploadTab').classList.add('active');
-        } else if (tab === 'drive') {
-            document.querySelectorAll('.tab')[1].classList.add('active');
-            document.getElementById('driveTab').classList.add('active');
-        } else {
-            document.querySelectorAll('.tab')[2].classList.add('active');
-            document.getElementById('youtubeTab').classList.add('active');
-        }
-    }
-
-    function convertDriveLink() {
-        const driveLink = document.getElementById('driveLink').value.trim();
-        
-        if (!driveLink) {
-            alert("الصق رابط Google Drive أولاً!");
-            return;
-        }
-
-        let fileId = '';
-        
-        if (driveLink.includes('/file/d/')) {
-            fileId = driveLink.split('/file/d/')[1].split('/')[0];
-        } else if (driveLink.includes('id=')) {
-            fileId = driveLink.split('id=')[1].split('&')[0];
-        }
-
-        if (!fileId) {
-            alert("الرابط غير صحيح! تأكد من رابط Google Drive");
-            return;
-        }
-
-        // الرابط المباشر للتحميل
-        finalLink = `https://drive.google.com/uc?export=download&id=${fileId}`;
-        
-        document.getElementById('directLink').innerText = finalLink;
-        document.getElementById('driveResult').style.display = 'block';
-    }
-
-    function copyDirectLink() {
-        navigator.clipboard.writeText(finalLink).then(() => {
-            alert('✅ تم نسخ الرابط المباشر!');
-        });
-    }
-</script>
-
 <script src="data.js"></script>
 <script>
-    function addToData() {
-        const sub = document.getElementById('subSelect').value;
-        const type = document.getElementById('typeSelect').value;
-        const log = document.getElementById('log');
-        const btn = document.getElementById('addBtn');
+function getDriveIDs(url) {
+    let id = "";
+    if (url.includes('/d/')) id = url.split('/d/')[1].split('/')[0];
+    else if (url.includes('id=')) id = url.split('id=')[1].split('&')[0];
+    
+    return {
+        view: `https://drive.google.com/file/d/${id}/view`,
+        download: `https://drive.google.com/uc?export=download&id=${id}`
+    };
+}
 
-        let link, name;
+function saveData() {
+    const sub = document.getElementById('subject').value;
+    const cat = document.getElementById('category').value;
+    const name = document.getElementById('name').value;
+    const size = document.getElementById('size').value;
+    let link = document.getElementById('link').value;
+    const status = document.getElementById('status');
 
-        // جلب الرابط والاسم حسب التاب النشط
-        if (currentTab === 'upload') {
-            link = document.getElementById('uploadedLink').value.trim();
-            name = document.getElementById('uploadName').value.trim();
-            
-            if (!link) {
-                alert("الصق الرابط المباشر أولاً!");
-                return;
-            }
-            if (!name) {
-                alert("اكتب اسم المذكرة/الملف!");
-                return;
-            }
-        } else if (currentTab === 'drive') {
-            name = document.getElementById('driveName').value.trim();
-            
-            if (!finalLink) {
-                alert("حول رابط Drive أولاً!");
-                return;
-            }
-            if (!name) {
-                alert("اكتب اسم المذكرة/الملف!");
-                return;
-            }
-            link = finalLink;
-        } else {
-            link = document.getElementById('youtubeLink').value.trim();
-            name = document.getElementById('videoTitle').value.trim();
-            
-            if (!link || !name) {
-                alert("املأ رابط اليوتيوب والعنوان!");
-                return;
-            }
-        }
+    if (!name || !link) { alert("أكمل البيانات يا هندسة!"); return; }
 
-        btn.disabled = true;
-        btn.innerText = "⏳ جاري المعالجة...";
-
-        log.style.display = "block";
-        log.style.background = "rgba(168, 202, 215, 0.1)";
-        log.style.color = "#a8cad7";
-        log.innerText = "⏳ جاري إضافة البيانات...";
-
-        try {
-            if (!libraryData[sub]) {
-                throw new Error(`المادة "${sub}" غير موجودة`);
-            }
-            
-            if (!libraryData[sub][type]) {
-                throw new Error(`القسم "${type}" غير موجود`);
-            }
-
-            const id = Math.floor(Math.random() * 9000) + 1000;
-            let newItem;
-            
-            if (currentTab === 'youtube') {
-                // فيديوهات اليوتيوب
-                newItem = { name: name, link: link };
-            } else {
-                // ملفات عادية - نضيف الاسم مع الـ ID
-                newItem = { id: id.toString(), name: name, link: link };
-            }
-
-            libraryData[sub][type].push(newItem);
-
-            log.style.background = "rgba(0, 242, 96, 0.2)";
-            log.style.color = "#00f260";
-            log.innerText = "✅ تم الإضافة! جاري تجهيز ملف data.js...";
-
-            // تحويل الداتا لنص بتنسيق جميل
-            let dataContent = 'var libraryData = {\n';
-            
-            for (let subject in libraryData) {
-                dataContent += `    "${subject}": {\n`;
-                
-                for (let category in libraryData[subject]) {
-                    dataContent += `        ${category}: [\n`;
-                    
-                    libraryData[subject][category].forEach((item, index) => {
-                        if (item.name && currentTab === 'youtube') {
-                            // فيديوهات يوتيوب
-                            dataContent += `            {  name: "${item.name}", link: "${item.link}" }`;
-                        } else if (item.name) {
-                            // ملفات عادية مع الاسم
-                            dataContent += `            { id: "${item.id}", name: "${item.name}", link: "${item.link}" }`;
-                        } else {
-                            // ملفات قديمة بدون اسم
-                            dataContent += `            { id: "${item.id}", link: "${item.link}" }`;
-                        }
-                        
-                        if (index < libraryData[subject][category].length - 1) {
-                            dataContent += ',\n';
-                        } else {
-                            dataContent += '\n';
-                        }
-                    });
-                    
-                    dataContent += `        ],\n`;
-                }
-                
-                dataContent += `    },\n`;
-            }
-            
-            dataContent += '};';
-
-            const blob = new Blob([dataContent], { type: 'text/javascript;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'data.js';
-            a.click();
-            URL.revokeObjectURL(url);
-
-            setTimeout(() => {
-                log.innerHTML = "✅ <strong>نجح!</strong><br>📥 تم تنزيل data.js<br>📤 ارفعه على GitHub والموقع هيتحدث! 🚀";
-                
-                // مسح الحقول
-                document.getElementById('uploadedLink').value = "";
-                document.getElementById('uploadName').value = "";
-                document.getElementById('driveLink').value = "";
-                document.getElementById('driveName').value = "";
-                document.getElementById('youtubeLink').value = "";
-                document.getElementById('videoTitle').value = "";
-                document.getElementById('driveResult').style.display = 'none';
-                finalLink = '';
-                
-                btn.disabled = false;
-                btn.innerText = "✅ إضافة وتنزيل data.js الجديد";
-            }, 600);
-
-        } catch (e) {
-            log.style.background = "rgba(255, 75, 43, 0.2)";
-            log.style.color = "#ff4b2b";
-            log.innerText = "❌ خطأ: " + e.message;
-            btn.disabled = false;
-            btn.innerText = "✅ إضافة وتنزيل data.js الجديد";
-        }
+    let finalLink = link;
+    if (link.includes('drive.google.com')) {
+        const ids = getDriveIDs(link);
+        finalLink = ids.download; 
     }
+
+    if (!libraryData[sub]) libraryData[sub] = {};
+    if (!libraryData[sub][cat]) libraryData[sub][cat] = [];
+
+    // إضافة البيانات للملف
+    libraryData[sub][cat].push({
+        id: Date.now().toString(),
+        name: name,
+        link: finalLink,
+        size: size || "Drive 💾" // لو فاضي يحط كلمة درايف
+    });
+
+    // إنشاء وحفظ الملف
+    const finalContent = "var libraryData = " + JSON.stringify(libraryData, null, 4) + ";";
+    const blob = new Blob([finalContent], { type: 'text/javascript;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'data.js';
+    a.click();
+
+    status.style.display = 'block';
+    status.className = 'success';
+    status.innerHTML = "✅ تمت الإضافة! نزل الملف وارفع الـ data.js الجديد.";
+}
 </script>
 </body>
 </html>
