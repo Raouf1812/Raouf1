@@ -1,3 +1,18 @@
+// دالة لتوليد ID فريد
+function generateUniqueIds(data) {
+    let counter = 1000;
+    for (let subject in data) {
+        for (let category in data[subject]) {
+            for (let item of data[subject][category]) {
+                if (!item.id || item.id === "undefined" || item.id === "id") {
+                    item.id = "item-" + (++counter);
+                }
+            }
+        }
+    }
+    return data;
+}
+
 var libraryData = {
     "PLC (متحكمات مبرمجة)": {
         "shrah": [
@@ -747,7 +762,7 @@ var libraryData = {
             }
         ]
     },
-    "KAB (مشروع وثقافة العمل الحر )": {
+    "KAB (مشروع ثقافة العمل الحر )": {
         "shrah": [
             {
                 "id": "undefined",
@@ -1620,3 +1635,6 @@ var libraryData = {
         ]
     }
 };
+
+// تطبيق توليد الـ IDs الفريدة
+libraryData = generateUniqueIds(libraryData);

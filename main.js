@@ -1,4 +1,10 @@
-/* libraryData يُحمّل من data.js */
+
+
+// تصيير البيانات مباشرة عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', function () {
+    renderCards();
+});
+
 async function openCategory(cat) {
     const categoryMenu = document.getElementById('categoryMenu');
     const filesMenu = document.getElementById('filesMenu');
@@ -23,8 +29,8 @@ async function openCategory(cat) {
             html += `<div class="memo-card" style="border-color: var(--clr-shrah); overflow: hidden; background: rgba(0,0,0,0.4);"><div style="position:relative; width:100%; height:180px;"><img src="${thumbUrl}" style="width:100%; height:100%; object-fit:cover; display:block;"><div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.8), transparent); display:flex; align-items:center; justify-content:center;"><div style="width:60px; height:60px; background:var(--clr-shrah); border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow: 0 0 20px var(--clr-shrah);"><span style="font-size:30px; margin-left:5px;">▶</span></div></div></div><div style="padding: 15px; text-align: center;"><div style="font-weight:900; font-size:1.1rem; color:#fff; margin-bottom:15px;">${name}</div><a href="${item.link}" target="_blank" class="btn-action" style="background: var(--clr-shrah); color:#fff; border:none; width:100%; display:block; text-decoration:none; padding:12px; border-radius:10px; font-weight:900;">🎬 مشاهدة الآن</a></div></div>`;
         } else {
             const size = await getFileSize(item.link);
-            // إضافة download attribute للتحميل المباشر
-            html += `<div class="memo-card"><div class="memo-header-area"><div class="memo-title-side"><span class="memo-name">${name}</span><span class="memo-dl-count" id="c-${itemId}">تم التحميل 0 مرة</span></div><span class="memo-size-tag">💾 ${size}</span></div><div class="memo-actions"><a href="${item.link}" class="btn-action btn-view" target="_blank">معاينة</a><a href="${item.link}" class="btn-action btn-dl" onclick="handleDownload('${itemId}')" download="${name}">تحميل</a></div></div>`;
+            // استخدام button بدل link للتحميل المباشر
+            html += `<div class="memo-card"><div class="memo-header-area"><div class="memo-title-side"><span class="memo-name">${name}</span><span class="memo-dl-count" id="c-${itemId}">تم التحميل 0 مرة</span></div><span class="memo-size-tag">💾 ${size}</span></div><div class="memo-actions"><a href="${item.link}" class="btn-action btn-view" target="_blank">معاينة</a><button class="btn-action btn-dl" onclick="handleDownload('${itemId}')">تحميل</button></div></div>`;
         }
     }
     if (list) list.innerHTML = html;
@@ -118,13 +124,28 @@ async function getFileSize(url) {
 })();
 
 window.addEventListener('load', function () {
+    // الانتظار قليلاً ثم تصيير البيانات
+    setTimeout(function () {
+        renderCards();
+        
+        // إخفاء شاشة الترحيب
+        var el = document.getElementById('welcome-screen');
+        if (el) {
+            el.style.opacity = '0';
+            el.style.transition = 'opacity 0.5s ease';
+            setTimeout(function () {
+                if (el) el.style.display = 'none';
+            }, 500);
+        }
+    }, 100);
+    
+    // في حالة التأخير الطويل، إخفاء الشاشة بعد 3 ثواني
     setTimeout(function () {
         var el = document.getElementById('welcome-screen');
-        if (el) el.style.opacity = '0';
-        setTimeout(function () {
-            if (el) el.style.display = 'none';
-        }, 500);
-    }, 800);
+        if (el && el.style.display !== 'none') {
+            el.style.display = 'none';
+        }
+    }, 3000);
 });
 
 let currentSub = "";
@@ -223,6 +244,7 @@ async function showSubSection(t) {
         } else {
             let previewLink = item.link;
             let downloadLink = item.link;
+            let isLocalFile = !isDrive && !item.link.includes('http');
 
             if (isDrive) {
                 let driveId = "";
@@ -246,7 +268,7 @@ async function showSubSection(t) {
                     </div>
                     <div class="memo-actions">
                         <a href="${previewLink}" class="btn-action btn-view" target="_blank">👁️ معاينة</a>
-                        <a href="${downloadLink}" class="btn-action btn-dl" onclick="handleDownload('${itemId}')">📥 تحميل</a>
+                        <button class="btn-action btn-dl" onclick="handleDownload('${itemId}', '${isLocalFile}')">📥 تحميل</button>
                     </div>
                 </div>`;
             
@@ -258,27 +280,80 @@ async function showSubSection(t) {
     if (window.syncCounts) window.syncCounts();
 }
 
-function handleDownload(id) {
+async function handleDownload(id, isLocalFile) {
     showToast(); // إظهار رسالة "جاري التحميل"
     
-    let itemLink = "";
-    // جلب الرابط من البيانات
+    let item = null;
+    // جلب البيانات الكاملة للملف
     for (let sub in libraryData) {
         for (let cat in libraryData[sub]) {
-            const item = libraryData[sub][cat].find(i => i.id == id);
-            if (item) { itemLink = item.link; break; }
+            const foundItem = libraryData[sub][cat].find(i => i.id == id);
+            if (foundItem) { 
+                item = foundItem; 
+                break; 
+            }
         }
+        if (item) break;
     }
 
-    if (itemLink) {
-        // إنشاء عنصر رابط مخفي والضغط عليه لإجبار المتصفح على التحميل
-        const a = document.createElement('a');
-        a.href = itemLink;
-        a.target = '_blank'; // يفتح في صفحة جديدة ليبدأ الدرايف التحميل
-        a.rel = 'noopener noreferrer';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+    if (item) {
+        let downloadLink = item.link;
+        let fileName = item.name || getFileName(item.link) || 'ملف';
+
+        // التعامل مع روابط جوجل درايف
+        if (item.link.includes('drive.google.com')) {
+            let driveId = "";
+            if (item.link.includes('id=')) driveId = item.link.split('id=')[1].split('&')[0];
+            else if (item.link.includes('/d/')) driveId = item.link.split('/d/')[1].split('/')[0];
+            
+            if (driveId) {
+                downloadLink = `https://drive.google.com/uc?export=download&id=${driveId}`;
+            }
+        }
+
+        try {
+            // محاولة تحميل الملف
+            const response = await fetch(downloadLink, { 
+                headers: {
+                    'Accept': '*/*'
+                }
+            });
+            
+            if (!response.ok) {
+                // إذا فشل التحميل، افتح الرابط في صفحة جديدة
+                window.open(downloadLink, '_blank');
+            } else {
+                // تحميل الملف بنجاح
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                
+                // تنظيف بعد التحميل
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                }, 100);
+            }
+            
+            // تحديث عداد التحميلات في Firebase
+            if (window.updateDL) {
+                window.updateDL(id);
+            }
+        } catch (e) {
+            console.log("[v0] Download error, opening in new tab:", e);
+            // في حالة الخطأ، افتح الرابط في صفحة جديدة
+            window.open(downloadLink, '_blank');
+            
+            // تحديث العداد حتى في حالة الخطأ
+            if (window.updateDL) {
+                window.updateDL(id);
+            }
+        }
     }
 }
 
@@ -301,9 +376,6 @@ function getYTThumb(url) {
     return id ? 'https://img.youtube.com/vi/' + id + '/mqdefault.jpg' : 'IMG/default-video.png';
 }
 
-if (typeof libraryData !== 'undefined') renderCards();
-else document.addEventListener('DOMContentLoaded', function () { setTimeout(renderCards, 100); });
-
 var countDownDate = new Date("May 20, 2026 10:00:00").getTime();
 var countInterval = setInterval(function () {
     var now = new Date().getTime();
@@ -323,3 +395,14 @@ var countInterval = setInterval(function () {
         if (c) c.innerHTML = "<h2 style='color:var(--gold); grid-column: span 4;'>بدأت الامتحانات.. بالتوفيق! 🎓</h2>";
     }
 }, 1000);
+window.addEventListener('load', function() {
+    const welcomeScreen = document.getElementById('welcome-screen');
+    if (welcomeScreen) {
+        setTimeout(() => {
+            welcomeScreen.style.opacity = '0';
+            setTimeout(() => {
+                welcomeScreen.style.display = 'none';
+            }, 500);
+        }, 1000); // سيختفي بعد ثانية واحدة من التحميل
+    }
+});

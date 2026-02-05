@@ -25,16 +25,24 @@ onValue(totalRef, (snap) => {
 
 window.updateDL = (id) => {
   if (!id) return;
-  runTransaction(ref(db, 'counts/' + id), (curr) => (curr || 0) + 1);
+  runTransaction(ref(db, 'counts/' + id), (curr) => {
+    console.log("[v0] Updating download count for:", id, "Current:", curr);
+    return (curr || 0) + 1;
+  });
 };
 
 window.syncCounts = () => {
   onValue(ref(db, 'counts/'), (snap) => {
     const data = snap.val();
+    console.log("[v0] Syncing counts:", data);
     if (!data) return;
     for (let id in data) {
       const el = document.getElementById('c-' + id);
-      if (el) el.innerText = "تم التحميل " + data[id] + " مرة";
+      if (el) {
+        const count = data[id];
+        const text = count === 1 ? "تم التحميل مرة واحدة" : `تم التحميل ${count} مرات`;
+        el.innerText = text;
+      }
     }
   });
 };
