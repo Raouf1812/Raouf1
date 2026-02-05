@@ -110,34 +110,185 @@
 <script type="module" src="firebase-init.js"></script>
 <script src="data.js"></script>
 <script src="main.js"></script>
+<div id="adminModal" class="admin-glass-modal">
+    <div class="modal-card">
+        <div class="card-glow"></div>
+        <div class="icon-container">
+            <span class="lock-icon">🔒</span>
+        </div>
+        <h2>عامل ايه ياهندسة👷‍♂️</h2>
+        <p>عشان تدخل لوحة التحكم، محتاجين الرقم السري انت لازم تكون ادمن عشان تدخل هنا.</p>
+        
+        <div class="input-group">
+            <input type="password" id="adminPassInput" placeholder="أدخل الكود هنا..." autocomplete="off">
+            <div class="input-highlight"></div>
+        </div>
+
+        <div class="button-group">
+            <button class="btn-primary" onclick="checkAdminPass()">الدخول</button>
+            <button class="btn-cancel" onclick="closeAdminModal()">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* تصميم المودال الزجاجي الاحترافي */
+    .admin-glass-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(10px);
+        z-index: 10000;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.4s ease;
+    }
+
+    .modal-card {
+        background: rgba(20, 20, 20, 0.9);
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        padding: 40px;
+        border-radius: 30px;
+        width: 90%;
+        max-width: 420px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        transform: scale(0.9);
+        animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .card-glow {
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .icon-container {
+        font-size: 60px;
+        margin-bottom: 20px;
+        filter: drop-shadow(0 0 15px var(--gold));
+        animation: bounce 2s infinite;
+    }
+
+    .modal-card h2 {
+        color: #d4af37; /* اللون الذهبي */
+        font-family: 'Cairo', sans-serif;
+        font-weight: 900;
+        margin-bottom: 10px;
+    }
+
+    .modal-card p {
+        color: #a8cad7;
+        font-size: 15px;
+        margin-bottom: 30px;
+    }
+
+    .input-group {
+        position: relative;
+        margin-bottom: 25px;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 15px;
+        background: rgba(255,255,255,0.05);
+        border: 2px solid #333;
+        border-radius: 15px;
+        color: #fff;
+        text-align: center;
+        font-size: 20px;
+        transition: 0.3s;
+        outline: none;
+    }
+
+    .input-group input:focus {
+        border-color: #d4af37;
+        background: rgba(212, 175, 55, 0.05);
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+    }
+
+    .btn-primary {
+        background: linear-gradient(45deg, #d4af37, #f9e27d);
+        color: #000;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 15px;
+        font-weight: bold;
+        width: 100%;
+        cursor: pointer;
+        font-size: 17px;
+        transition: 0.3s;
+        box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5);
+    }
+
+    .btn-cancel {
+        background: transparent;
+        color: #777;
+        border: none;
+        margin-top: 15px;
+        cursor: pointer;
+        font-size: 14px;
+        text-decoration: underline;
+    }
+
+    /* Animations */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { transform: scale(0.8) translateY(50px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+</style>
+
 <script>
     let titleClickCount = 0;
     let titleLastClick = 0;
 
     document.getElementById('secretTitle').addEventListener('click', function() {
         const now = new Date().getTime();
-        
-        // لو ضغطت ببطء (أكتر من ثانية بين الضغطات) العداد يصفر
-        if (now - titleLastClick > 1000) {
-            titleClickCount = 0;
-        }
-
+        if (now - titleLastClick > 1000) titleClickCount = 0;
         titleClickCount++;
         titleLastClick = now;
 
-        // لما يوصل لـ 4 ضغطات
         if (titleClickCount === 4) {
-            titleClickCount = 0; // تصفير العداد عشان ميتكررش
-            
-            const pass = prompt("من فضلك أدخل كلمة السر للدخول للوحة التحكم:");
-            
-            if (pass === "1234") { // غير كلمة السر "1234" لأي حاجة تانية تحبها
-                window.location.href = "admin.html"; // تأكد إن ده اسم ملف الأدمن بتاعك
-            } else if (pass !== null) {
-                alert("كلمة السر خطأ!");
-            }
+            titleClickCount = 0;
+            // بيفتح المودال الاحترافي اللي عملناه فوراً
+            document.getElementById('adminModal').style.display = 'flex';
+            document.getElementById('adminPassInput').focus();
         }
     });
+
+    function closeAdminModal() {
+        document.getElementById('adminModal').style.display = 'none';
+        document.getElementById('adminPassInput').value = '';
+    }
+
+    function checkAdminPass() {
+        const pass = document.getElementById('adminPassInput').value;
+        if (pass === "1234") { // عدل الباسورد من هنا
+            window.location.href = "admin.html";
+        } else {
+            // تأثير اهتزاز عند الخطأ
+            const card = document.querySelector('.modal-card');
+            card.style.animation = 'none';
+            setTimeout(() => card.style.animation = 'shake 0.4s cubic-bezier(.36,.07,.19,.97) both', 10);
+            document.getElementById('adminPassInput').value = '';
+        }
+    }
+
+    // إضافة أنيميشن الاهتزاز للخطأ
+    const style = document.createElement('style');
+    style.innerHTML = `@keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }`;
+    document.head.appendChild(style);
 </script>
 </body>
 </html>

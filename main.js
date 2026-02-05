@@ -13,6 +13,7 @@ async function openCategory(cat) {
     let html = "";
     for (const item of items) {
         const isYouTube = item.link.includes('youtube.com') || item.link.includes('youtu.be');
+        // استخدام الاسم المخزن أو استخراج اسم الملف
         const name = item.name || (isYouTube ? "فيديو شرح" : getFileName(item.link));
         const itemId = item.id;
         if (isYouTube) {
@@ -22,7 +23,8 @@ async function openCategory(cat) {
             html += `<div class="memo-card" style="border-color: var(--clr-shrah); overflow: hidden; background: rgba(0,0,0,0.4);"><div style="position:relative; width:100%; height:180px;"><img src="${thumbUrl}" style="width:100%; height:100%; object-fit:cover; display:block;"><div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.8), transparent); display:flex; align-items:center; justify-content:center;"><div style="width:60px; height:60px; background:var(--clr-shrah); border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow: 0 0 20px var(--clr-shrah);"><span style="font-size:30px; margin-left:5px;">▶</span></div></div></div><div style="padding: 15px; text-align: center;"><div style="font-weight:900; font-size:1.1rem; color:#fff; margin-bottom:15px;">${name}</div><a href="${item.link}" target="_blank" class="btn-action" style="background: var(--clr-shrah); color:#fff; border:none; width:100%; display:block; text-decoration:none; padding:12px; border-radius:10px; font-weight:900;">🎬 مشاهدة الآن</a></div></div>`;
         } else {
             const size = await getFileSize(item.link);
-            html += `<div class="memo-card"><div class="memo-header-area"><div class="memo-title-side"><span class="memo-name">${name}</span><span class="memo-dl-count" id="c-${itemId}">تم التحميل 0 مرة</span></div><span class="memo-size-tag">💾 ${size}</span></div><div class="memo-actions"><a href="https://drive.google.com/viewerng/viewer?embedded=true&url=https://raouf1812.github.io/Raouf1/${item.link}" class="btn-action btn-view" target="_blank">معاينة</a><a href="${item.link}" class="btn-action btn-dl" onclick="handleDownload('${item.id}')" download>تحميل</a></div></div>`;
+            // إضافة download attribute للتحميل المباشر
+            html += `<div class="memo-card"><div class="memo-header-area"><div class="memo-title-side"><span class="memo-name">${name}</span><span class="memo-dl-count" id="c-${itemId}">تم التحميل 0 مرة</span></div><span class="memo-size-tag">💾 ${size}</span></div><div class="memo-actions"><a href="${item.link}" class="btn-action btn-view" target="_blank">معاينة</a><a href="${item.link}" class="btn-action btn-dl" onclick="handleDownload('${itemId}')" download="${name}">تحميل</a></div></div>`;
         }
     }
     if (list) list.innerHTML = html;
@@ -32,7 +34,16 @@ async function openCategory(cat) {
 function getFileName(path) {
     try {
         let lastPart = path.split('/').pop();
-        let name = decodeURIComponent(decodeURIComponent(lastPart)).replace('.pdf', '').replace(/_/g, ' ').replace(/-/g, ' ');
+        // إزالة الامتدادات الشائعة وتحويل _ و - لمسافات
+        let name = decodeURIComponent(decodeURIComponent(lastPart))
+            .replace('.pdf', '')
+            .replace('.jpg', '')
+            .replace('.jpeg', '')
+            .replace('.png', '')
+            .replace('.doc', '')
+            .replace('.docx', '')
+            .replace(/_/g, ' ')
+            .replace(/-/g, ' ');
         return name;
     } catch (e) { return "ملف دراسي"; }
 }
@@ -178,6 +189,7 @@ async function showSubSection(t) {
     let html = "";
     items.forEach(function (item, index) {
         const isYouTube = item.link.includes('youtube.com') || item.link.includes('youtu.be');
+        // استخدام الاسم المخزن أو استخراج اسم الملف
         const name = item.name || getFileName(item.link);
         const itemId = item.id || ('file-' + index);
         const sizeElemId = 'size-' + itemId + '-' + index;
@@ -186,7 +198,8 @@ async function showSubSection(t) {
             let thumbUrl = item.thumb ? item.thumb : (videoId ? 'https://img.youtube.com/vi/' + videoId + '/mqdefault.jpg' : 'IMG/RR.png');
             html += '<div class="memo-card" style="border-color: var(--clr-shrah); overflow: hidden; background: rgba(0,0,0,0.4);"><div style="width:100%; height:180px;"><img src="' + thumbUrl + '" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.src=\'IMG/RR.png\'"></div><div style="padding: 15px; text-align: center;"><div style="font-weight:900; font-size:1.1rem; color:#fff; margin-bottom:15px;">' + name + '</div><a href="' + item.link + '" target="_blank" class="btn-action" style="background: var(--clr-shrah); color:#fff; border:none; width:100%; display:block; text-decoration:none; padding:12px; border-radius:10px; font-weight:900;">🎬 مشاهدة الشرح</a></div></div>';
         } else {
-            html += '<div class="memo-card"><div class="memo-header-area"><div class="memo-title-side"><span class="memo-name">' + name + '</span><span class="memo-dl-count" id="c-' + itemId + '">تم التحميل 0 مرة</span></div><span class="memo-size-tag" id="' + sizeElemId + '">⏳ جاري..</span></div><div class="memo-actions"><a href="' + item.link + '" class="btn-action btn-view" target="_blank">👁️ معاينة</a><a href="' + item.link + '" class="btn-action btn-dl" onclick="handleDownload(\'' + item.id + '\')" download>📥 تحميل</a></div></div>';
+            // إضافة download attribute للتحميل المباشر
+            html += '<div class="memo-card"><div class="memo-header-area"><div class="memo-title-side"><span class="memo-name">' + name + '</span><span class="memo-dl-count" id="c-' + itemId + '">تم التحميل 0 مرة</span></div><span class="memo-size-tag" id="' + sizeElemId + '">⏳ جاري..</span></div><div class="memo-actions"><a href="' + item.link + '" class="btn-action btn-view" target="_blank">👁️ معاينة</a><a href="' + item.link + '" class="btn-action btn-dl" onclick="handleDownload(\'' + itemId + '\')" download="' + name + '">📥 تحميل</a></div></div>';
             updateFileSizeUI(item.link, sizeElemId);
         }
     });
