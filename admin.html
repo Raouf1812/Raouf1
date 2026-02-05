@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>لوحة التحكم | مذكرات راؤوف</title>
+    <style>
+        body { background: #050505; color: #a8cad7; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 20px; }
+        .box { border: 2px solid #a8cad7; padding: 30px; border-radius: 20px; background: #111; display: inline-block; width: 95%; max-width: 550px; text-align: right; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h2 { text-align: center; color: #fff; margin-bottom: 25px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+        label { display: block; margin: 15px 0 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 12px; background: #222; border: 1px solid #444; color: #fff; border-radius: 10px; box-sizing: border-box; font-size: 15px; }
+        button { background: #00f260; color: #000; border: none; padding: 16px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; font-size: 17px; margin-top: 25px; transition: 0.3s; }
+        button:hover { background: #fff; transform: translateY(-2px); }
+        #log { margin-top: 20px; padding: 10px; border-radius: 8px; font-size: 14px; display: none; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>🛠️ إضافة محتوى جديد</h2>
+    
+    <label>📌 اختر المادة:</label>
+    <select id="subSelect">
+        <option value="PLC (متحكمات مبرمجة)">PLC (متحكمات مبرمجة)</option>
+        <option value="صيانة وإصلاح أجهزة إلكترونية">صيانة وإصلاح أجهزة إلكترونية</option>
+        <option value="إتصالات">إتصالات</option>
+        <option value="KAB (مشروع وثقافة العمل الحر )">KAB (مشروع وثقافة العمل الحر )</option>
+        <option value="معامل تطبيقية">معامل تطبيقية</option>
+        <option value="تقارير فنية">تقارير فنية</option>
+        <option value="دوائر متقدمة">دوائر متقدمة</option>
+    </select>
+
+    <label>📂 اختر القسم:</label>
+    <select id="typeSelect">
+        <option value="shrah">🎬 فيديوهات الشرح (shrah)</option>
+        <option value="mozakrat">📜 المذكرات (mozakrat)</option>
+        <option value="books">📚 الكتب (books)</option>
+        <option value="exams">✍️ امتحانات (exams)</option>
+        <option value="solvedExams">✅ امتحانات محلولة (solvedExams)</option>
+    </select>
+
+    <label>✏️ اسم الملف / العنوان:</label>
+    <input type="text" id="itemName" placeholder="مثلاً: الباب الأول - شرح الدوائر">
+
+    <label>🔗 الرابط المباشر:</label>
+    <input type="text" id="itemLink" placeholder="ضع رابط الملف أو فيديو اليوتيوب هنا">
+    
+    <button onclick="updateGitHub()">تحديث الموقع أوتوماتيكياً ✅</button>
+    <div id="log"></div>
+</div>
+<script>
+    // حماية بسيطة عشان لو حد دخل على الرابط مباشرة
+    if (sessionStorage.getItem('isAdmin') !== 'true') {
+        const pass = prompt("من فضلك أدخل كلمة السر:");
+        if (pass === "1234") {
+            sessionStorage.setItem('isAdmin', 'true');
+        } else {
+            alert("غير مسموح بالدخول");
+            window.location.href = "index.html";
+        }
+    }
+</script>
+<script>
+    // --- بياناتك الشخصية (يجب تعبئتها بدقة) ---
+    const GH_TOKEN = "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"; // التوكن الخاص بك
+    const GH_USER = "Raouf1"; 
+    const GH_REPO = "Raouf1812";
+    const GH_PATH = "data.js";
+
+    async function updateGitHub() {
+        const sub = document.getElementById('subSelect').value;
+        const type = document.getElementById('typeSelect').value;
+        const name = document.getElementById('itemName').value;
+        const link = document.getElementById('itemLink').value;
+        const log = document.getElementById('log');
+
+        if(!name || !link) return alert("يا هندسة، املأ اسم الملف والرابط أولاً!");
+
+        log.style.display = "block";
+        log.style.color = "#a8cad7";
+        log.innerText = "⏳ جاري محاولة الوصول لملفات GitHub...";
+
+        try {
+            const url = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${GH_PATH}`;
+            const res = await fetch(url, { headers: { "Authorization": `token ${GH_TOKEN}` } });
+            if(!res.ok) throw new Error("التوكن أو اسم الحساب غلط!");
+            
+            const data = await res.json();
+            let content = decodeURIComponent(escape(atob(data.content)));
+
+            // تحديد موقع الحشر بناءً على المادة والقسم
+            const subjectHeader = `"${sub}":`;
+            const subIdx = content.indexOf(subjectHeader);
+            const typeIdx = content.indexOf(`${type}: [`, subIdx);
+            const closeBracketIdx = content.indexOf(`],`, typeIdx);
+
+            if (subIdx === -1 || typeIdx === -1 || closeBracketIdx === -1) {
+                throw new Error("تأكد من وجود المادة والقسم داخل ملف data.js");
+            }
+
+            // إنشاء السطر الجديد (ID عشوائي للملفات غير اليوتيوب)
+            const id = Math.floor(Math.random() * 900) + 100;
+            const newEntry = `            { id: "${id}", name: "${name}", link: "${link}" },\n`;
+
+            // بناء المحتوى الجديد
+            const newContent = content.slice(0, closeBracketIdx) + newEntry + "        " + content.slice(closeBracketIdx);
+
+            log.innerText = "📤 جاري رفع التعديل لـ GitHub...";
+            const putRes = await fetch(url, {
+                method: "PUT",
+                headers: { "Authorization": `token ${GH_TOKEN}`, "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    message: `إضافة ${name} إلى قسم ${type} في مادة ${sub}`,
+                    content: btoa(unescape(encodeURIComponent(newContent))),
+                    sha: data.sha
+                })
+            });
+
+            if(putRes.ok) {
+                log.style.color = "#00f260";
+                log.innerText = "✅ تم بنجاح! السطر انضاف في آخر القائمة والموقع هيحدث نفسه.";
+                alert("مبروك! تم تحديث الموقع بنجاح.");
+            } else {
+                throw new Error("فشل الرفع، تأكد من صلاحيات التوكن.");
+            }
+
+        } catch (e) {
+            log.style.color = "#ff4b2b";
+            log.innerText = "❌ خطأ: " + e.message;
+        }
+    }
+</script>
+</body>
+</html>
