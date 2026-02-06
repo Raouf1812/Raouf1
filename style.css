@@ -145,13 +145,7 @@
             background: linear-gradient(90deg, transparent, var(--xx-gold-color), transparent);
         }
 
-        /* تأثير عند الوقوف بالماوس */
-        .xx-glass-card:hover {
-            transform: translateY(-12px) scale(1.02);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-        }
+       
 
         .xx-card-wrapper {
             width: 80px;
@@ -302,3 +296,77 @@
             .time-number { font-size: 1.4rem; }
             .exam-countdown-card { margin: 15px; padding: 15px; }
         }
+/* تصميم البومودورو الاحترافي - بدون هوفر */
+.pomodoro-card {
+    text-align: center;
+    padding: 30px !important;
+    border: 1px solid var(--gold-glow);
+    background: rgba(255, 255, 255, 0.02) !important;
+}
+
+#pomo-timer {
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--gold);
+    text-shadow: 0 0 20px var(--gold-glow);
+    margin: 15px 0;
+    font-family: 'monospace';
+}
+
+#pomo-slider {
+    width: 80%;
+    height: 6px;
+    accent-color: var(--gold);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    outline: none;
+}
+
+.slider-label {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #a8cad7;
+    margin-bottom: 20px;
+}
+
+.pomo-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* أزرار ثابتة بدون تأثير تغيير عند الهوفر */
+.btn-pomo {
+    background: var(--gold) !important;
+    color: #000 !important;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 15px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.btn-pomo-alt {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid var(--gold) !important;
+    color: var(--gold) !important;
+    padding: 12px 30px;
+    border-radius: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.pomo-status-box {
+    height: 50px; /* لتثبيت المسافة عند تغيير النص */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#pomo-status {
+    font-size: 16px;
+    color: #fff;
+    font-style: italic;
+    transition: all 0.5s ease;
+}
