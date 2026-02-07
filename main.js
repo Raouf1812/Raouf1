@@ -415,9 +415,13 @@ function startPomoV2() {
         return;
     }
 
-    if (!pomoTime) {
+    // التعديل هنا لضمان سحب وقت الراحة أو التركيز بشكل صحيح
+    if (!pomoTime || pomoTime <= 0) {
         const focusMins = parseInt(document.getElementById('focus-time').value) || 25;
-        pomoTime = focusMins * 60;
+        const breakMins = parseInt(document.getElementById('break-time').value) || 5;
+        
+        // لو إحنا في حالة راحة، يسحب وقت الراحة، غير كدة يسحب التركيز
+        pomoTime = (isBreak ? breakMins : focusMins) * 60;
     }
 
     isRunning = true;
@@ -444,17 +448,17 @@ function handlePomoEndV2() {
     modal.style.display = 'flex';
     
     if (!isBreak) {
-        title.innerText = "عاش يا هندسة! 🏆";
-        text.innerText = "خلصنا وقت المذاكره . وقتك الراحة دلوقتي.";
         isBreak = true;
+        title.innerText = "وقت الراحة! ✨";
+        // سطر التعديل: سحب وقت الراحة من المدخلات فوراً
         pomoTime = (parseInt(document.getElementById('break-time').value) || 5) * 60;
-        document.getElementById('pomo-msg-v2').innerText = "في وقت راحة حالياً..";
+        document.getElementById('pomo-msg-v2').innerText = "وقت الاستراحة.. اشرب قهوتك ☕";
     } else {
-        title.innerText = "انتهت الراحة! 💪";
-        text.innerText = "مستعد للجولة الجاية؟ يلا بينا نذاكر.";
         isBreak = false;
+        title.innerText = "انتهت الراحة! 💪";
+        // سطر التعديل: العودة لوقت التركيز
         pomoTime = (parseInt(document.getElementById('focus-time').value) || 25) * 60;
-        document.getElementById('pomo-msg-v2').innerText = "وقت المذاكره..";
+        document.getElementById('pomo-msg-v2').innerText = "يلا نذاكر..";
     }
     
     document.getElementById('pomo-start-v2').innerText = "ابدأ";
@@ -752,18 +756,18 @@ document.getElementById('pomo-start-v2').onclick = startPomoV2;
 
 // دالة لتغيير الوقت بالأزرار (+ و -)
 function changeVal(id, step) {
-    if (isRunning) return; // منع التغيير أثناء التشغيل
+    if (isRunning) return; 
     const input = document.getElementById(id);
     let newVal = parseInt(input.value) + step;
     if (newVal < 1) newVal = 1;
-    if (newVal > 60) newVal = 60;
     input.value = newVal;
     
-    // تحديث العرض فوراً لو بنغير وقت التركيز
-    if (id === 'focus-time' && !isBreak) {
-        pomoTime = newVal * 60;
-        updatePomoDisplay(pomoTime);
-    }
+    // سطر التعديل: تصفير الوقت المخزن ليتم تحديثه في العداد عند الضغط على "ابدأ"
+    pomoTime = null; 
+    
+    // تحديث العرض المرئي فوراً
+    const focusMins = parseInt(document.getElementById('focus-time').value);
+    if (!isBreak) updatePomoDisplay(focusMins * 60);
 }
 
 // تعديل بسيط في دالة البداية startPomoV2 لتأخذ القيم الجديدة
