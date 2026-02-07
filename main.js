@@ -332,7 +332,7 @@ async function handleDownload(id, isLocal) {
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
         
-        if (toast) toast.innerText = "بداء التحميل بنجاح ✅ - هتلاقي الملف في التحميلات";
+        if (toast) toast.innerText = "تم التحميل بنجاح";
     } catch (err) {
         // إذا كان الملف خارجي (جوجل درايف مثلاً) ولا يسمح بالـ Fetch
         const a = document.createElement('a');
