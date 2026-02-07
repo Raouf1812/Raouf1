@@ -427,48 +427,54 @@ function startPomoV2() {
     isRunning = true;
     document.getElementById('pomo-start-v2').innerText = "توقف";
     
+    // داخل دالة startPomoV2
     pomoTimerId = setInterval(() => {
         pomoTime--;
         updatePomoDisplay(pomoTime);
 
         if (pomoTime <= 0) {
             clearInterval(pomoTimerId);
-            handlePomoEndV2();
+            clearInterval(msgIntervalId);
+            isRunning = false;
+            
+            // السطر ده هو اللي "بيشغل" كل حاجة لما الوقت يخلص:
+            handlePomoEndV2(); // <--- ضيف السطر ده هنا بالظبط
         }
     }, 1000);
 }
 
 function handlePomoEndV2() {
-    audioNotify.play();
-    isRunning = false;
+    // 1. تشغيل صوت التنبيه
+    if (typeof audioNotify !== 'undefined') {
+        audioNotify.play().catch(e => console.log("الصوت محتاج تفاعل أول مرة"));
+    }
+
+    // 2. إظهار البوب أب (تغيير الـ display)
     const modal = document.getElementById('pomo-alert-modal');
-    const title = document.getElementById('pomo-alert-title');
-    const text = document.getElementById('pomo-alert-text');
-    
-    modal.style.display = 'flex';
-    
+    if (modal) {
+        modal.style.display = 'flex'; // <--- السطر ده اللي بيطلعه قدام عينك
+    }
+
+    // 3. تبديل الوقت (الراحة والتركيز)
     if (!isBreak) {
         isBreak = true;
-        title.innerText = "وقت الراحة! ✨";
-        // سطر التعديل: سحب وقت الراحة من المدخلات فوراً
-        pomoTime = (parseInt(document.getElementById('break-time').value) || 5) * 60;
-        document.getElementById('pomo-msg-v2').innerText = "وقت الاستراحة.. اشرب قهوتك ☕";
+        document.getElementById('pomo-alert-title').innerText = "وقت الراحة! ✨";
+        const breakMins = parseInt(document.getElementById('break-time').value) || 5;
+        pomoTime = breakMins * 60;
     } else {
         isBreak = false;
-        title.innerText = "انتهت الراحة! 💪";
-        // سطر التعديل: العودة لوقت التركيز
-        pomoTime = (parseInt(document.getElementById('focus-time').value) || 25) * 60;
-        document.getElementById('pomo-msg-v2').innerText = "يلا نذاكر..";
+        document.getElementById('pomo-alert-title').innerText = "انتهت الراحة! 💪";
+        const focusMins = parseInt(document.getElementById('focus-time').value) || 25;
+        pomoTime = focusMins * 60;
     }
     
-    document.getElementById('pomo-start-v2').innerText = "ابدأ";
     updatePomoDisplay(pomoTime);
+    document.getElementById('pomo-start-v2').innerText = isBreak ? "بدء الراحة" : "بدء التركيز";
 }
-
 function closePomoAlert() {
     document.getElementById('pomo-alert-modal').style.display = 'none';
+    startPomoV2(); // السطر ده بيبدأ العداد فوراً
 }
-
 document.getElementById('pomo-start-v2').onclick = startPomoV2;
 document.getElementById('pomo-reset-v2').onclick = () => {
     clearInterval(pomoTimerId);
@@ -794,10 +800,14 @@ function startPomoV2() {
     pomoTimerId = setInterval(() => {
         pomoTime--;
         updatePomoDisplay(pomoTime);
+
         if (pomoTime <= 0) {
             clearInterval(pomoTimerId);
             clearInterval(msgIntervalId);
-            handlePomoEndV2();
+            isRunning = false;
+            
+            // السطر اللي كان ناقص هو استدعاء الدالة دي:
+            handlePomoEndV2(); 
         }
     }, 1000);
 }

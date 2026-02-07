@@ -328,5 +328,12 @@
     style.innerHTML = `@keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }`;
     document.head.appendChild(style);
 </script>
+<div id="pomo-alert-modal" class="pomo-modal" style="display: none;">
+    <div class="pomo-modal-content">
+        <h2 id="pomo-alert-title">عاش يا بطل! 🎉</h2>
+        <p id="pomo-alert-text">خلصنا وقت المذاكره استعد للراحة.</p>
+        <button onclick="closePomoAlert()" class="pomo-main-btn" style="width: 100%; margin-top: 20px;">تمام</button>
+    </div>
+</div>
 </body>
 </html>
