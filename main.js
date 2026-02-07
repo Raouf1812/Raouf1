@@ -280,81 +280,69 @@ async function showSubSection(t) {
     if (window.syncCounts) window.syncCounts();
 }
 
-async function handleDownload(id, isLocalFile) {
-    showToast(); // إظهار رسالة "جاري التحميل"
-    
-    let item = null;
-    // جلب البيانات الكاملة للملف
+async function handleDownload(id, isLocal) {
+    const toast = document.getElementById('toast');
+    if (toast) {
+        toast.style.bottom = '20px';
+        toast.innerText = "جاري التحميل... ⏳";
+    }
+
+    // 1. تحديث العداد
+    if (window.updateDL) { window.updateDL(id); }
+
+    // 2. البحث عن بيانات الملف في القاعدة
+    let fileItem = null;
     for (let sub in libraryData) {
         for (let cat in libraryData[sub]) {
-            const foundItem = libraryData[sub][cat].find(i => i.id == id);
-            if (foundItem) { 
-                item = foundItem; 
-                break; 
-            }
+            fileItem = libraryData[sub][cat].find(i => i.id == id); // مقارنة مرنة للـ id
+            if (fileItem) break;
         }
-        if (item) break;
+        if (fileItem) break;
     }
 
-    if (item) {
-        let downloadLink = item.link;
-        let fileName = item.name || getFileName(item.link) || 'ملف';
-
-        // التعامل مع روابط جوجل درايف
-        if (item.link.includes('drive.google.com')) {
-            let driveId = "";
-            if (item.link.includes('id=')) driveId = item.link.split('id=')[1].split('&')[0];
-            else if (item.link.includes('/d/')) driveId = item.link.split('/d/')[1].split('/')[0];
-            
-            if (driveId) {
-                downloadLink = `https://drive.google.com/uc?export=download&id=${driveId}`;
-            }
-        }
-
-        try {
-            // محاولة تحميل الملف
-            const response = await fetch(downloadLink, { 
-                headers: {
-                    'Accept': '*/*'
-                }
-            });
-            
-            if (!response.ok) {
-                // إذا فشل التحميل، افتح الرابط في صفحة جديدة
-                window.open(downloadLink, '_blank');
-            } else {
-                // تحميل الملف بنجاح
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = fileName;
-                a.style.display = 'none';
-                document.body.appendChild(a);
-                a.click();
-                
-                // تنظيف بعد التحميل
-                setTimeout(() => {
-                    document.body.removeChild(a);
-                    window.URL.revokeObjectURL(url);
-                }, 100);
-            }
-            
-            // تحديث عداد التحميلات في Firebase
-            if (window.updateDL) {
-                window.updateDL(id);
-            }
-        } catch (e) {
-            console.log("[v0] Download error, opening in new tab:", e);
-            // في حالة الخطأ، افتح الرابط في صفحة جديدة
-            window.open(downloadLink, '_blank');
-            
-            // تحديث العداد حتى في حالة الخطأ
-            if (window.updateDL) {
-                window.updateDL(id);
-            }
-        }
+    if (!fileItem) {
+        console.error("الملف غير موجود في البيانات");
+        return;
     }
+
+    // --- الجزء الأهم: تحديد الاسم الأصلي للملف ---
+    // بنسحب الجزء الأخير من الرابط (اسم الملف الفعلي)
+    const urlParts = fileItem.link.split('/');
+    const originalFileName = decodeURIComponent(urlParts[urlParts.length - 1]); 
+    
+    // الأولوية للاسم المكتوب في الموقع، لو مش موجود نستخدم الاسم الأصلي للملف
+    const finalFileName = fileItem.name || originalFileName;
+
+    try {
+        // 3. التحميل عبر Fetch لضمان الاسم
+        const response = await fetch(fileItem.link);
+        if (!response.ok) throw new Error('فشل جلب الملف');
+        
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = finalFileName; // هيحمل بالاسم الحقيقي (مثلاً: 2017 مايو.jpg)
+        
+        document.body.appendChild(a);
+        a.click();
+        
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+        if (toast) toast.innerText = "بداء التحميل بنجاح ✅ - هتلاقي الملف في التحميلات";
+    } catch (err) {
+        // إذا كان الملف خارجي (جوجل درايف مثلاً) ولا يسمح بالـ Fetch
+        const a = document.createElement('a');
+        a.href = fileItem.link;
+        a.download = finalFileName;
+        a.target = "_blank";
+        a.click();
+    }
+
+    setTimeout(() => { if (toast) toast.style.bottom = '-100px'; }, 3000);
 }
 
 function showToast() {
@@ -408,20 +396,89 @@ window.addEventListener('load', function() {
 });
 
 
-// نظام البومودورو المطور - ريكوردات المذاكرة
-let pomoInterval;
-let pomoMinutes = 25;
-let pomoSeconds = 0;
-let pomoIsRunning = false;
-let pomoIsBreak = false;
 
-const pomoDisplay = document.getElementById('pomo-timer');
-const pomoSlider = document.getElementById('pomo-slider');
-const pomoSliderVal = document.getElementById('slider-val');
-const pomoStatus = document.getElementById('pomo-status');
-const pomoStartBtn = document.getElementById('pomo-start');
+let pomoTime, pomoTimerId, isBreak = false, isRunning = false;
+const audioNotify = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3'); // صوت تنبيه
 
-const romanticQuotes = [
+function updatePomoDisplay(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    document.getElementById('pomo-timer-v2').innerText = 
+        `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
+
+function startPomoV2() {
+    if (isRunning) {
+        clearInterval(pomoTimerId);
+        isRunning = false;
+        document.getElementById('pomo-start-v2').innerText = "كمل";
+        return;
+    }
+
+    if (!pomoTime) {
+        const focusMins = parseInt(document.getElementById('focus-time').value) || 25;
+        pomoTime = focusMins * 60;
+    }
+
+    isRunning = true;
+    document.getElementById('pomo-start-v2').innerText = "توقف";
+    
+    pomoTimerId = setInterval(() => {
+        pomoTime--;
+        updatePomoDisplay(pomoTime);
+
+        if (pomoTime <= 0) {
+            clearInterval(pomoTimerId);
+            handlePomoEndV2();
+        }
+    }, 1000);
+}
+
+function handlePomoEndV2() {
+    audioNotify.play();
+    isRunning = false;
+    const modal = document.getElementById('pomo-alert-modal');
+    const title = document.getElementById('pomo-alert-title');
+    const text = document.getElementById('pomo-alert-text');
+    
+    modal.style.display = 'flex';
+    
+    if (!isBreak) {
+        title.innerText = "عاش يا هندسة! 🏆";
+        text.innerText = "خلصنا وقت المذاكره . وقتك الراحة دلوقتي.";
+        isBreak = true;
+        pomoTime = (parseInt(document.getElementById('break-time').value) || 5) * 60;
+        document.getElementById('pomo-msg-v2').innerText = "في وقت راحة حالياً..";
+    } else {
+        title.innerText = "انتهت الراحة! 💪";
+        text.innerText = "مستعد للجولة الجاية؟ يلا بينا نذاكر.";
+        isBreak = false;
+        pomoTime = (parseInt(document.getElementById('focus-time').value) || 25) * 60;
+        document.getElementById('pomo-msg-v2').innerText = "وقت المذاكره..";
+    }
+    
+    document.getElementById('pomo-start-v2').innerText = "ابدأ";
+    updatePomoDisplay(pomoTime);
+}
+
+function closePomoAlert() {
+    document.getElementById('pomo-alert-modal').style.display = 'none';
+}
+
+document.getElementById('pomo-start-v2').onclick = startPomoV2;
+document.getElementById('pomo-reset-v2').onclick = () => {
+    clearInterval(pomoTimerId);
+    isRunning = false;
+    pomoTime = null;
+    isBreak = false;
+    document.getElementById('pomo-start-v2').innerText = "ابدأ";
+    updatePomoDisplay((parseInt(document.getElementById('focus-time').value) || 25) * 60);
+};
+
+
+
+// قائمة الرسائل التحفيزية
+const messages = [
     // --- (دعوات هادية) ---
     "يا رب يسر الأمور وهون طريق المذاكرة 🤲",
     "اللهم ارزقنا البركة في الوقت والتركيز العالي.",
@@ -627,102 +684,116 @@ const romanticQuotes = [
     "بالتوفيق يا هندسة، ربنا ينور طريقك دايماً."
 ];
 
-// تحديث الشاشة
-function updatePomoDisplay() {
-    let m = pomoMinutes < 10 ? '0' + pomoMinutes : pomoMinutes;
-    let s = pomoSeconds < 10 ? '0' + pomoSeconds : pomoSeconds;
-    pomoDisplay.innerText = `${m}:${s}`;
+
+function updatePomoDisplay(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    document.getElementById('pomo-timer-v2').innerText = 
+        `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 }
 
-// تغيير السلايدر
-pomoSlider.addEventListener('input', (e) => {
-    if (!pomoIsRunning) {
-        pomoMinutes = e.target.value;
-        pomoSeconds = 0;
-        pomoSliderVal.innerText = pomoMinutes;
-        updatePomoDisplay();
-    }
-});
-
-function startPomo() {
-    if (pomoIsRunning) return;
-    pomoIsRunning = true;
-    pomoStartBtn.innerText = "ايقاف مؤقت";
-    pomoSlider.disabled = true;
-
-    pomoInterval = setInterval(() => {
-        if (pomoSeconds === 0) {
-            if (pomoMinutes == 0) {
-                clearInterval(pomoInterval);
-                pomoIsRunning = false;
-                handlePomoEnd();
-                return;
-            }
-            pomoMinutes--;
-            pomoSeconds = 59;
-        } else {
-            pomoSeconds--;
-        }
-
-        // كل 30 ثانية رسالة رومانسية محفزة
-        // كل 10 ثواني رسالة رومانسية محفزة
-if (pomoSeconds % 15 === 0) {
-    const randomMsg = romanticQuotes[Math.floor(Math.random() * romanticQuotes.length)];
-    
-    // تأثير اختفاء بسيط (Fade out)
-    pomoStatus.style.opacity = 0;
-    
+// دالة تغيير الرسائل
+function changeMessage() {
+    const msgElement = document.getElementById('pomo-msg-v2');
+    if (!msgElement) return;
+    msgElement.style.opacity = 0;
     setTimeout(() => {
-        pomoStatus.innerText = randomMsg;
-        // تأثير ظهور (Fade in)
-        pomoStatus.style.opacity = 1;
+        msgElement.innerText = messages[Math.floor(Math.random() * messages.length)];
+        msgElement.style.opacity = 1;
     }, 500);
 }
 
-        updatePomoDisplay();
+function startPomoV2() {
+    if (isRunning) {
+        // حالة التوقف المؤقت
+        clearInterval(pomoTimerId);
+        clearInterval(msgIntervalId); // إيقاف الرسائل أيضاً
+        isRunning = false;
+        document.getElementById('pomo-start-v2').innerText = "كمل";
+        return;
+    }
+
+    if (!pomoTime) {
+        const focusMins = parseInt(document.getElementById('focus-time').value) || 25;
+        pomoTime = focusMins * 60;
+    }
+
+    isRunning = true;
+    document.getElementById('pomo-start-v2').innerText = "توقف";
+    
+    // تشغيل الرسائل فوراً ثم كل 15 ثانية
+    changeMessage();
+    msgIntervalId = setInterval(changeMessage, 15000);
+
+    pomoTimerId = setInterval(() => {
+        pomoTime--;
+        updatePomoDisplay(pomoTime);
+        if (pomoTime <= 0) {
+            clearInterval(pomoTimerId);
+            clearInterval(msgIntervalId);
+            handlePomoEndV2();
+        }
     }, 1000);
 }
 
-function handlePomoEnd() {
-    if (!pomoIsBreak) {
-        alert("الله ينور يا هندسة! خلصنا وقت التركيز.. خدي 5 دقائق راحة ❤️");
-        pomoIsBreak = true;
-        pomoMinutes = 5; // وقت الراحة
-        pomoSeconds = 0;
-        pomoStatus.innerText = "وقت الراحة.. غمض عينك وافصل ☕";
-        pomoDisplay.style.color = "#00f260"; // لون أخضر للراحة
-        startPomo();
-    } else {
-        alert("خلصنا الراحة.. مستعد للجولة الجاية؟ 💪");
-        pomoIsBreak = false;
-        pomoMinutes = pomoSlider.value;
-        pomoSeconds = 0;
-        pomoDisplay.style.color = "var(--gold)";
-        pomoStartBtn.innerText = "ابدأ ❤️";
-        pomoSlider.disabled = false;
-        updatePomoDisplay();
+// دالة الإعادة (Reset) لصفر كل شيء
+document.getElementById('pomo-reset-v2').onclick = () => {
+    clearInterval(pomoTimerId);
+    clearInterval(msgIntervalId);
+    isRunning = false;
+    pomoTime = null;
+    isBreak = false;
+    document.getElementById('pomo-start-v2').innerText = "ابدأ المذاكره";
+    document.getElementById('pomo-msg-v2').innerText = "جاهز  يا هندسة؟ ";
+    updatePomoDisplay((parseInt(document.getElementById('focus-time').value) || 25) * 60);
+};
+
+document.getElementById('pomo-start-v2').onclick = startPomoV2;
+
+// دالة لتغيير الوقت بالأزرار (+ و -)
+function changeVal(id, step) {
+    if (isRunning) return; // منع التغيير أثناء التشغيل
+    const input = document.getElementById(id);
+    let newVal = parseInt(input.value) + step;
+    if (newVal < 1) newVal = 1;
+    if (newVal > 60) newVal = 60;
+    input.value = newVal;
+    
+    // تحديث العرض فوراً لو بنغير وقت التركيز
+    if (id === 'focus-time' && !isBreak) {
+        pomoTime = newVal * 60;
+        updatePomoDisplay(pomoTime);
     }
 }
 
-pomoStartBtn.onclick = () => {
-    if (pomoIsRunning) {
-        clearInterval(pomoInterval);
-        pomoIsRunning = false;
-        pomoStartBtn.innerText = "كمل";
-    } else {
-        startPomo();
+// تعديل بسيط في دالة البداية startPomoV2 لتأخذ القيم الجديدة
+function startPomoV2() {
+    if (isRunning) {
+        clearInterval(pomoTimerId);
+        clearInterval(msgIntervalId);
+        isRunning = false;
+        document.getElementById('pomo-start-v2').innerText = "كمل ";
+        return;
     }
-};
 
-document.getElementById('pomo-reset').onclick = () => {
-    clearInterval(pomoInterval);
-    pomoIsRunning = false;
-    pomoIsBreak = false;
-    pomoSlider.disabled = false;
-    pomoMinutes = pomoSlider.value;
-    pomoSeconds = 0;
-    pomoDisplay.style.color = "var(--gold)";
-    pomoStartBtn.innerText = "ابدأ ❤️";
-    pomoStatus.innerText = "مستعد ؟";
-    updatePomoDisplay();
-};
+    if (!pomoTime) {
+        const focusMins = parseInt(document.getElementById('focus-time').value) || 25;
+        pomoTime = focusMins * 60;
+    }
+
+    isRunning = true;
+    document.getElementById('pomo-start-v2').innerText = "وقّف شوية";
+    
+    changeMessage();
+    msgIntervalId = setInterval(changeMessage, 15000);
+
+    pomoTimerId = setInterval(() => {
+        pomoTime--;
+        updatePomoDisplay(pomoTime);
+        if (pomoTime <= 0) {
+            clearInterval(pomoTimerId);
+            clearInterval(msgIntervalId);
+            handlePomoEndV2();
+        }
+    }, 1000);
+}

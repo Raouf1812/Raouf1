@@ -296,77 +296,157 @@
             .time-number { font-size: 1.4rem; }
             .exam-countdown-card { margin: 15px; padding: 15px; }
         }
-/* تصميم البومودورو الاحترافي - بدون هوفر */
-.pomodoro-card {
-    text-align: center;
-    padding: 30px !important;
-    border: 1px solid var(--gold-glow);
-    background: rgba(255, 255, 255, 0.02) !important;
-}
 
-#pomo-timer {
-    font-size: 4rem;
-    font-weight: 900;
-    color: var(--gold);
-    text-shadow: 0 0 20px var(--gold-glow);
-    margin: 15px 0;
-    font-family: 'monospace';
-}
-
-#pomo-slider {
-    width: 80%;
-    height: 6px;
-    accent-color: var(--gold);
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 5px;
-    outline: none;
-}
-
-.slider-label {
-    margin-top: 10px;
-    font-size: 14px;
+.xx-glass-card-pomodoro-card-v2 {border-radius: 70px; padding: 31px ;  margin: 0px 0px 50px 0px ; text-align: center; background: rgba(168, 202, 215, 0.05); border: 2px solid var(--gold); }
+#pomo-timer-v2 { font-size: 5rem; font-weight: 900; color: var(--gold); text-shadow: 0 0 30px var(--gold-glow); font-family: monospace; margin: 10px 0; }
+.pomo-settings-v2 { display: flex; justify-content: center; gap: 20px; margin: 20px 0; }
+.setting-group { display: flex; flex-direction: column; font-size: 0.8rem; color: var(--gold); }
+.setting-group input { background: rgba(255,255,255,0.1); border: 1px solid var(--gold); color: #fff; padding: 5px; border-radius: 8px; width: 60px; text-align: center; }
+.pomo-btn-main { background: var(--gold); color: #000; border: none; padding: 12px 40px; border-radius: 50px; font-weight: 900; cursor: pointer; transition: 0.3s; }
+.pomo-btn-main:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--gold-glow); }
+.pomo-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 20000; align-items: center; justify-content: center; }
+.pomo-modal-content { background: #111; border: 2px solid var(--gold); padding: 40px; border-radius: 30px; text-align: center; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+@keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+#pomo-msg-v2 {
+    margin-top: 15px;
+    font-size: 0.95rem;
     color: #a8cad7;
-    margin-bottom: 20px;
+    font-weight: 700;
+    transition: opacity 0.5s ease; /* دي عشان التأثير اللي قولنا عليه */
+    min-height: 1.5em; 
+}
+/* تنسيقات الموبايل للعداد */
+.pomodoro-card-v2 {
+    width: 95%;
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px !important;
 }
 
-.pomo-controls {
+#pomo-timer-v2 {
+    font-size: clamp(3rem, 15vw, 5rem); /* حجم خط مرن يتناسب مع الشاشة */
+    line-height: 1;
+}
+
+.pomo-settings-v2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* جعلهم بجانب بعض دائماً */
+    gap: 10px;
+}
+
+.setting-group input {
+    width: 100%; /* يأخذ مساحة الخلية */
+    height: 45px; /* أسهل للضغط بالإصبع */
+    font-size: 1.1rem;
+}
+
+.pomo-controls-v2 {
+    flex-wrap: nowrap; /* منع الأزرار من النزول تحت بعض */
+    gap: 10px;
+}
+
+.pomo-btn-main {
+    flex: 2; /* زر ابدأ أكبر قليلاً */
+    padding: 15px 10px;
+    font-size: 0.9rem;
+}
+
+.pomo-btn-sub {
+    flex: 1;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid var(--gold);
+    color: #fff;
+    border-radius: 50px;
+    cursor: pointer;
+}
+.pomodoro-card-v2 {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 25px !important;
+    border-radius: 30px;
+    background: rgba(168, 202, 215, 0.05) !important;
+}
+
+#pomo-timer-v2 {
+    font-size: 4.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--gold);
+    margin: 10px 0;
+    text-shadow: 0 0 20px var(--gold-glow);
+}
+
+.pomo-settings-v2 {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     gap: 15px;
+    margin-bottom: 25px;
 }
 
-/* أزرار ثابتة بدون تأثير تغيير عند الهوفر */
-.btn-pomo {
-    background: var(--gold) !important;
-    color: #000 !important;
+.setting-item { flex: 1; }
+.setting-item label { font-size: 12px; color: #a8cad7; display: block; margin-bottom: 8px; }
+
+/* أزرار الزيادة والنقصان */
+.stepper {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(168, 202, 215, 0.2);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.stepper button {
+    flex: 1;
+    background: transparent;
     border: none;
-    padding: 12px 30px;
+    color: var(--gold);
+    font-size: 20px;
+    padding: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.stepper button:hover { background: var(--gold-glow); }
+
+.stepper input {
+    width: 40px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* الأزرار الرئيسية */
+.pomo-actions-v2 {
+    display: flex;
+    gap: 12px;
+}
+
+.pomo-main-btn, .pomo-reset-btn {
+    height: 55px;
     border-radius: 15px;
     font-weight: 900;
     cursor: pointer;
-}
-
-.btn-pomo-alt {
-    background: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid var(--gold) !important;
-    color: var(--gold) !important;
-    padding: 12px 30px;
-    border-radius: 15px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.pomo-status-box {
-    height: 50px; /* لتثبيت المسافة عند تغيير النص */
+    transition: 0.3s;
+    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 20px;
 }
 
-#pomo-status {
-    font-size: 16px;
-    color: #fff;
-    font-style: italic;
-    transition: all 0.5s ease;
+.pomo-main-btn {
+    flex: 2; /* زر ابدأ أخد مساحة أكبر بشياكة */
+    background: var(--gold);
+    color: #000;
 }
+
+.pomo-reset-btn {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    border: 1px solid var(--gold);
+}
+
+.pomo-main-btn:active, .pomo-reset-btn:active { transform: scale(0.95); }
