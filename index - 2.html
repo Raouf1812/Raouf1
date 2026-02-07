@@ -112,7 +112,7 @@
     <div id="toast">📥 بدأ التحميل..</div>
 
     <header data-aos="zoom-in">
-        <h1>صفحة الشيتات</h1>
+        <h1 onclick="location.href='admin - 2.html'" style="cursor: pointer;" >صفحة الشيتات</h1>
         <a href="index.html" class="back-btn">🏠 العودة للمكتبة الرئيسية</a>
     </header>
 
@@ -125,25 +125,10 @@
     </div>
 
     <footer>~ Raouf ~</footer>
-
+    <script src="الشيتات.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({ duration: 800, once: true });
-
-        const allData = [
-            { name: "شيت رقم 1", date: "2999-09-01", sub: "plc", url: "RR/pngegg.png" },
-        ];
-
-        const subjects = [
-            { key: 'plc', label: 'PLC (متحكمات)', eng: 'محمد الجيار' },
-            { key: 'صيانة', label: 'صيانة أجهزة', eng: ' أسراء' },
-            { key: 'اتصالات', label: 'إتصالات', eng: ' معرفش' },
-            { key: 'KAB', label: 'KAB (العمل الحر)', eng: ' شيرين' },
-            { key: 'معامل', label: 'معامل تطبيقية', eng: ' معرفش' },
-            { key: 'تقارير', label: 'تقارير فنية', eng: ' معرفش' },
-            { key: 'دوائر', label: 'دوائر متقدمة', eng: ' سوسن' }
-        ];
-
         function showToast() {
             const t = document.getElementById('toast');
             t.classList.add('show');
