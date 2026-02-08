@@ -42,10 +42,5 @@ const allData = [
         "date": "2026-02-08",
         "sub": "plc",
         "url": "https://i.ibb.co/TBtLKCc1/1000290478.jpg"
-    }
-];� رقم 1",
-        "date": "2026-02-08",
-        "sub": "plc",
-        "url": "https://i.ibb.co/TBtLKCc1/1000290478.jpg"
-    }
+    },
 ];
