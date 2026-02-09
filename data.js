@@ -663,25 +663,25 @@ var libraryData = {
                 "id": "1770632599663",
                 "name": "مذكرة اتصالات معهد الزقازيق",
                 "link": "https://drive.google.com/uc?export=download&id=1Tp3pO42dgwxF8mwhvGvbN4OqNQnjg96Q",
-                "size": "47.4 MB"
+                "size": "💾 47.4 MB"
             }, 
             {
     "id": "1770634367837",
     "name": "اتصالات م سمر صبحي",
     "link": "https://drive.google.com/uc?export=download&id=1FJZ5C3HNoEvV4qvlHoKGAce-uBUvEmPD",
-    "size": "5.5 MB"
+    "size": "💾 5.5 MB"
 },
             {
     "id": "1770634324994",
     "name": "اتصالات المهندسه اسماء",
     "link": "https://drive.google.com/uc?export=download&id=1DWOpkVIMW0eTCERL8A721bkD8ca3pqhb",
-    "size": "15.3 MB"
+    "size": "💾 15.3 MB"
 },
             {
     "id": "1770634253844",
     "name": "مادة اتصالات Abdelmonem",
     "link": "https://drive.google.com/uc?export=download&id=1g8vFrN0NwxXGhhzAX6PiMx6Y7u1GBZ-H",
-    "size": "25.2 MB"
+    "size": "💾 25.2 MB"
 },
         ],
         "books": [
