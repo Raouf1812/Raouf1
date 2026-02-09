@@ -268,11 +268,6 @@ var libraryData = {
                 "id": "222",
                 "link": "PDF/PLC/plc_عبدالرحمان_السعدوي.pdf"
             },
-            {
-                "id": "1770604340929",
-                "name": "م-عبدالحميد plc الجديدة كاملة",
-                "link": "https://drive.google.com/uc?export=download&id=1IIKvAdUN78auoZXScZYI3vJhVViWFin3",
-                "size": "9.20 MB"
 
         ],
         "books": [
