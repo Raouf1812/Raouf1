@@ -1,203 +1,188 @@
-// دالة لتوليد ID فريد
-function generateUniqueIds(data) {
-    let counter = 1000;
-    for (let subject in data) {
-        for (let category in data[subject]) {
-            for (let item of data[subject][category]) {
-                if (!item.id || item.id === "undefined" || item.id === "id") {
-                    item.id = "item-" + (++counter);
-                }
-            }
-        }
-    }
-    return data;
-}
-
 var libraryData = {
     "PLC (متحكمات مبرمجة)": {
         "shrah": [
             {
-                "id": "undefined",
+                "id": "item-1001",
                 "name": "شرح مادة PLC - الباب الأول الجزء الأول",
                 "link": "https://youtu.be/OnZLZSjwU8o?si=1j3PL9aKQl7bIlr_"
             },
             {
-                "id": "undefined",
+                "id": "item-1002",
                 "name": "شرح مادة PLC - الباب الأول الجزء الثاني",
                 "link": "https://youtu.be/Cp4KCg_JBoc?si=WQ_jUY7mc6VB6esj"
             },
             {
-                "id": "undefined",
+                "id": "item-1003",
                 "name": "شرح مادة PLC الباب الأول - حل أسئلة الإمتحانات الخاصة بالباب الأول",
                 "link": "https://youtu.be/vKYtryRihnQ?si=rRmlO3reh_FIs9mw"
             },
             {
-                "id": "undefined",
+                "id": "item-1004",
                 "name": "شرح مادة ال PLC - الباب الثاني الجزء الأول - الفرق بين لغات ال Ladder و STL و FBD",
                 "link": "https://youtu.be/BADN2ObQrmU?si=XVikkC6hJbVugmTZ"
             },
             {
-                "id": "undefined",
+                "id": "item-1005",
                 "name": "شرح مادة PLC - الباب الثاني الجزء الثاني - حل أمثلة على برامج ال LAD و STL و FBD",
                 "link": "https://youtu.be/BhBfwnyJUDk?si=_ziizxW96dy79Wms"
             },
             {
-                "id": "undefined",
+                "id": "item-1006",
                 "name": "شرح مادة PLC - الباب الثاني الجزء الثالث - حل أفكار جديدة عن STL & FBD & LAD + حل أمثلة أمتحان 2019",
                 "link": "https://youtu.be/-8FLDUET5Dc?si=Rn1BX4jBOcm64eiL"
             },
             {
-                "id": "undefined",
+                "id": "item-1007",
                 "name": "مادة ال PLC - الباب الثاني - شرح البوابات المنطقية الجزء الأول - AND & OR & NOT & NAND",
                 "link": "https://youtu.be/awnQwjSiv4Y?si=jp9eFkJlrHJgdJFf"
             },
             {
-                "id": "undefined",
+                "id": "item-1008",
                 "name": "شرح مادة PLC - الباب الثاني - شرح الدوائر المنطقية الجزء الثاني - NOR & XOR & XNOR",
                 "link": "https://youtu.be/aHJnVlQ4jJc?si=E1I_b_izriypYv4i"
             },
             {
-                "id": "undefined",
+                "id": "item-1009",
                 "name": "مادة PLC - الباب الثاني - حل بعض مسائل الإمتحانات عن الدوائر المنطقية",
                 "link": "https://youtu.be/THYiXfNSzvk?si=Gvb0QM4gyPhxZr1x"
             },
             {
-                "id": "undefined",
+                "id": "item-1010",
                 "name": "شرح مادة PLC - الباب الثاني - المسائل اللفظية الجزء الأول",
                 "link": "https://youtu.be/_5NGW7gv59Q?si=bC67-21o9Lk9PIWE"
             },
             {
-                "id": "undefined",
+                "id": "item-1011",
                 "name": "شرح مادة PLC - الباب الثاني - المسائل اللفظية الجزء الثاني",
                 "link": "https://youtu.be/9R3-ySymBnM?si=JO9mR99Y5UCDEFJI"
             },
             {
-                "id": "undefined",
+                "id": "item-1012",
                 "name": "شرح مادة PLC - الباب الثاني - المسائل اللفظية الجزء الثالث - مسألة دائرة الخزان",
                 "link": "https://youtu.be/Yc-PtoFn02k?si=RsUXZc-pAhnnysKb"
             },
             {
-                "id": "undefined",
+                "id": "item-1013",
                 "name": "شرح مادة PLC - الباب الثالث - الأنظمة العددية",
                 "link": "https://youtu.be/M2OTCgaE-Z8?si=kBZoKDZ5w1JPqVgq"
             },
             {
-                "id": "undefined",
+                "id": "item-1014",
                 "name": "شرح مادة PLC - الباب الثالث - برمجة دوال التوحيد والتصفير Set/Reset",
                 "link": "https://youtu.be/4Z7HBO5CNxc?si=UpysixRw7uMLUaNV"
             },
             {
-                "id": "undefined",
+                "id": "item-1015",
                 "name": "شرح مادة PLC - الباب الثالث شرح أنواع المؤقتات الزمنية حسب زمن التأخير On-Delay & Off-Delay Timers",
                 "link": "https://youtu.be/HGJTspYHWhc?si=YTVEeGHwGre-tFYs"
             },
             {
-                "id": "undefined",
+                "id": "item-1016",
                 "name": "مادة PLC-الباب3-المؤقتات الزمية Pulse/Extended pulse/ Latched On-Delay/On-Delay/Off-Delay Timers",
                 "link": "https://youtu.be/dIqjcXA1pQQ?si=mdG9SzwQomHEh1HE"
             },
             {
-                "id": "undefined",
+                "id": "item-1017",
                 "name": "مادة PLC -أنواع المؤقتات حسب الأساس الزمني Time base ورسم مخطط ال Ladder+مثال على On/Off Delay Timer",
                 "link": "https://youtu.be/r7ieyw6uVFQ?si=gEC_mMXPRltocJTW"
             },
             {
-                "id": "undefined",
+                "id": "item-1018",
                 "name": "مادة PLC-الباب3 العدادات - العداد التصاعدي والتناولي والتصاعدي/التنازلي Up & Down & Up/Down Counters",
                 "link": "https://youtu.be/ImG_vtsDH2k?si=PXPIA4rqbqSlsbVN"
             },
             {
-                "id": "undefined",
+                "id": "item-1019",
                 "name": "شرح مادة PLC - الباب الثالث - مثال على الـ Up/Down Counter مع رسم مخطط الـ Ladder",
                 "link": "https://youtu.be/zNSIUZy65jU?si=hF1sGPUOYMpxygcC"
             },
             {
-                "id": "undefined",
+                "id": "item-1020",
                 "name": "مادة PLC - الباب الثالث - شرح وظائف الإزاحة",
                 "link": "https://youtu.be/vFnMaZjWfTw?si=tz89V5oOmJDsqLgy"
             },
             {
-                "id": "undefined",
+                "id": "item-1021",
                 "name": "مادة PLC - الباب الثالث - شرح مسائل وظائف الإزاحة",
                 "link": "https://youtu.be/1JLPd5IZRoc?si=AaiilYppCU5vv1sZ"
             },
             {
-                "id": "undefined",
+                "id": "item-1022",
                 "name": "مادة PLC - الباب الثالث - شرح أوامر المقارنة",
                 "link": "https://youtu.be/EqnwRbFqGrE?si=l6Gg668HE7pJp44Y"
             },
             {
-                "id": "undefined",
+                "id": "item-1023",
                 "name": "شرح PLC - أوامر القفز Jump Instructions - القفز غير المشروط - القفز المشروط - القفز ذو الشرط المنفي",
                 "link": "https://youtu.be/tvdNM5kcJl8?si=hQJqwKaNTPQ-JCok"
             },
             {
-                "id": "undefined",
+                "id": "item-1024",
                 "name": "شرح PLC - حل أسئلة الباب الثالث - أسئلة وظائف الإزاحة وأوامر المقارنة وأوامر القفز",
                 "link": "https://youtu.be/gYjNu9kkjAQ?si=V88v3WO_nRhKl1I6"
             },
             {
-                "id": "undefined",
+                "id": "item-1025",
                 "name": "المراجعة النهائية علي مادة PLC 💝 ، الجزء الأول .",
                 "link": "https://youtu.be/K91LLVf-ALg?si=r0xnBzMt_3yie49j"
             },
             {
-                "id": "undefined",
+                "id": "item-1026",
                 "name": "المراجعة النهائية علي مادة PLC 💝 ، الجزء الثاني .",
                 "link": "https://youtu.be/PT96pqzGHJc?si=5nrprIqDHp809wJx"
             },
             {
-                "id": "undefined",
+                "id": "item-1027",
                 "name": "المراجعة النهائية علي مادة PLC 💝 ، الجزء الرابع .",
                 "link": "https://youtu.be/7dgkzIUh5JU?si=bczAn3BbKiYc0-_Q"
             },
             {
-                "id": "undefined",
+                "id": "item-1028",
                 "name": "المراجعة النهائية علي مادة PLC 💝 ، الجزء الثالث .",
                 "link": "https://youtu.be/xrN64w9bxqU?si=QkKgFeLXA0FJ4A0f"
             },
             {
-                "id": "undefined",
+                "id": "item-1029",
                 "name": "المراجعة النهائية علي مادة PLC 💝 ، الجزء الخامس",
                 "link": "https://youtu.be/gpZVZy05Scw?si=-jdSF1fWpm8cuurm"
             },
             {
-                "id": "undefined",
+                "id": "item-1030",
                 "name": "المراجعة النهائية علي مادة PLC 💝، الجزء السادس",
                 "link": "https://youtu.be/aEdQBjbZLOE?si=2pAIQWLJWF58UuXp"
             },
             {
-                "id": "undefined",
+                "id": "item-1031",
                 "name": "الباب الأول +جزء من الباب الثاني - م/ايمن ابراهيم",
                 "link": "https://youtu.be/xag7atrSbs4"
             },
             {
-                "id": "undefined",
+                "id": "item-1032",
                 "name": "الباب الثاني - م/ايمن ابراهيم",
                 "link": "https://youtu.be/6jpmg5pe3rs"
             },
             {
-                "id": "undefined",
+                "id": "item-1033",
                 "name": "الباب الثاني - م/ايمن ابراهيم",
                 "link": "https://youtu.be/4EgjPJyl71E"
             },
             {
-                "id": "undefined",
+                "id": "item-1034",
                 "name": "الباب الثالث - م/ليلي ابو زيد",
                 "link": "https://youtu.be/kUKCV-xP1NU"
             },
             {
-                "id": "undefined",
+                "id": "item-1035",
                 "name": "الباب الثالث - م/ليلي ابو زيد",
                 "link": "https://youtu.be/8LyhR9Vlvgc"
             },
             {
-                "id": "undefined",
+                "id": "item-1036",
                 "name": "الباب الثالث - م/ليلي ابو زيد",
                 "link": "https://youtu.be/d2lbIYZuJrw"
             },
             {
-                "id": "undefined",
+                "id": "item-1037",
                 "name": "الباب الثالث - م/سميرة",
                 "link": "https://youtu.be/5Ol5Laqq28s"
             }
@@ -282,6 +267,12 @@ var libraryData = {
             {
                 "id": "222",
                 "link": "PDF/PLC/plc_عبدالرحمان_السعدوي.pdf"
+            },
+            {
+                "id": "1770604340929",
+                "name": "م-عبدالحميد plc الجديدة كاملة",
+                "link": "https://drive.google.com/uc?export=download&id=1IIKvAdUN78auoZXScZYI3vJhVViWFin3",
+                "size": "9.20 MB"
             }
         ],
         "books": [
@@ -386,52 +377,52 @@ var libraryData = {
     "صيانة وإصلاح أجهزة إلكترونية": {
         "shrah": [
             {
-                "id": "undefined",
+                "id": "item-1038",
                 "name": "الباب الرابع : م/ دعاء المطري",
                 "link": "https://youtu.be/q5fMQOVXi0k"
             },
             {
-                "id": "undefined",
+                "id": "item-1039",
                 "name": "الباب الرابع : م/ هناء سعيد",
                 "link": "https://youtu.be/LIVSwL6gnhQ?si=ipfhNdlvIr2bQeFI"
             },
             {
-                "id": "undefined",
+                "id": "item-1040",
                 "name": "الباب الرابع : م/ هناء سعيد",
                 "link": "https://youtu.be/MOQ7lgiiWkI?si=ml6SaJQp_VrNpuJs"
             },
             {
-                "id": "undefined",
+                "id": "item-1041",
                 "name": "الباب الرابع : م/ هناء سعيد",
                 "link": "https://youtu.be/cn0CbZJNo8A?si=RVcePcgPcF4aYn5z"
             },
             {
-                "id": "undefined",
+                "id": "item-1042",
                 "name": "الباب الرابع : م/ هناء سعيد",
                 "link": "https://youtu.be/Ggjd8d0g5L0?si=iitjO8StKZSjoUnF"
             },
             {
-                "id": "undefined",
+                "id": "item-1043",
                 "name": "الباب الرابع : م/ هناء سعيد",
                 "link": "https://youtu.be/-QjaAS5y6dU?si=AVnQJJFBqRB7KH1y"
             },
             {
-                "id": "undefined",
+                "id": "item-1044",
                 "name": "الباب الخامس : م/ هناء سعيد",
                 "link": "https://youtu.be/-QjaAS5y6dU?si=AVnQJJFBqRB7KH1y"
             },
             {
-                "id": "undefined",
+                "id": "item-1045",
                 "name": "الباب الخامس : م/ هناء سعيد",
                 "link": "https://youtu.be/y3q3Om5slJA?si=BCmROy1VYUa73P00"
             },
             {
-                "id": "undefined",
+                "id": "item-1046",
                 "name": "الباب الخامس : م/ دعاء المطري",
                 "link": "https://youtu.be/NSGXaV_rBak"
             },
             {
-                "id": "undefined",
+                "id": "item-1047",
                 "name": "الباب السادس : م/ دعاء المطري",
                 "link": "https://youtu.be/iYR1Zh5sbbA"
             }
@@ -556,67 +547,67 @@ var libraryData = {
     "إتصالات": {
         "shrah": [
             {
-                "id": "undefined",
+                "id": "item-1048",
                 "name": "الباب الاول : م/نور جوده",
                 "link": "https://youtu.be/Dj3KNP11qPE"
             },
             {
-                "id": "undefined",
+                "id": "item-1049",
                 "name": "الباب الثاني : م/نور جوده",
                 "link": "https://youtu.be/4GiBrSxyfTQ?si=PkYLvzh8G11B9P8Z"
             },
             {
-                "id": "undefined",
+                "id": "item-1050",
                 "name": "الباب الثاني : م/نور جوده",
                 "link": "https://youtu.be/3VnxZs1q6kY"
             },
             {
-                "id": "undefined",
+                "id": "item-1051",
                 "name": "الباب الثالث : م/نور جوده",
                 "link": "https://youtu.be/NhkMTIj2bOM"
             },
             {
-                "id": "undefined",
+                "id": "item-1052",
                 "name": "الباب الثالث : م/نور جوده",
                 "link": "https://youtu.be/vgMytbz8Nks"
             },
             {
-                "id": "undefined",
+                "id": "item-1053",
                 "name": "الباب الرابع : م/نور جوده",
                 "link": "https://youtu.be/A9xtvqEL7qw"
             },
             {
-                "id": "undefined",
+                "id": "item-1054",
                 "name": "الباب الرابع : م/شرين سعد",
                 "link": "https://youtu.be/-A84hBHPIYM"
             },
             {
-                "id": "undefined",
+                "id": "item-1055",
                 "name": "الباب الرابع : م/شرين سعد",
                 "link": "https://youtu.be/PQJjCYE1A0k"
             },
             {
-                "id": "undefined",
+                "id": "item-1056",
                 "name": "الباب الرابع : م/شرين سعد",
                 "link": "https://youtu.be/ZYJbqPTlNLE"
             },
             {
-                "id": "undefined",
+                "id": "item-1057",
                 "name": "الباب الرابع : م/شرين سعد",
                 "link": "https://youtu.be/X49FxfSBQXQ"
             },
             {
-                "id": "undefined",
+                "id": "item-1058",
                 "name": "الباب الخامس : م/نور جوده",
                 "link": "https://youtu.be/OKM72n7ruxI"
             },
             {
-                "id": "undefined",
+                "id": "item-1059",
                 "name": "الباب الخامس : م/شرين سعد",
                 "link": "https://youtu.be/qukJIS_5jpw"
             },
             {
-                "id": "undefined",
+                "id": "item-1060",
                 "name": "مراجعة عالمنهج : م/نور جوده",
                 "link": "https://youtu.be/4GiBrSxyfTQ"
             }
@@ -765,62 +756,62 @@ var libraryData = {
     "KAB (مشروع ثقافة العمل الحر )": {
         "shrah": [
             {
-                "id": "undefined",
+                "id": "item-1061",
                 "name": "الباب الثاني : م/وفاء",
                 "link": "https://youtu.be/eQZ18rrZj7U?si=pw2nG7DMpEAoQTWQ"
             },
             {
-                "id": "undefined",
+                "id": "item-1062",
                 "name": "الباب الثاني : م/وفاء",
                 "link": "https://youtu.be/SeQfdlU1V0g?si=bqYgk-6H5jjmxjk4"
             },
             {
-                "id": "undefined",
+                "id": "item-1063",
                 "name": "الباب الرابع : م/وفاء",
                 "link": "https://youtu.be/MahFxLn1F8s?si=vMjb_NoLNnWN36IL"
             },
             {
-                "id": "undefined",
+                "id": "item-1064",
                 "name": "الباب الخامس : م/وفاء",
                 "link": "https://youtu.be/_sHd-M7eGpk?si=pGGTVqBuTTuAb1nl"
             },
             {
-                "id": "undefined",
+                "id": "item-1065",
                 "name": "الباب الخامس : م/وفاء",
                 "link": "https://youtu.be/QCeSFukmn6o?si=0Iff5SOlFnY6AT6B"
             },
             {
-                "id": "undefined",
+                "id": "item-1066",
                 "name": "الباب السادس : م/وفاء",
                 "link": "https://youtu.be/CTliLjwPwbs?si=XZJfhkMTGb_61PXR"
             },
             {
-                "id": "undefined",
+                "id": "item-1067",
                 "name": "الباب السادس : م/وفاء",
                 "link": "https://youtu.be/OIz_N_6BU24?si=a5BTkAUs8pjmT4RB"
             },
             {
-                "id": "undefined",
+                "id": "item-1068",
                 "name": "الباب السابع : م/وفاء",
                 "link": "https://youtu.be/qHmmNUBQ_l8?si=wo_CJwcDGqw6DFiq"
             },
             {
-                "id": "undefined",
+                "id": "item-1069",
                 "name": "مسائل KAB : م/وفاء",
                 "link": "https://youtu.be/6llItR8l1ak?si=aa_0CmI2u3ili3Fr"
             },
             {
-                "id": "undefined",
+                "id": "item-1070",
                 "name": "مراجعه : م/حماده محمد",
                 "link": "https://youtu.be/IhxingRvBqo"
             },
             {
-                "id": "undefined",
+                "id": "item-1071",
                 "name": "مراجعه : م/حماده محمد",
                 "link": "https://youtu.be/hAf5PGYjrjE"
             },
             {
-                "id": "undefined",
+                "id": "item-1072",
                 "name": "مراجعه : م/حماده محمد",
                 "link": "https://youtu.be/BoXFDesQt-c"
             }
@@ -928,137 +919,137 @@ var libraryData = {
     "معامل تطبيقية": {
         "shrah": [
             {
-                "id": "undefined",
+                "id": "item-1073",
                 "name": "الباب الاول : م/عبد الحميد",
                 "link": "https://youtu.be/hzt2bk8dUw0"
             },
             {
-                "id": "undefined",
+                "id": "item-1074",
                 "name": "الباب الاول : م/عبد الحميد",
                 "link": "https://youtu.be/iShRaOWFd8I"
             },
             {
-                "id": "undefined",
+                "id": "item-1075",
                 "name": "الباب الثاني : م/عبد الحميد",
                 "link": "https://m.youtube.com/watch?v=8notNWuoXNU"
             },
             {
-                "id": "undefined",
+                "id": "item-1076",
                 "name": "الباب الثاني : م/عبد الحميد",
                 "link": "https://m.youtube.com/watch?v=x2yK1dykn-8"
             },
             {
-                "id": "undefined",
+                "id": "item-1077",
                 "name": "الباب الثاني : م/عبد الحميد",
                 "link": "https://m.youtube.com/watch?v=RTzDukwhsMk"
             },
             {
-                "id": "undefined",
+                "id": "item-1078",
                 "name": "الباب الثاني : م/عبد الحميد",
                 "link": "https://m.youtube.com/watch?v=96WiQMT1emo"
             },
             {
-                "id": "undefined",
+                "id": "item-1079",
                 "name": "الباب الثاني : م/عبد الحميد",
                 "link": "https://m.youtube.com/watch?v=Y7hBtAD-oYQ"
             },
             {
-                "id": "undefined",
+                "id": "item-1080",
                 "name": "الباب الثاني : م/عبد الحميد",
                 "link": "https://m.youtube.com/watch?v=HJgjwChsDEM"
             },
             {
-                "id": "undefined",
+                "id": "item-1081",
                 "name": "الباب الثاني : م/عبد الحميد",
                 "link": "https://m.youtube.com/watch?v=NnmtwiCjiQE"
             },
             {
-                "id": "undefined",
+                "id": "item-1082",
                 "name": "الباب الثاني : م/عبد الحميد",
                 "link": "https://m.youtube.com/watch?v=xLCUzo5Y_2M"
             },
             {
-                "id": "undefined",
+                "id": "item-1083",
                 "name": "الباب الثاني : م/ايمان فياض",
                 "link": "https://youtu.be/mUDnrDPi968"
             },
             {
-                "id": "undefined",
+                "id": "item-1084",
                 "name": "الباب الثاني : م/ايمان فياض",
                 "link": "https://youtu.be/GwG2NcrMi_4"
             },
             {
-                "id": "undefined",
+                "id": "item-1085",
                 "name": "الباب الثاني : م/ايمان فياض",
                 "link": "https://youtu.be/zuK_EEhyJzM"
             },
             {
-                "id": "undefined",
+                "id": "item-1086",
                 "name": "الباب الثاني : م/ايمان فياض",
                 "link": "https://youtu.be/B92XhCd8cno"
             },
             {
-                "id": "undefined",
+                "id": "item-1087",
                 "name": "الباب الثالث : م/عبد الحميد",
                 "link": "https://youtu.be/TKnUNXI6BsM"
             },
             {
-                "id": "undefined",
+                "id": "item-1088",
                 "name": "الباب الثالث : م/عبد الحميد",
                 "link": "https://youtu.be/yRbQjZxL5O0"
             },
             {
-                "id": "undefined",
+                "id": "item-1089",
                 "name": "الباب الثالث  : م/ايمان فياض",
                 "link": "https://youtu.be/WbnKoDM5Fio"
             },
             {
-                "id": "undefined",
+                "id": "item-1090",
                 "name": "الباب الثالث  : م/ايمان فياض",
                 "link": "https://youtu.be/D9qp9Z5ObTU"
             },
             {
-                "id": "undefined",
+                "id": "item-1091",
                 "name": "الباب الرابع : م/عبد الحميد",
                 "link": "https://youtu.be/ECa0vfbQrAU"
             },
             {
-                "id": "undefined",
+                "id": "item-1092",
                 "name": "الباب الرابع : م/عبد الحميد",
                 "link": "https://youtu.be/qab1a60oCRM"
             },
             {
-                "id": "undefined",
+                "id": "item-1093",
                 "name": "الباب الرابع  : م/ايمان فياض",
                 "link": "https://youtu.be/AGmq9SCNUW0"
             },
             {
-                "id": "undefined",
+                "id": "item-1094",
                 "name": "الباب الرابع  : م/ايمان فياض",
                 "link": "hhttps://youtu.be/05_et_1-yK0"
             },
             {
-                "id": "undefined",
+                "id": "item-1095",
                 "name": "الباب الرابع  : م/ايمان فياض",
                 "link": "https://youtu.be/EQIyCbKh7SY"
             },
             {
-                "id": "undefined",
+                "id": "item-1096",
                 "name": "الباب الرابع  : م/ايمان فياض",
                 "link": "https://youtu.be/CJOR0x5GEZg"
             },
             {
-                "id": "undefined",
+                "id": "item-1097",
                 "name": "مراجعة علي المنهج : م/عبد الحميد",
                 "link": "https://m.youtube.com/watch?v=Aua10Qb5Sdc"
             },
             {
-                "id": "undefined",
+                "id": "item-1098",
                 "name": "مراجعة علي المنهج : م/عبد الحميد",
                 "link": "https://m.youtube.com/watch?v=Po0hOLMe7kI"
             },
             {
-                "id": "undefined",
+                "id": "item-1099",
                 "name": "مراجعة علي المنهج : م/عبد الحميد",
                 "link": "https://youtu.be/0CPdLjgaKWo"
             }
@@ -1209,27 +1200,27 @@ var libraryData = {
     "تقارير فنية": {
         "shrah": [
             {
-                "id": "undefined",
+                "id": "item-1100",
                 "name": "الباب الثالث : م/ابراهيم صهيب",
                 "link": "https://youtu.be/2N1jQMC7RTA"
             },
             {
-                "id": "undefined",
+                "id": "item-1101",
                 "name": "الباب الرابع : م/ابراهيم صهيب",
                 "link": "https://youtu.be/5bKeWiHNOq0"
             },
             {
-                "id": "undefined",
+                "id": "item-1102",
                 "name": "الباب السابع : م/احمد عبد الخالق",
                 "link": "https://youtu.be/CXh3I61yPIk"
             },
             {
-                "id": "undefined",
+                "id": "item-1103",
                 "name": "الباب الثامن : م/احمد عبد الخالق",
                 "link": "https://youtu.be/nBirBUq1mIQ"
             },
             {
-                "id": "undefined",
+                "id": "item-1104",
                 "name": "الباب التاسع : م/احمد عبد الخالق",
                 "link": "https://youtu.be/lVIryA3bYXc"
             }
@@ -1382,117 +1373,117 @@ var libraryData = {
     "دوائر متقدمة": {
         "shrah": [
             {
-                "id": "undefined",
+                "id": "item-1105",
                 "name": "الباب الثاني : م/سمر صبحي",
                 "link": "https://youtu.be/YsUbcN01FM8"
             },
             {
-                "id": "undefined",
+                "id": "item-1106",
                 "name": "الباب الثاني : م/سمر صبحي",
                 "link": "https://youtu.be/WivEhR4YOOo"
             },
             {
-                "id": "undefined",
+                "id": "item-1107",
                 "name": "الباب الثاني : م/هناء سعيد",
                 "link": "https://youtu.be/RAbg6KA5FoE"
             },
             {
-                "id": "undefined",
+                "id": "item-1108",
                 "name": "الباب الثاني : م/هناء سعيد",
                 "link": "https://youtu.be/EIVOh15nZRM"
             },
             {
-                "id": "undefined",
+                "id": "item-1109",
                 "name": "الباب الثاني : م/هناء سعيد",
                 "link": "https://youtu.be/MI81ea8n-G8"
             },
             {
-                "id": "undefined",
+                "id": "item-1110",
                 "name": "الباب الثاني : م/دعاء المطري",
                 "link": "https://youtu.be/G5VC3wOgjys"
             },
             {
-                "id": "undefined",
+                "id": "item-1111",
                 "name": "الباب الثاني : م/دعاء المطري",
                 "link": "https://youtu.be/iBwOVJ8ftbk"
             },
             {
-                "id": "undefined",
+                "id": "item-1112",
                 "name": "الباب الثاني : م/دعاء المطري",
                 "link": "https://youtu.be/5S9Ce5hJrBE"
             },
             {
-                "id": "undefined",
+                "id": "item-1113",
                 "name": "الباب الثاني : م/دعاء المطري",
                 "link": "https://youtu.be/qClNiJzc9U0"
             },
             {
-                "id": "undefined",
+                "id": "item-1114",
                 "name": "الباب الثالث : م/سمر صبحي",
                 "link": "https://youtu.be/zaIMUm0QloY"
             },
             {
-                "id": "undefined",
+                "id": "item-1115",
                 "name": "الباب الثالث : م/سمر صبحي",
                 "link": "https://youtu.be/rCZDZdLyfUU"
             },
             {
-                "id": "undefined",
+                "id": "item-1116",
                 "name": "الباب الثالث : م/سمر صبحي",
                 "link": "https://youtu.be/3uazpHEsSYM"
             },
             {
-                "id": "undefined",
+                "id": "item-1117",
                 "name": "الباب الثالث : م/سمر صبحي",
                 "link": "https://youtu.be/5kTB37OCBng"
             },
             {
-                "id": "undefined",
+                "id": "item-1118",
                 "name": "الباب الثالث : م/سمر صبحي",
                 "link": "https://youtu.be/ge9pBx21L9Q"
             },
             {
-                "id": "undefined",
+                "id": "item-1119",
                 "name": "الباب الثالث : م/سمر صبحي",
                 "link": "https://youtu.be/iRbTLeAUhJg"
             },
             {
-                "id": "undefined",
+                "id": "item-1120",
                 "name": "الباب الثالث : م/سمر صبحي",
                 "link": "https://youtu.be/TJUXP72OWnI"
             },
             {
-                "id": "undefined",
+                "id": "item-1121",
                 "name": "الباب الثالث : م/دعاء المطري",
                 "link": "https://youtu.be/uUtI5xUlei0"
             },
             {
-                "id": "undefined",
+                "id": "item-1122",
                 "name": "الباب الثالث : م/دعاء المطري",
                 "link": "https://youtu.be/Xxs4brhtOeA"
             },
             {
-                "id": "undefined",
+                "id": "item-1123",
                 "name": "الباب الثالث : م/دعاء المطري",
                 "link": "https://youtu.be/IovqwUQDVYk"
             },
             {
-                "id": "undefined",
+                "id": "item-1124",
                 "name": "الباب الرابع : م/دعاء المطري",
                 "link": "https://youtu.be/mmrZQgzkzUs"
             },
             {
-                "id": "undefined",
+                "id": "item-1125",
                 "name": "الباب الرابع : م/دعاء المطري",
                 "link": "https://youtu.be/mmrZQgzkzUs"
             },
             {
-                "id": "undefined",
+                "id": "item-1126",
                 "name": "الباب الخامس +السادس : م/دعاء المطري",
                 "link": "https://youtu.be/9I2HpFZ6q3s"
             },
             {
-                "id": "undefined",
+                "id": "item-1127",
                 "name": "الباب الخامس +السادس : م/سمر صبحي ",
                 "link": "https://youtu.be/foq7BrSeAZk"
             }
@@ -1635,6 +1626,3 @@ var libraryData = {
         ]
     }
 };
-
-// تطبيق توليد الـ IDs الفريدة
-libraryData = generateUniqueIds(libraryData);
