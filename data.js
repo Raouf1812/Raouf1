@@ -661,7 +661,7 @@ var libraryData = {
             },
             {
                 "id": "1770632599663",
-                "name": "مذكرة_اتصالات_إلكترونيه_معهد_الزقازيق",
+                "name": "مذكرة اتصالات معهد الزقازيق",
                 "link": "https://drive.google.com/uc?export=download&id=1Tp3pO42dgwxF8mwhvGvbN4OqNQnjg96Q",
                 "size": "47.4 MB"
             }
