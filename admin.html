@@ -52,6 +52,7 @@
     </div>
 
     <div class="box">
+        <h2>بحبك يابنونتي 😘</h2>
         <h5>🛠️ إضافة مادة للمكتبة</h5>
         
         <label>اختر المادة:</label>
@@ -109,7 +110,6 @@ function saveData() {
     const name = document.getElementById('name').value;
     const size = document.getElementById('size').value;
     let link = document.getElementById('link').value;
-    const status = document.getElementById('status');
 
     if (!name || !link) { alert("أكمل البيانات يا هندسة!"); return; }
 
@@ -119,29 +119,37 @@ function saveData() {
         finalLink = ids.download; 
     }
 
-    if (!libraryData[sub]) libraryData[sub] = {};
-    if (!libraryData[sub][cat]) libraryData[sub][cat] = [];
-
-    // إضافة البيانات للملف
-    libraryData[sub][cat].push({
-        id: Date.now().toString(),
+    // تجهيز السطر الجديد كـ Object
+    const newItem = {
+        id: Date.now().toString(), // توليد ID تلقائي
         name: name,
         link: finalLink,
-        size: size || "Drive 💾" // لو فاضي يحط كلمة درايف
-    });
+        size: size || (cat === "shrah" ? "Video 🎥" : "Drive 💾")
+    };
 
-    // إنشاء وحفظ الملف
-    const finalContent = "var libraryData = " + JSON.stringify(libraryData, null, 4) + ";";
-    const blob = new Blob([finalContent], { type: 'text/javascript;charset=utf-8' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'data.js';
-    a.click();
+    // تحويل الـ Object لنص وإضافة فاصلة في الآخر
+    const lineWithComma = JSON.stringify(newItem, null, 4) + ",";
 
-    status.style.display = 'block';
-    status.className = 'success';
-    status.innerHTML = "✅ تمت الإضافة! نزل الملف وارفع الـ data.js الجديد.";
+    // عرض السطر في المربع بدلاً من تحميل ملف
+    document.getElementById('result-container').style.display = 'block';
+    const outputArea = document.getElementById('outputLine');
+    outputArea.value = lineWithComma;
+    
+    alert("تم توليد السطر بنجاح!");
+}
+
+// دالة مساعدة لنسخ الكود بسرعة
+function copyToClipboard() {
+    const copyText = document.getElementById("outputLine");
+    copyText.select();
+    document.execCommand("copy");
+    alert("تم النسخ!");
 }
 </script>
+<div id="result-container" style="margin-top: 20px; display: none;">
+    <p style="color: #fff; margin-bottom: 5px;">انسخ السطر ده وحطه في الملف يا هندسة:</p>
+    <textarea id="outputLine" style="width: 100%; height: 100px; background: #222; color: #00f260; padding: 10px; border: 1px solid var(--gold); border-radius: 8px; direction: ltr; font-family: monospace;"></textarea>
+    <button onclick="copyToClipboard()" style="margin-top: 10px; background: var(--gold); color: #000; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">نسخ الكود</button>
+</div>
 </body>
 </html>
