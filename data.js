@@ -267,8 +267,7 @@ var libraryData = {
             {
                 "id": "222",
                 "link": "PDF/PLC/plc_عبدالرحمان_السعدوي.pdf"
-            },
-
+            }
         ],
         "books": [
             {
@@ -653,8 +652,18 @@ var libraryData = {
                 "link": "PDF/إتصالات/م_شيرين_باب_رابع.pdf"
             },
             {
+                "id": "81",
+                "link": "PDF/إتصالات/اتصالات_الباب_الخامس.pdf"
+            },
+            {
                 "id": "223",
                 "link": "PDF/إتصالات/اتصالات_المنوفي.pdf"
+            },
+            {
+                "id": "1770632599663",
+                "name": "مذكرة_اتصالات_إلكترونيه_معهد_الزقازيق",
+                "link": "https://drive.google.com/uc?export=download&id=1Tp3pO42dgwxF8mwhvGvbN4OqNQnjg96Q",
+                "size": "47.4 MB"
             }
         ],
         "books": [
