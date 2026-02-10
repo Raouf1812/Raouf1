@@ -3,44 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>صفحة الشيتات</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <title>المنصة مغلقة</title>
     <style>
-        :root {
-            --bg: #080808;
-            --gold: #a8cad7;
-            --gold-glow: rgba(168, 202, 215, 0.3);
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.1);
-        }
-
         body {
-            font-family: 'Cairo', sans-serif;
-            background: var(--bg);
-            color: #fff;
-            margin: 0; padding: 0;
-            overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 10% 10%, rgba(168, 202, 215, 0.07) 0%, transparent 35%),
-                radial-gradient(circle at 90% 90%, rgba(168, 202, 215, 0.07) 0%, transparent 35%);
-            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
         }
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 3rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            max-width: 500px;
+            width: 90%;
+        }
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #e94560;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+        p {
+            font-size: 1.1rem;
+            color: #adb5bd;
+            line-height: 1.6;
+        }
+        .footer {
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
 
-        #toast {
-            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
-            background: var(--gold); color: #050505; padding: 14px 30px;
-            border-radius: 15px; font-weight: 700; z-index: 10000;
-            transition: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
-        }
-        #toast.show { top: 30px; }
+    <div class="container">
+        <div class="icon">🔒</div>
+        <h1>تم إغلاق المنصة</h1>
+        <p>نأسف لإبلاغكم بأن المنصة لم تعد متاحة حالياً. نشكركم على ثقتكم بنا طوال الفترة الماضية.</p>
+        
+        <div class="footer">
+            &copy; 2026 جميع الحقوق محفوظة
+        </div>
+    </div>
 
-        header { padding: 80px 20px 40px; text-align: center; }
-        header h1 { 
-            font-size: 42px; font-weight: 900; color: var(--gold); 
-            margin: 0; text-shadow: 0 0 20px var(--gold-glow);
-        }
+</body>
+</html>
 
         .back-btn {
             display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; 
@@ -197,3 +219,4 @@
     </script>
 </body>
 </html>
+
