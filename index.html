@@ -3,63 +3,336 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المنصة مغلقة</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: white;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-        .container {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 3rem;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            max-width: 500px;
-            width: 90%;
-        }
-        .icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            color: #e94560;
-        }
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            font-weight: bold;
-        }
-        p {
-            font-size: 1.1rem;
-            color: #adb5bd;
-            line-height: 1.6;
-        }
-        .footer {
-            margin-top: 2rem;
-            font-size: 0.9rem;
-            color: #6c757d;
-        }
-    </style>
+    <title>مكتبة أجهزة </title>
+    <link rel="icon" href="IMG/RR.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div class="bg-visuals">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+</div>
+<div class="stars-layer"></div>
+<div id="welcome-screen">
+<img src="IMG/RR.png" alt="Logo" id="secretLogo" style="width: 100px; cursor: pointer;">
+    <h2 style="color: var(--gold); margin-top: 20px; font-weight: 900;"> اهلا بيك يا هندسة</h2>
+    <h6 style="color: var(--gold); margin-top: 20px; font-weight: 800;">جاري التحميل...</h6>
+</div>
 
-    <div class="container">
-        <div class="icon">🔒</div>
-        <h1>تم إغلاق المنصة</h1>
-        <p>نأسف لإبلاغكم بأن المنصة لم تعد متاحة حالياً. نشكركم على ثقتكم بنا طوال الفترة الماضية.</p>
-        
-        <div class="footer">
-            &copy; 2026 جميع الحقوق محفوظة
+<div id="toast">جاري تحميل الملف... ستجده في التحميلات 📂</div>
+<canvas id="bgCanvas"></canvas>
+
+<header>
+    <img src="IMG/RR.png" alt="Logo" class="main-logo">
+<h1 id="secretTitle" style="cursor: pointer; user-select: none;">مكتبة أجهزة</h1>
+    <h5>الصف الثاني  -  الترم الثاني</h5>
+        <div class="container">
+                <div class="exam-countdown-card">
+                    <div class="countdown-header">
+                        <span class="dot"></span>
+                        <span class="countdown-title">العد التنازلي للامتحانات</span>
+                        <span class="dot"></span>
+                    </div>
+                    <div id="countdown" class="countdown-grid">
+                        <div class="time-block">
+                            <span id="days" class="time-number">00</span>
+                            <span class="time-label">يوم</span>
+                        </div>
+                        <div class="time-block">
+                            <span id="hours" class="time-number">00</span>
+                            <span class="time-label">ساعة</span>
+                        </div>
+                        <div class="time-block">
+                            <span id="minutes" class="time-number">00</span>
+                            <span class="time-label">دقيقة</span>
+                        </div>
+                        <div class="time-block">
+                            <span id="seconds" class="time-number">00</span>
+                            <span class="time-label">ثانية</span>
+                        </div>
+                    </div>
+                </div>
+</header>
+<div class="container" id="subjectsGrid"></div>
+<section class="main-content">
+    <div class="container"> 
+
+
+                    <div class="xx-glass-card-pomodoro-card-v2">
+                        <div class="pomo-header">
+                            <span class="pomo-icon">⌛️</span>
+                            <h3>عداد البومودورو</h3>
+                        </div>
+                        
+                        <div id="pomo-timer-v2">25:00</div>
+                        
+                        <div class="pomo-settings-v2">
+                            <div class="setting-item">
+                                <label>وقت المذاكره</label>
+                                <div class="stepper">
+                                    <button onclick="changeVal('focus-time', -1)">-</button>
+                                    <input type="number" id="focus-time" value="25" readonly>
+                                    <button onclick="changeVal('focus-time', 1)">+</button>
+                                </div>
+                            </div>
+                            <div class="setting-item">
+                                <label>وقت الراحة</label>
+                                <div class="stepper">
+                                    <button onclick="changeVal('break-time', -1)">-</button>
+                                    <input type="number" id="break-time" value="5" readonly>
+                                    <button onclick="changeVal('break-time', 1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pomo-actions-v2">
+                            <button id="pomo-start-v2" class="pomo-main-btn">ابدأ الجولة</button>
+                            <button id="pomo-reset-v2" class="pomo-reset-btn">إعادة</button>
+                        </div>
+                        
+                        <p id="pomo-msg-v2">مستعد  يا هندسة؟ ✨</p>
+                    </div>
+
+
+        <div class="xx-glass-card" onclick="location.href='index - 2.html'">
+            <div class="xx-card-wrapper">
+                <div class="xx-card-icon">📑</div>
+            </div>
+            <div class="xx-card-body">
+                <h3 class="xx-card-title">صفحة الشيتات</h3>
+                <p class="xx-card-text">تصفح جميع الشيتات والملفات</p>
+            </div>
+            <div class="xx-gold-line"></div>
+        </div>
+        <div class="xx-glass-card" onclick="window.open('https://www.moadla.com/Engineering/')">
+            <div class="xx-card-wrapper">
+                <div class="xx-card-icon">🎓</div>
+            </div>
+            <div class="xx-card-body">
+                <h3 class="xx-card-title">صفحة المعادلة</h3>
+                <p class="xx-card-text">تصفح جميع الملفات الخاصه بمعادلة كليه الهندسة</p>
+            </div>
+            <div class="xx-gold-line"></div>
+        </div>
+</div>
+</section>
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()">✕</span>
+        <h2 id="modalTitle" style="color: var(--gold); margin: 10px 0 25px; text-align: center;"></h2>
+        <div id="mainOptions">
+            <button class="btn-luxury" onclick="showSubSection('shrah')">🎬 فيديوهات الشرح <span class="shrah">❯</span></button>
+            <button class="btn-luxury" onclick="showSubSection('mozakrat')">📜 المذكرات <span class="mozakrat">❯</span></button>
+            <button class="btn-luxury" onclick="showSubSection('books')">📚 الكتب <span class="books">❯</span></button>
+            <button class="btn-luxury" onclick="showSubSection('exams')">✍️ امتحانات <span class="exams">❯</span></button>
+            <button class="btn-luxury" onclick="showSubSection('solvedExams')">✅ امتحانات محلولة <span class="solved">❯</span></button>
+        </div>
+        <div id="subSection" style="display: none;">
+            <button class="btn-luxury" onclick="backToMain()" style="background: var(--gold); color: #000; padding: 15px; margin-bottom: 25px;">🔙 العودة للقائمة</button>
+            <div id="itemsList"></div>
         </div>
     </div>
+</div>
 
+<footer>
+    <div class="footer-stats">
+        <div class="stat-badge">
+            <span>👥 عدد الزيارات:</span>
+            <span id="total-visitors">جارِ التحميل...</span>
+        </div>
+    </div>
+    <p>تم التطوير بواسطة <span>~ Raouf ~</span></p>
+</footer>
+<script src="data.js"></script>
+<script type="module" src="firebase-init.js"></script>
+<script src="main.js"></script>
+<div id="adminModal" class="admin-glass-modal">
+    <div class="modal-card">
+        <div class="card-glow"></div>
+        <div class="icon-container">
+            <span class="lock-icon">🔒</span>
+        </div>
+        <h2>عامل ايه ياهندسة👷‍♂️</h2>
+        <p>عشان تدخل لوحة التحكم، محتاجين الرقم السري انت لازم تكون ادمن عشان تدخل هنا.</p>
+        
+        <div class="input-group">
+            <input type="password" id="adminPassInput" placeholder="أدخل الكود هنا..." autocomplete="off">
+            <div class="input-highlight"></div>
+        </div>
+
+        <div class="button-group">
+            <button class="btn-primary" onclick="checkAdminPass()">الدخول</button>
+            <button class="btn-cancel" onclick="closeAdminModal()">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* تصميم المودال الزجاجي الاحترافي */
+    .admin-glass-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(10px);
+        z-index: 10000;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.4s ease;
+    }
+
+    .modal-card {
+        background: rgba(20, 20, 20, 0.9);
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        padding: 40px;
+        border-radius: 30px;
+        width: 90%;
+        max-width: 420px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        transform: scale(0.9);
+        animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .card-glow {
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .icon-container {
+        font-size: 60px;
+        margin-bottom: 20px;
+        filter: drop-shadow(0 0 15px var(--gold));
+        animation: bounce 2s infinite;
+    }
+
+    .modal-card h2 {
+        color: #d4af37; /* اللون الذهبي */
+        font-family: 'Cairo', sans-serif;
+        font-weight: 900;
+        margin-bottom: 10px;
+    }
+
+    .modal-card p {
+        color: #a8cad7;
+        font-size: 15px;
+        margin-bottom: 30px;
+    }
+
+    .input-group {
+        position: relative;
+        margin-bottom: 25px;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 15px;
+        background: rgba(255,255,255,0.05);
+        border: 2px solid #333;
+        border-radius: 15px;
+        color: #fff;
+        text-align: center;
+        font-size: 20px;
+        transition: 0.3s;
+        outline: none;
+    }
+
+    .input-group input:focus {
+        border-color: #d4af37;
+        background: rgba(212, 175, 55, 0.05);
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+    }
+
+    .btn-primary {
+        background: linear-gradient(45deg, #d4af37, #f9e27d);
+        color: #000;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 15px;
+        font-weight: bold;
+        width: 100%;
+        cursor: pointer;
+        font-size: 17px;
+        transition: 0.3s;
+        box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(212, 175, 55, 0.5);
+    }
+
+    .btn-cancel {
+        background: transparent;
+        color: #777;
+        border: none;
+        margin-top: 15px;
+        cursor: pointer;
+        font-size: 14px;
+        text-decoration: underline;
+    }
+
+    /* Animations */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { transform: scale(0.8) translateY(50px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+</style>
+
+<script>
+    let titleClickCount = 0;
+    let titleLastClick = 0;
+
+    document.getElementById('secretTitle').addEventListener('click', function() {
+        const now = new Date().getTime();
+        if (now - titleLastClick > 1000) titleClickCount = 0;
+        titleClickCount++;
+        titleLastClick = now;
+
+        if (titleClickCount === 4) {
+            titleClickCount = 0;
+            // بيفتح المودال الاحترافي اللي عملناه فوراً
+            document.getElementById('adminModal').style.display = 'flex';
+            document.getElementById('adminPassInput').focus();
+        }
+    });
+
+    function closeAdminModal() {
+        document.getElementById('adminModal').style.display = 'none';
+        document.getElementById('adminPassInput').value = '';
+    }
+
+    function checkAdminPass() {
+        const pass = document.getElementById('adminPassInput').value;
+        if (pass === "Raouf") { 
+            window.location.href = "admin.html";
+        } else {
+            // تأثير اهتزاز عند الخطأ
+            const card = document.querySelector('.modal-card');
+            card.style.animation = 'none';
+            setTimeout(() => card.style.animation = 'shake 0.4s cubic-bezier(.36,.07,.19,.97) both', 10);
+            document.getElementById('adminPassInput').value = '';
+        }
+    }
+
+    // إضافة أنيميشن الاهتزاز للخطأ
+    const style = document.createElement('style');
+    style.innerHTML = `@keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }`;
+    document.head.appendChild(style);
+</script>
+<div id="pomo-alert-modal" class="pomo-modal" style="display: none;">
+    <div class="pomo-modal-content">
+        <h2 id="pomo-alert-title">عاش يا بطل! 🎉</h2>
+        <p id="pomo-alert-text">خلصنا وقت المذاكره استعد للراحة.</p>
+        <button onclick="closePomoAlert()" class="pomo-main-btn" style="width: 100%; margin-top: 20px;">تمام</button>
+    </div>
+</div>
 </body>
 </html>
