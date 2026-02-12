@@ -449,4 +449,18 @@
     border: 1px solid var(--gold);
 }
 
+
 .pomo-main-btn:active, .pomo-reset-btn:active { transform: scale(0.95); }
+
+.duaa-inline {
+  max-width: 720px;
+  margin: 20px auto 0;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  color: #dcdcdc;
+  font-size: 14px;
+  line-height: 1.9;
+  text-align: center;
+  opacity: 0.85;
+  font-family: "Cairo", "Amiri", serif;
+} 
