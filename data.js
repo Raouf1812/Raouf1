@@ -718,7 +718,7 @@ var libraryData = {
     "id": "1770975818659",
     "name": "قوانين اول 4 ابواب_مادة اتصالات",
     "link": "https://drive.google.com/uc?export=download&id=19vp3u-_VvMzmwMOqCHC3SWP73mdLobHl",
-    "size": "💾 487.33 KB"
+    "size": " 💾 487.36 KB"
 },
         ],
         "books": [
