@@ -458,6 +458,37 @@ var libraryData = {
                 "id": "51",
                 "link": "PDF/صيانة/من_1ل_6صيانه_وإصلاح.pdf"
             }
+            {
+    "id": "1770975266552",
+    "name": "مادا صيانه بنها",
+    "link": "https://drive.google.com/uc?export=download&id=1TWs6trRI3Bgeiv8zeA9YWnXDNaSygJBR",
+    "size": "💾 20 MB"
+},
+                {
+    "id": "1770975499274",
+    "name": "صيانة_واصلاح_الاجهزة اسكندريه",
+    "link": "https://drive.google.com/uc?export=download&id=1dc5vHonP1vq4Hl_-y3n764ouMOFzG8js",
+    "size": "💾 24.5 MB"
+},
+                {
+    "id": "1770975577739",
+    "name": "صيانة_وإصلاح_م_عبدالحميد",
+    "link": "https://drive.google.com/uc?export=download&id=1Z45qZrRqxi_DuwZ2JFh5k49maCcje1vu",
+    "size": "💾 10.9 MB"
+},
+                {
+    "id": "1770975643064",
+    "name": "مراجعة صيانة م- عبدالحميد",
+    "link": "https://drive.google.com/uc?export=download&id=1m7wAUst1AEkmBDA47Aev556tvD9F2tfX",
+    "size": "💾 4.8 MB"
+},
+                {
+    "id": "1770975706722",
+    "name": "منهج صيانة سؤال و جواب",
+    "link": "https://drive.google.com/uc?export=download&id=1PII9dQtSfsbjYphDZyFwLM-03e6BgvnP",
+    "size": "💾 16.3 MB"
+},
+                
         ],
         "books": [
             {
@@ -682,6 +713,12 @@ var libraryData = {
     "name": "مادة اتصالات Abdelmonem",
     "link": "https://drive.google.com/uc?export=download&id=1g8vFrN0NwxXGhhzAX6PiMx6Y7u1GBZ-H",
     "size": "💾 25.2 MB"
+},
+            {
+    "id": "1770975818659",
+    "name": "قوانين اول 4 ابواب_مادة اتصالات",
+    "link": "https://drive.google.com/uc?export=download&id=19vp3u-_VvMzmwMOqCHC3SWP73mdLobHl",
+    "size": "💾 487.33 KB"
 },
         ],
         "books": [
