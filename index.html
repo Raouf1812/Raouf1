@@ -20,6 +20,266 @@
     <h6 style="color: var(--gold); margin-top: 20px; font-weight: 800;">جاري التحميل...</h6>
 </div>
 
+<!-- Message Popup -->
+<div id="message-popup" class="message-popup">
+    <div class="message-popup-content">
+        <button class="close-popup" onclick="closeMessagePopup()">×</button>
+        
+        <div class="popup-header">
+            <h2>💬 رسالة للمطور</h2>
+            <p>شاركنا رأيك أو اقتراحاتك!</p>
+        </div>
+
+        <div class="popup-body">
+            <div class="input-group">
+                <label>الاسم (اختياري)</label>
+                <input type="text" id="senderName" placeholder="اكتب اسمك هنا...">
+            </div>
+
+            <div class="input-group">
+                <label>الرسالة *</label>
+                <textarea id="messageText" placeholder="اكتب رسالتك، اقتراحك، أو شكواك هنا..." rows="5"></textarea>
+            </div>
+
+            <div class="popup-actions">
+                <button class="btn-send" onclick="sendMessage()">
+                    <span id="sendBtnText">📤 إرسال الرسالة</span>
+                    <span id="sendBtnLoader" style="display: none;">جاري الإرسال...</span>
+                </button>
+                <button class="btn-skip" onclick="closeMessagePopup()">تخطي</button>
+            </div>
+        </div>
+
+        <div id="successMsg" class="success-message">
+            <div class="success-icon">✅</div>
+            <h3>تم إرسال الرسالة بنجاح!</h3>
+            <p>شكراً لتواصلك معنا 💙</p>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Message Popup Styles */
+.message-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.message-popup.show {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.message-popup-content {
+    background: linear-gradient(145deg, #1a1a1a 0%, #0d0d0d 100%);
+    border: 2px solid rgba(168, 202, 215, 0.3);
+    border-radius: 25px;
+    padding: 35px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    position: relative;
+    animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.close-popup {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: rgba(255, 71, 87, 0.2);
+    color: #ff4757;
+    border-radius: 50%;
+    font-size: 24px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-popup:hover {
+    background: #ff4757;
+    color: white;
+    transform: rotate(90deg);
+}
+
+.popup-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.popup-header h2 {
+    color: #a8cad7;
+    font-size: 26px;
+    font-weight: 900;
+    margin: 0 0 10px 0;
+}
+
+.popup-header p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    margin: 0;
+}
+
+.popup-body {
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.input-group input,
+.input-group textarea {
+    width: 100%;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(168, 202, 215, 0.2);
+    border-radius: 12px;
+    color: #fff;
+    font-size: 15px;
+    font-family: 'Cairo', sans-serif;
+    transition: 0.3s;
+    box-sizing: border-box;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+    outline: none;
+    border-color: #a8cad7;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 15px rgba(168, 202, 215, 0.2);
+}
+
+.input-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.popup-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.btn-send,
+.btn-skip {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: 'Cairo', sans-serif;
+}
+
+.btn-send {
+    background: linear-gradient(135deg, #a8cad7 0%, #7ea8b8 100%);
+    color: #000;
+}
+
+.btn-send:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(168, 202, 215, 0.4);
+}
+
+.btn-send:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-skip {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-skip:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.success-message {
+    display: none;
+    text-align: center;
+    padding: 30px;
+}
+
+.success-message.show {
+    display: block;
+    animation: successPop 0.5s ease;
+}
+
+@keyframes successPop {
+    0% { transform: scale(0.5); opacity: 0; }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.success-icon {
+    font-size: 60px;
+    margin-bottom: 15px;
+}
+
+.success-message h3 {
+    color: #00f260;
+    font-size: 22px;
+    margin: 10px 0;
+}
+
+.success-message p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 16px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .message-popup-content {
+        padding: 25px;
+    }
+    
+    .popup-header h2 {
+        font-size: 22px;
+    }
+    
+    .popup-actions {
+        flex-direction: column;
+    }
+}
+</style>
+
 <div id="toast">جاري تحميل الملف... ستجده في التحميلات 📂</div>
 <canvas id="bgCanvas"></canvas>
 
@@ -105,6 +365,18 @@
             </div>
             <div class="xx-gold-line"></div>
         </div>
+        
+        <div class="xx-glass-card" onclick="showMessagePopup()">
+            <div class="xx-card-wrapper">
+                <div class="xx-card-icon">💬</div>
+            </div>
+            <div class="xx-card-body">
+                <h3 class="xx-card-title">الشكاوى والاقتراحات</h3>
+                <p class="xx-card-text">شاركنا رأيك أو مشكلتك وهنرد عليك</p>
+            </div>
+            <div class="xx-gold-line"></div>
+        </div>
+        
         <div class="xx-glass-card" onclick="window.open('https://www.moadla.com/Engineering/')">
             <div class="xx-card-wrapper">
                 <div class="xx-card-icon">🎓</div>
@@ -142,6 +414,10 @@
             <span id="total-visitors">جارِ التحميل...</span>
         </div>
     </div>
+    
+    <!-- زرار سري للرسائل - مخفي -->
+    <div id="secretMessageBtn" style="width: 30px; height: 30px; position: absolute; bottom: 10px; left: 10px; opacity: 0; cursor: pointer;" onclick="openMessagesAdmin()"></div>
+    
     <p>تم التطوير بواسطة <span> <br> Raouf <br> Banan <br> Donia <br> Arwa </span></p>
     
     <div class="duaa-inline">
@@ -366,12 +642,211 @@
         <button onclick="closePomoAlert()" class="pomo-main-btn" style="width: 100%; margin-top: 20px;">تمام</button>
     </div>
 </div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-database-compat.js"></script>
+
+<script>
+// Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyADtj_iYU1wn3kBaaPfXTqMqEAClVJRVNE",
+  authDomain: "raouf-68d9e.firebaseapp.com",
+  databaseURL: "https://raouf-68d9e-default-rtdb.firebaseio.com",
+  projectId: "raouf-68d9e",
+  storageBucket: "raouf-68d9e.firebasestorage.app",
+  messagingSenderId: "390151395077",
+  appId: "1:390151395077:web:993860d19c10650cc1496c"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+console.log('🔥 Firebase initialized successfully!');
+
+// Show popup after welcome screen (معطل - البوب آب دلوقتي من الكارت)
+window.addEventListener('load', () => {
+    console.log('🎯 Page loaded!');
+    console.log('💡 Click on "الشكاوى والاقتراحات" card to send a message');
+    
+    // البوب آب معطّل - المستخدم يفتحه من الكارت
+    // لو عايز تفعله تاني، شيل التعليق من الكود التالي:
+    
+    /*
+    setTimeout(() => {
+        console.log('⏰ Checking if popup should show...');
+        const lastShown = localStorage.getItem('messagePopupShown');
+        const today = new Date().toDateString();
+        
+        console.log('📅 Last shown:', lastShown);
+        console.log('📅 Today:', today);
+        
+        if (lastShown !== today) {
+            console.log('✅ Showing popup!');
+            showMessagePopup();
+            localStorage.setItem('messagePopupShown', today);
+        } else {
+            console.log('⏭️ Popup already shown today');
+        }
+    }, 2000);
+    */
+});
+
+// Show Message Popup
+window.showMessagePopup = function() {
+    console.log('💬 Opening message popup...');
+    document.getElementById('message-popup').classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+// Close Message Popup
+window.closeMessagePopup = function() {
+    console.log('❌ Closing message popup...');
+    document.getElementById('message-popup').classList.remove('show');
+    document.body.style.overflow = 'auto';
+}
+
+// للتجربة: اكتب في Console: testPopup()
+window.testPopup = function() {
+    console.log('🧪 Testing popup (ignoring localStorage)...');
+    showMessagePopup();
+}
+
+// لإعادة تعيين: اكتب في Console: resetPopup()
+window.resetPopup = function() {
+    localStorage.removeItem('messagePopupShown');
+    console.log('🔄 Popup reset! Reload the page to see it again.');
+}
+
+// Send Message to Firebase
+window.sendMessage = async function() {
+    const nameInput = document.getElementById('senderName');
+    const messageInput = document.getElementById('messageText');
+    const name = nameInput.value.trim() || 'مجهول';
+    const message = messageInput.value.trim();
+    
+    if (!message) {
+        alert('⚠️ من فضلك اكتب رسالتك أولاً!');
+        messageInput.focus();
+        return;
+    }
+    
+    // Disable button and show loader
+    const sendBtn = document.querySelector('.btn-send');
+    const btnText = document.getElementById('sendBtnText');
+    const btnLoader = document.getElementById('sendBtnLoader');
+    
+    sendBtn.disabled = true;
+    btnText.style.display = 'none';
+    btnLoader.style.display = 'inline';
+    
+    try {
+        // إرسال للـ Firebase
+        await db.ref('messages').push({
+            name: name,
+            message: message,
+            timestamp: new Date().toISOString(),
+            date: new Date().toLocaleString('ar-EG')
+        });
+        
+        console.log('✅ Message sent successfully!');
+        
+        // إخفاء الفورم وإظهار رسالة النجاح
+        document.querySelector('.popup-body').style.display = 'none';
+        document.getElementById('successMsg').classList.add('show');
+        
+        // Clear inputs
+        nameInput.value = '';
+        messageInput.value = '';
+        
+        // إغلاق تلقائي بعد 3 ثواني
+        setTimeout(() => {
+            closeMessagePopup();
+            // إعادة تعيين الفورم
+            setTimeout(() => {
+                document.querySelector('.popup-body').style.display = 'block';
+                document.getElementById('successMsg').classList.remove('show');
+                sendBtn.disabled = false;
+                btnText.style.display = 'inline';
+                btnLoader.style.display = 'none';
+            }, 500);
+        }, 3000);
+        
+    } catch (error) {
+        console.error('Error sending message:', error);
+        alert('❌ حدث خطأ في الإرسال. حاول مرة أخرى!');
+        
+        // Reset button
+        sendBtn.disabled = false;
+        btnText.style.display = 'inline';
+        btnLoader.style.display = 'none';
+    }
+}
+
+// Close on ESC key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeMessagePopup();
+    }
+});
+
+console.log('✅ Message popup script loaded successfully!');
+console.log('💡 Try: testPopup() to show popup manually');
+console.log('💡 Try: resetPopup() to reset localStorage');
+
+// فتح صفحة الرسائل (الزرار السري)
+window.openMessagesAdmin = function() {
+    console.log('🔓 Opening messages admin page...');
+    window.location.href = 'messages-admin.html';
+}
+
+// كود سري: اضغط 5 مرات على اللوجو في الفوتر لفتح الرسائل
+let clickCount = 0;
+let clickTimer = null;
+
+// دالة للنقرات السرية على اسم Raouf
+document.addEventListener('DOMContentLoaded', function() {
+    const footer = document.querySelector('footer p');
+    if (footer) {
+        footer.addEventListener('click', function() {
+            clickCount++;
+            console.log('🔢 Click count:', clickCount);
+            
+            // إلغاء التايمر السابق
+            if (clickTimer) {
+                clearTimeout(clickTimer);
+            }
+            
+            // لو وصل 5 نقرات في خلال 3 ثواني
+            if (clickCount >= 5) {
+                console.log('🎉 Secret code activated!');
+                clickCount = 0;
+                
+                // تأثير بصري
+                footer.style.color = '#00f260';
+                footer.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    footer.style.color = '';
+                    footer.style.transform = '';
+                }, 300);
+                
+                // فتح صفحة الرسائل
+                setTimeout(() => {
+                    openMessagesAdmin();
+                }, 500);
+            } else {
+                // إعادة تعيين العداد بعد 3 ثواني
+                clickTimer = setTimeout(() => {
+                    clickCount = 0;
+                    console.log('🔄 Click count reset');
+                }, 3000);
+            }
+        });
+    }
+});
+</script>
+
 </body>
 
 </html>
-
-
-
-
-
-

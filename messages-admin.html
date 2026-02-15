@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📬 رسائل المستخدمين</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 2px solid rgba(168, 202, 215, 0.3);
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: #a8cad7;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: rgba(168, 202, 215, 0.1);
+            padding: 15px 25px;
+            border-radius: 12px;
+            border: 1px solid rgba(168, 202, 215, 0.3);
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 900;
+            color: #a8cad7;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 5px;
+        }
+
+        .password-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+        }
+
+        .password-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .password-card h2 {
+            color: #a8cad7;
+            margin-bottom: 20px;
+        }
+
+        .password-card input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 15px;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .password-card button {
+            width: 100%;
+            padding: 15px;
+            background: #a8cad7;
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .password-card button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(168, 202, 215, 0.4);
+        }
+
+        #messages-container {
+            display: none;
+        }
+
+        .message-card {
+            background: linear-gradient(145deg, #1a1a1a 0%, #0d0d0d 100%);
+            border: 1px solid rgba(168, 202, 215, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .message-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(180deg, #a8cad7, #7ea8b8);
+        }
+
+        .message-card:hover {
+            transform: translateX(-5px);
+            border-color: #a8cad7;
+            box-shadow: 0 5px 20px rgba(168, 202, 215, 0.2);
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sender-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sender-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #a8cad7, #7ea8b8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 900;
+            color: #000;
+        }
+
+        .sender-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #a8cad7;
+        }
+
+        .message-date {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .message-content {
+            font-size: 16px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            border-right: 3px solid rgba(168, 202, 215, 0.3);
+        }
+
+        .delete-btn {
+            background: rgba(255, 71, 87, 0.2);
+            color: #ff4757;
+            border: 1px solid #ff4757;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 700;
+            transition: 0.3s;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .delete-btn:hover {
+            background: #ff4757;
+            color: white;
+        }
+
+        .no-messages {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 18px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #a8cad7;
+            font-size: 18px;
+        }
+
+        @media (max-width: 600px) {
+            .stats {
+                flex-direction: column;
+            }
+            
+            .message-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="password-screen" id="passwordScreen">
+    <div class="password-card">
+        <h2>🔒 دخول الأدمن</h2>
+        <input type="password" id="adminPass" placeholder="كلمة السر">
+        <button onclick="checkPassword()">دخول</button>
+    </div>
+</div>
+
+<div id="messages-container">
+    <div class="container">
+        <header>
+            <h1>📬 رسائل المستخدمين</h1>
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalMessages">0</div>
+                    <div class="stat-label">إجمالي الرسائل</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="todayMessages">0</div>
+                    <div class="stat-label">رسائل اليوم</div>
+                </div>
+            </div>
+        </header>
+
+        <div id="messagesList">
+            <div class="loading">جاري تحميل الرسائل...</div>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js";
+import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyADtj_iYU1wn3kBaaPfXTqMqEAClVJRVNE",
+  authDomain: "raouf-68d9e.firebaseapp.com",
+  databaseURL: "https://raouf-68d9e-default-rtdb.firebaseio.com",
+  projectId: "raouf-68d9e",
+  storageBucket: "raouf-68d9e.firebasestorage.app",
+  messagingSenderId: "390151395077",
+  appId: "1:390151395077:web:993860d19c10650cc1496c"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const ADMIN_PASSWORD = "Raouf"; // غير الباسورد هنا
+
+window.checkPassword = function() {
+    const pass = document.getElementById('adminPass').value;
+    if (pass === ADMIN_PASSWORD) {
+        document.getElementById('passwordScreen').style.display = 'none';
+        document.getElementById('messages-container').style.display = 'block';
+        loadMessages();
+    } else {
+        alert('❌ كلمة السر خاطئة!');
+    }
+}
+
+function loadMessages() {
+    const messagesRef = ref(db, 'messages');
+    
+    onValue(messagesRef, (snapshot) => {
+        const data = snapshot.val();
+        const messagesList = document.getElementById('messagesList');
+        
+        if (!data) {
+            messagesList.innerHTML = '<div class="no-messages">📭 لا توجد رسائل حتى الآن</div>';
+            document.getElementById('totalMessages').textContent = '0';
+            document.getElementById('todayMessages').textContent = '0';
+            return;
+        }
+        
+        // تحويل البيانات لمصفوفة
+        const messages = Object.entries(data).map(([id, msg]) => ({
+            id,
+            ...msg
+        }));
+        
+        // ترتيب من الأحدث للأقدم
+        messages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        
+        // حساب الإحصائيات
+        const total = messages.length;
+        const today = new Date().toDateString();
+        const todayCount = messages.filter(msg => 
+            new Date(msg.timestamp).toDateString() === today
+        ).length;
+        
+        document.getElementById('totalMessages').textContent = total;
+        document.getElementById('todayMessages').textContent = todayCount;
+        
+        // عرض الرسائل
+        let html = '';
+        messages.forEach(msg => {
+            const initial = msg.name.charAt(0).toUpperCase();
+            html += `
+                <div class="message-card">
+                    <div class="message-header">
+                        <div class="sender-info">
+                            <div class="sender-avatar">${initial}</div>
+                            <div>
+                                <div class="sender-name">${msg.name}</div>
+                                <div class="message-date">${msg.date}</div>
+                            </div>
+                        </div>
+                        <button class="delete-btn" onclick="deleteMessage('${msg.id}')">🗑️ حذف</button>
+                    </div>
+                    <div class="message-content">${msg.message}</div>
+                </div>
+            `;
+        });
+        
+        messagesList.innerHTML = html;
+    });
+}
+
+window.deleteMessage = function(messageId) {
+    if (confirm('هل أنت متأكد من حذف هذه الرسالة؟')) {
+        const messageRef = ref(db, 'messages/' + messageId);
+        remove(messageRef)
+            .then(() => {
+                console.log('تم حذف الرسالة');
+            })
+            .catch((error) => {
+                alert('حدث خطأ في الحذف');
+                console.error(error);
+            });
+    }
+}
+</script>
+
+</body>
+</html>

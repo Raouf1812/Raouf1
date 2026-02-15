@@ -280,70 +280,100 @@ async function showSubSection(t) {
     if (window.syncCounts) window.syncCounts();
 }
 
-async function handleDownload(id, isLocal) {
+async function handleDownload(id) {
     const toast = document.getElementById('toast');
-    if (toast) {
-        toast.style.bottom = '20px';
-        toast.innerText = "جاري التحميل... ⏳";
-    }
-
-    // 1. تحديث العداد
-    if (window.updateDL) { window.updateDL(id); }
-
-    // 2. البحث عن بيانات الملف في القاعدة
+    
+    // 1. البحث عن الملف في البيانات
     let fileItem = null;
     for (let sub in libraryData) {
         for (let cat in libraryData[sub]) {
-            fileItem = libraryData[sub][cat].find(i => i.id == id); // مقارنة مرنة للـ id
+            // مقارنة مرنة (رقم مع نص)
+            fileItem = libraryData[sub][cat].find(i => i.id == id);
             if (fileItem) break;
         }
         if (fileItem) break;
     }
 
+    // حماية إضافية لو الملف مش موجود
     if (!fileItem) {
-        console.error("الملف غير موجود في البيانات");
+        console.error("الملف غير موجود بالمعرف:", id);
         return;
     }
 
-    // --- الجزء الأهم: تحديد الاسم الأصلي للملف ---
-    // بنسحب الجزء الأخير من الرابط (اسم الملف الفعلي)
-    const urlParts = fileItem.link.split('/');
-    const originalFileName = decodeURIComponent(urlParts[urlParts.length - 1]); 
-    
-    // الأولوية للاسم المكتوب في الموقع، لو مش موجود نستخدم الاسم الأصلي للملف
-    const finalFileName = fileItem.name || originalFileName;
+    // منطق استخراج الاسم الصحيح (المحلي vs درايف)
+    let url = fileItem.link;
+    let fileName = "";
 
+    const isDrive = url.includes('drive.google.com');
+
+    if (isDrive) {
+        // حالة جوجل درايف: نأخذ الاسم اللي أنت كاتبه في الموقع (اسم المذكرة)
+        fileName = fileItem.name || "ملف_تحميل";
+        // إضافة امتداد افتراضي لو مش مكتوب
+        if (!fileName.includes('.')) fileName += ".pdf"; 
+        
+        // تجهيز رابط التحميل المباشر
+        let driveId = url.split('/d/')[1]?.split('/')[0] || url.split('id=')[1]?.split('&')[0];
+        if (driveId) url = `https://drive.google.com/uc?export=download&id=${driveId}`;
+
+    } else {
+        // حالة المسار المحلي (سيرفرك): نأخذ اسم الملف الأصلي من المسار
+        // مثال: EXM/دوائر/2015 مايو.jpg  ---> هياخد "2015 مايو.jpg"
+        try {
+            // استخراج آخر جزء من الرابط وفك التشفير (عشان الحروف العربي والمسافات)
+            fileName = url.substring(url.lastIndexOf('/') + 1).split('?')[0];
+            fileName = decodeURIComponent(fileName);
+        } catch (e) {
+            fileName = fileItem.name; // لو فشل الاستخراج، نرجع للاسم المكتوب
+        }
+    }
+
+    // 2. إظهار التنبيه
+    if (toast) {
+        toast.style.bottom = '20px';
+        toast.innerText = `جاري تحميل: ${fileName} ⏳`;
+    }
+
+    if (window.updateDL) { window.updateDL(id); }
+
+    // 3. التنفيذ (Fetch + Blob) لضمان التحميل الفوري في القائمة
     try {
-        // 3. التحميل عبر Fetch لضمان الاسم
-        const response = await fetch(fileItem.link);
-        if (!response.ok) throw new Error('فشل جلب الملف');
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Network error');
         
         const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
+        const blobUrl = window.URL.createObjectURL(blob);
         
         const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href = url;
-        a.download = finalFileName; // هيحمل بالاسم الحقيقي (مثلاً: 2017 مايو.jpg)
-        
+        a.href = blobUrl;
+        a.download = fileName; // هنا الاسم اللي حددناه فوق
         document.body.appendChild(a);
         a.click();
         
-        window.URL.revokeObjectURL(url);
+        // تنظيف
+        window.URL.revokeObjectURL(blobUrl);
         document.body.removeChild(a);
-        
-        if (toast) toast.innerText = "تم التحميل بنجاح";
+
+        if (toast) toast.innerText = "تم التحميل بنجاح ✅";
+
     } catch (err) {
-        // إذا كان الملف خارجي (جوجل درايف مثلاً) ولا يسمح بالـ Fetch
+        // Plan B: لو فشل الـ Blob (نادر الحدوث مع الصور والملفات المحلية)
+        console.log("Fallback download...");
         const a = document.createElement('a');
-        a.href = fileItem.link;
-        a.download = finalFileName;
-        a.target = "_blank";
+        a.href = url;
+        a.download = fileName;
+        a.target = '_blank';
+        document.body.appendChild(a);
         a.click();
+        document.body.removeChild(a);
+        if (toast) toast.innerText = "بدأ التحميل 📂";
     }
 
-    setTimeout(() => { if (toast) toast.style.bottom = '-100px'; }, 3000);
+    setTimeout(() => {
+        if (toast) toast.style.bottom = '-100px';
+    }, 3000);
 }
+
 
 function showToast() {
     var toast = document.getElementById('toast');
