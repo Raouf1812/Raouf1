@@ -1358,7 +1358,13 @@ var libraryData = {
             {
                 "id": "174",
                 "link": "PDF/تقارير/مادة_تقارير_فنية_Abdelmonem.pdf"
-            }
+            }, 
+            {
+               "id": "1771682061644",
+               "name": "تقارير عبدالرحمن السعدوي",
+               "link": "https://drive.google.com/uc?export=download&id=1P976IRaQRv9GC8gAmGEuaRbkCw0Gi1nY",
+               "size": "💾 23.4 MB"
+            },
         ],
         "books": [
             {
