@@ -841,3 +841,90 @@ function startPomoV2() {
         }
     }, 1000);
 }
+
+// --- إعدادات عداد الفراق ---
+// 1. حط تاريخ الفراق هنا (مثال: "Jan 1, 2024 14:00:00")
+const partingDate = new Date("Jan 1, 2024 00:00:00").getTime(); 
+// 2. حط كلمة السر اللي محدش يعرفها غيرك
+const secretSadPassword = "Banan"; 
+
+let countUpInterval;
+// بنشيك لو الزمن اتوقف قبل كدا ومحفوظ في الجهاز
+let isTimerStopped = localStorage.getItem('partingTimerStopped') === 'true';
+let stoppedDistance = localStorage.getItem('partingStoppedDistance') ? parseInt(localStorage.getItem('partingStoppedDistance')) : 0;
+
+function updateCountUp() {
+    let now = new Date().getTime();
+    // لو الزمن واقف، بنعرض الوقت اللي وقف عنده، لو شغال بنحسب الفرق
+    let distance = isTimerStopped ? stoppedDistance : (now - partingDate);
+
+    // لو التاريخ في المستقبل لسه
+    if (distance < 0) distance = 0;
+
+    let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    let dEl = document.getElementById("p-days");
+    let hEl = document.getElementById("p-hours");
+    let mEl = document.getElementById("p-minutes");
+    let sEl = document.getElementById("p-seconds");
+
+    if(dEl) dEl.innerHTML = days < 10 ? "0" + days : days;
+    if(hEl) hEl.innerHTML = hours < 10 ? "0" + hours : hours;
+    if(mEl) mEl.innerHTML = minutes < 10 ? "0" + minutes : minutes;
+    if(sEl) sEl.innerHTML = seconds < 10 ? "0" + seconds : seconds;
+}
+
+// تشغيل العداد لو مش موقوف
+if (!isTimerStopped) {
+    countUpInterval = setInterval(updateCountUp, 1000);
+}
+updateCountUp(); // تحديث فوري أول ما الصفحة تفتح
+
+// --- دوال شاشة الإيقاف (Modal) ---
+function openSadModal() {
+    if (isTimerStopped) {
+        alert("الحمد لله");
+        return;
+    }
+    document.getElementById('sadTimerModal').style.display = 'flex';
+    document.getElementById('sadPassInput').focus();
+}
+
+function closeSadModal() {
+    document.getElementById('sadTimerModal').style.display = 'none';
+    document.getElementById('sadPassInput').value = '';
+}
+
+function checkSadPass() {
+    const pass = document.getElementById('sadPassInput').value;
+    
+    if (pass === secretSadPassword) {
+        // كلمة السر صحيحة -> وقف الزمن
+        clearInterval(countUpInterval);
+        isTimerStopped = true;
+        stoppedDistance = new Date().getTime() - partingDate;
+        
+        // حفظ التوقف في الـ Local Storage
+        localStorage.setItem('partingTimerStopped', 'true');
+        localStorage.setItem('partingStoppedDistance', stoppedDistance.toString());
+        
+        closeSadModal();
+        
+        // تغيير شكل الزرار
+        const btn = document.querySelector('.stop-parting-btn');
+        if (btn) {
+            btn.innerHTML = "توقف الزمن 💔";
+            btn.style.color = "#888";
+            btn.style.borderColor = "#222";
+        }
+    } else {
+        // كلمة السر غلط -> تأثير اهتزاز الشاشة
+        const card = document.querySelector('.sad-modal-card');
+        card.style.animation = 'none';
+        setTimeout(() => card.style.animation = 'shake 0.4s cubic-bezier(.36,.07,.19,.97) both', 10);
+        document.getElementById('sadPassInput').value = '';
+    }
+}
