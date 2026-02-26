@@ -844,7 +844,7 @@ function startPomoV2() {
 
 // --- إعدادات عداد الفراق ---
 // 1. حط تاريخ الفراق هنا (مثال: "Jan 1, 2024 14:00:00")
-const partingDate = new Date("feb 13, 2026 00:00:00").getTime(); 
+const partingDate = new Date("feb 14, 2026 00:00:00").getTime(); 
 // 2. حط كلمة السر اللي محدش يعرفها غيرك
 const secretSadPassword = "Banan"; 
 
