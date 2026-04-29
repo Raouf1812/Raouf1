@@ -394,7 +394,7 @@ function getYTThumb(url) {
     return id ? 'https://img.youtube.com/vi/' + id + '/mqdefault.jpg' : 'IMG/default-video.png';
 }
 
-var countDownDate = new Date("May 20, 2026 10:00:00").getTime();
+var countDownDate = new Date("May 23, 2026 10:00:00").getTime();
 var countInterval = setInterval(function () {
     var now = new Date().getTime();
     var distance = countDownDate - now;
@@ -410,7 +410,7 @@ var countInterval = setInterval(function () {
     if (distance < 0) {
         clearInterval(countInterval);
         var c = document.getElementById("countdown");
-        if (c) c.innerHTML = "<h2 style='color:var(--gold); grid-column: span 4;'>بدأت الامتحانات.. بالتوفيق! 🎓</h2>";
+        if (c) c.innerHTML = "<h2 style='color:var(--gold); grid-column: span 4;'>كل تعبك هيبان دلوقتي… بالتوفيق يا بطل ✨</h2>";
     }
 }, 1000);
 window.addEventListener('load', function() {
